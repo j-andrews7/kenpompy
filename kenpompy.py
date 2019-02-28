@@ -45,9 +45,10 @@ def get_efficiency(browser, season=None):
 	Scrapes the Efficiency stats table (https://kenpom.com/summary.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
-			season (str, optional): Used to define different seasons. 2002 is the earliest available season but possession 
-					length data wasn't available until 2010.
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
+			season (str, optional): Used to define different seasons. 2002 is the earliest available season but 
+				possession length data wasn't available until 2010.
 
 	Returns:
 			eff_df (pandas dataframe): Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.
@@ -102,7 +103,8 @@ def get_fourfactors(browser, season=None):
 	Scrapes the Four Factors table (https://kenpom.com/stats.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
 			season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 
 	Returns:
@@ -148,8 +150,10 @@ def get_teamstats(browser, defense=False, season=None):
 	Scrapes the Miscellaneous Team Stats table (https://kenpom.com/teamstats.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
-			defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by default.
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
+			defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by 
+				default.
 			season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 					Retrieves most current season by default.
 
@@ -203,7 +207,8 @@ def get_pointdist(browser, season=None):
 	Scrapes the Team Points Distribution table (https://kenpom.com/pointdist.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
 			season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 					Retrieves most current season by default.
 
@@ -249,7 +254,8 @@ def get_height(browser, season=None):
 	Scrapes the Height/Experience table (https://kenpom.com/height.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
 			season (str, optional): Used to define different seasons. 2007 is the earliest available season but 
 					continuity data wasn't available until 2008.
 
@@ -277,7 +283,7 @@ def get_height(browser, season=None):
 	h_df = h_df[0]
 
 	# Handle seasons prior to 2008 having fewer columns.
-	if len(h_df.columns) == 34:
+	if len(h_df.columns) == 22:
 		h_df = h_df.iloc[:, 0:22]
 		h_df.columns = ['Team', 'Conference', 'AvgHgt', 'AvgHgt.Rank', 'EffHgt', 'EffHgt.Rank',
 						'C-Hgt', 'C-Hgt.Rank', 'PF-Hgt', 'PF-Hgt.Rank', 'SF-Hgt', 'SF-Hgt.Rank',
@@ -298,3 +304,89 @@ def get_height(browser, season=None):
 	h_df = h_df.dropna()
 
 	return h_df
+
+def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=False):
+	"""
+	Scrapes the Player Leaders tables (https://kenpom.com/playerstats.php) into a dataframe.
+
+	Args:
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
+			season (str, optional): Used to define different seasons. 2004 is the earliest available season. Current 
+				season is the default.
+			metric (str, optional): Used to get leaders for different metrics. Available values are: 'ORtg', 'Min', 
+				'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', 
+				'3P', 'FT'. Default is 'eFG'. 'ORtg' returns a list of three dataframes, as there are three tables: 
+				players that used >28% of possessions, >24% of possessions, and >20% of possessions.
+			conf (str, optional): Used to limit to players in a specific conference. Allowed values are: 'A10', 'ACC',
+				'AE', 'AMER', 'ASUN', 'B10', 'B12', 'BE', 'BSKY', 'BSTH', 'BW', 'CAA', 'CUSA', 'HORZ', 'IND', IVY', 
+				'MAAC', 'MAC', 'MEAC', 'MVC', 'MWC', 'NEC', 'OVC', 'P12', 'PAT', 'SB', 'SC', 'SEC', 'SLND', 'SUM', 
+				'SWAC', 'WAC', 'WCC'. If you try to use a conference that doesn't exist for a given season, like 'IND'
+				and '2018', you'll get an empty table, as kenpom.com doesn't serve 404 pages for invalid table queries
+				like that. No filter applied by default.
+			conf_only (bool, optional): Used to define whether stats should reflect conference games only. Only
+				available if specific conference is defined. Only available for seasons after 2013. False by default.
+
+
+	Returns:
+			ps_df (pandas dataframe): Pandas dataframe containing the Player Leaders table from kenpom.com.
+
+	Raises:
+			ValueError: If `season` is less than 2004, `metric` is invalid, or `conf_only` is used with an 
+				invalid `season`.
+	"""
+
+	# `metric` parameter checking.
+	metrics = {'ORTG': 'ORtg', 'MIN': 'PctMin', 'EFG': 'eFG', 'POSS': 'PctPoss', 'SHOTS': 'PctShots', 'OR': 'ORPct', 
+			   'DR': 'DRPct', 'TO': 'TORate', 'ARATE': 'ARate', 'BLK': 'PctBlocks', 'FTRATE': 'FTRate', 
+			   'STL': 'PctStls', 'TS': 'TS', 'FC40': 'FCper40', 'FD40': 'FDper40', '2P': 'FG2Pct', '3P': 'FG3Pct', 
+			   'FT': 'FTPct'}
+	if metric.upper() not in metrics:
+		raise ValueError(
+			"""Metric is invalid, must be one of: 'ORtg', 'Min', 'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 
+			'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', '3P', 'FT'""")
+	else:
+		met_url = 's=' + metrics[metric]
+
+
+	url = 'https://kenpom.com/playerstats.php?' + met_url
+
+	if season:
+		if int(season) < 2004:
+			raise ValueError(
+				'Season cannot be less than 2004, as data only goes back that far.')
+		elif int(season) < 2014 & conf_only:
+			raise ValueError(
+				'Conference only stats only available for seasons after 2013.'
+			)
+		url = url + '&y=' + season
+
+	if conf_only:
+		url = url + '&c=c'
+
+	if conf:
+		url = url + '&f=' + conf
+
+	browser.open(url)
+	playerstats = browser.get_current_page()
+	if metric.upper() == 'ORTG':
+		ps_df = []
+		tables = playerstats.find_all('table')
+			for t in tables:
+				# Split ortg column.
+		ps_df.columns = ['Rank', 'Player', 'Team', 'ORtg', 'Ht', 'Wt', 'Yr'] 
+	table = playerstats.find_all('table')[0]
+	ps_df = pd.read_html(str(table))
+
+	# Dataframe tidying.
+	ps_df = ps_df[0]
+	ps_df.columns = ['Rank', 'Player', 'Team', metric, 'Ht', 'Wt', 'Yr'] 
+
+	# Remove the header rows that are interjected for readability.
+	ps_df = ps_df[ps_df.Rank != 'Rk']
+	# Remove NCAA tourny seeds for previous seasons.
+	ps_df['Team'] = ps_df['Team'].str.replace('\d+', '')
+	ps_df['Team'] = ps_df['Team'].str.rstrip()
+	ps_df = ps_df.dropna()
+
+	return ps_df
