@@ -316,8 +316,9 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 				season is the default.
 			metric (str, optional): Used to get leaders for different metrics. Available values are: 'ORtg', 'Min', 
 				'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', 
-				'3P', 'FT'. Default is 'eFG'. 'ORtg' returns a list of three dataframes, as there are three tables: 
-				players that used >28% of possessions, >24% of possessions, and >20% of possessions.
+				'3P', 'FT'. Default is 'eFG'. 'ORtg' returns a list of four dataframes, as there are four tables: 
+				players that used >28% of possessions, >24% of possessions, >20% of possessions, and with no possession 
+				restriction.
 			conf (str, optional): Used to limit to players in a specific conference. Allowed values are: 'A10', 'ACC',
 				'AE', 'AMER', 'ASUN', 'B10', 'B12', 'BE', 'BSKY', 'BSTH', 'BW', 'CAA', 'CUSA', 'HORZ', 'IND', IVY', 
 				'MAAC', 'MAC', 'MEAC', 'MVC', 'MWC', 'NEC', 'OVC', 'P12', 'PAT', 'SB', 'SC', 'SEC', 'SLND', 'SUM', 
@@ -370,23 +371,35 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 	browser.open(url)
 	playerstats = browser.get_current_page()
 	if metric.upper() == 'ORTG':
-		ps_df = []
+		ps_dfs = []
 		tables = playerstats.find_all('table')
-			for t in tables:
-				# Split ortg column.
-		ps_df.columns = ['Rank', 'Player', 'Team', 'ORtg', 'Ht', 'Wt', 'Yr'] 
-	table = playerstats.find_all('table')[0]
-	ps_df = pd.read_html(str(table))
+		for t in tables:
+			ps_df = pd.read_html(str(t))
+			ps_df = ps_df[0]
+			
+			# Split ortg column.
+			ps_df.columns = ['Rank', 'Player', 'Team', 'ORtg', 'Ht', 'Wt', 'Yr']
+			ps_df['ORtg'], ps_df['Poss%'] = ps_df['ORtg'].str.split(' ', 1).str
+			ps_df['Poss%'] = ps_df['Poss%'].str.strip('()')
 
-	# Dataframe tidying.
-	ps_df = ps_df[0]
-	ps_df.columns = ['Rank', 'Player', 'Team', metric, 'Ht', 'Wt', 'Yr'] 
+			ps_df = ps_df[ps_df.Rank != 'Rk']
+			ps_df = ps_df.dropna()
 
-	# Remove the header rows that are interjected for readability.
-	ps_df = ps_df[ps_df.Rank != 'Rk']
-	# Remove NCAA tourny seeds for previous seasons.
-	ps_df['Team'] = ps_df['Team'].str.replace('\d+', '')
-	ps_df['Team'] = ps_df['Team'].str.rstrip()
-	ps_df = ps_df.dropna()
+			ps_dfs.append(ps_df)
+		ps_df = ps_dfs
+	else:
+		perc_mets = ['Min', 'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'Blk', 'Stl', 'TS', '2P', '3P', 'FT']
+		if metric.upper() in perc_mets:
+			metric = metric + '%'
+		table = playerstats.find_all('table')[0]
+		ps_df = pd.read_html(str(table))
+
+		# Dataframe tidying.
+		ps_df = ps_df[0]
+		ps_df.columns = ['Rank', 'Player', 'Team', metric, 'Ht', 'Wt', 'Yr'] 
+
+		# Remove the header rows that are interjected for readability.
+		ps_df = ps_df[ps_df.Rank != 'Rk']
+		ps_df = ps_df.dropna()
 
 	return ps_df
