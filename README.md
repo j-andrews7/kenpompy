@@ -2,8 +2,6 @@
 
 This python package serves as a convenient web scraper for [kenpom.com](kenpom.com), which provides tons of great NCAA basketball statistics and metrics. It **requires a subscription to Ken Pomeroy's site for use**, otherwise only the home page will be accessible. It's a small fee for a year of access, and totally worth it in my opinion.
 
----
-
 ## Objective
 Ultimately, this package is to allow both hobbyist and reknown sports analysts alike to get data from kenpom in a format more suitable for visualization, transformation, and additional analysis. It's meant to be simple, easy to use, and to yield information in a way that is immediately usable.
 
@@ -17,16 +15,22 @@ This package is available on [pypi]() and can be easily installed with `pip`:
 ```pip install kenpompy```
 
 ## Usage
-`kenpompy` is simple to use. Generally, each page is scraped into a `pandas` dataframe with simple parameters to select different seasons or tables. As some tables have headers that don't parse well, some are manually altered to a small degree to make the resulting dataframe easier to interpret and manipulate. 
+`kenpompy` is simple to use. Generally, tables on each page are scraped into `pandas` dataframes with simple parameters to select different seasons or tables. As many tables have headers that don't parse well, some are manually altered to a small degree to make the resulting dataframe easier to interpret and manipulate. 
 
 First, you must login:
 ```
+from kenpompy.utils import login
 
+# Returns an authenticated browser that can then be used to scrape pages that require authorization.
+browser = login(your_email, your_password)
 ```
 
 Then you can request specific pages that will be parsed into convenient dataframes:
 ```
+import kenpompy.summary as kp
 
+# Returns a pandas dataframe containing the efficiency and tempo stats for the current season (https://kenpom.com/summary.php).
+eff_stats = kp.get_efficiency(browser)
 ```
 
 Full documentation can be found [here]().

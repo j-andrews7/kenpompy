@@ -1,43 +1,12 @@
 """
-A simple, yet comprehensive web scraper for kenpom.com.
-
-This module provides functions for scraping kenpom.com pages into more
+This module provides functions for scraping the summary stats kenpom.com pages into more
 usable pandas dataframes.
 """
 
 import mechanicalsoup
 import pandas as pd
+import re
 from bs4 import BeautifulSoup
-
-
-def login(email, password):
-	"""
-	Logs in to kenpom.com using user credentials.
-
-	Args:
-			email (str): User e-mail for login to kenpom.com.
-			password (str): User password for login to kenpom.com.
-
-	Returns:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
-	"""
-
-	browser = mechanicalsoup.StatefulBrowser()
-	browser.open('https://kenpom.com/index.php')
-
-	# Response page actually throws an error but further navigation works and will show you as logged in.
-	browser.get_current_page()
-	browser.select_form('form[action="handlers/login_handler.php"]')
-	browser['email'] = email
-	browser['password'] = password
-
-	response = browser.submit_selected()
-
-	if response.status_code != 200:
-		raise Exception(
-			'Logging in to kenpom.com failed - check that the site is available and your credentials are correct.')
-
-	return browser
 
 
 def get_efficiency(browser, season=None):
@@ -403,3 +372,68 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 		ps_df = ps_df.dropna()
 
 	return ps_df
+
+def get_kpoy(browser, season=None):
+	"""
+	Scrapes the kenpom Player of the Year tables (https://kenpom.com/kpoy.php) into dataframes.
+
+	Args:
+			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+				by the `login` function.
+			season (str, optional): Used to define different seasons. 2011 is the earliest available season.
+					Retrieves most current season by default.
+
+	Returns:
+			kpoy_dfs (list of pandas dataframe): List of dandas dataframes containing the kenpom Player of the Year
+				and Game MVP leaders tables from kenpom.com. Game MVP table only available from 2013 season onwards.
+
+	Raises:
+			ValueError: If `season` is less than 2011.
+	"""
+
+	kpoy_dfs = []
+	url = 'https://kenpom.com/kpoy.php'
+
+	# Create URL.
+	if season:
+		if int(season) < 2011:
+			raise ValueError(
+				'season cannot be less than 2002, as data only goes back that far.')
+		url = url + '?y=' + season
+	else:
+		season = 2013
+
+	browser.open(url)
+	kpoy = browser.get_current_page()
+	table = kpoy.find_all('table')[0]
+	df = pd.read_html(str(table))
+
+	kpoy_df = df[0]
+	kpoy_df.columns = ['Rank', 'Player', 'KPOY Rating']
+
+	# Some mildly moronic dataframe tidying.
+	kpoy_df['Player'], kpoy_df['Weight'], kpoy_df['Year'], kpoy_df['Hometown'] = kpoy_df['Player'].str.split(' · ').str
+	kpoy_df['Player'], kpoy_df['Info'] = kpoy_df['Player'].str.split(', ', 1).str
+	kpoy_df['Team'] = kpoy_df['Info'].str.replace('\d+', '').str.rstrip('-')
+	kpoy_df['Height'] = kpoy_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE).str.strip('. ').str.strip()
+	kpoy_df = kpoy_df.drop(['Info'], axis=1)
+
+	kpoy_dfs.append(kpoy_df)
+	# Now the MVP table.
+	if int(season) >= 2013:
+		table = kpoy.find_all('table')[-1]
+		df = pd.read_html(str(table))
+
+		mvp_df = df[0]
+		mvp_df.columns = ['Rank', 'Player', 'Game MVPs']
+
+		# More tidying.
+		mvp_df['Player'], mvp_df['Weight'], mvp_df['Year'], mvp_df['Hometown'] = mvp_df['Player'].str.split(' · ').str
+		mvp_df['Player'], mvp_df['Info'] = mvp_df['Player'].str.split(', ', 1).str
+		mvp_df['Team'] = mvp_df['Info'].str.replace('\d+', '').str.rstrip('-')
+		mvp_df['Height'] = mvp_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE).str.strip('. ').str.strip()
+		mvp_df = mvp_df.drop(['Info'], axis=1)
+
+		kpoy_dfs.append(mvp_df)
+
+	return kpoy_dfs
