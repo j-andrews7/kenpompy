@@ -32,7 +32,7 @@ def get_efficiency(browser, season=None):
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		url = url + '?y=' + season
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	eff = browser.get_current_page()
@@ -89,7 +89,7 @@ def get_fourfactors(browser, season=None):
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		url = url + '?y=' + season
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	ff = browser.get_current_page()
@@ -141,7 +141,7 @@ def get_teamstats(browser, defense=False, season=None):
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		url = url + '?y=' + season
+		url = url + '?y=' + str(season)
 		if defense:
 			url = url + '&od=d'
 			last_cols = ['AdjDE', 'AdjDE.Rank']
@@ -195,7 +195,7 @@ def get_pointdist(browser, season=None):
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		url = url + '?y=' + season
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	dist = browser.get_current_page()
@@ -241,7 +241,7 @@ def get_height(browser, season=None):
 		if int(season) < 2007:
 			raise ValueError(
 				'Season cannot be less than 2007, as data only goes back that far.')
-		url = url + '?y=' + season
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	height = browser.get_current_page()
@@ -329,7 +329,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 			raise ValueError(
 				'Conference only stats only available for seasons after 2013.'
 			)
-		url = url + '&y=' + season
+		url = url + '&y=' + str(season)
 
 	if conf_only:
 		url = url + '&c=c'
@@ -399,7 +399,7 @@ def get_kpoy(browser, season=None):
 		if int(season) < 2011:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		url = url + '?y=' + season
+		url = url + '?y=' + str(season)
 	else:
 		season = 2013
 
