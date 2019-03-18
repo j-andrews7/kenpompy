@@ -274,6 +274,7 @@ def get_height(browser, season=None):
 
 	return h_df
 
+
 def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=False):
 	"""
 	Scrapes the Player Leaders tables (https://kenpom.com/playerstats.php) into a dataframe.
@@ -302,17 +303,18 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 			ps_df (pandas dataframe): Pandas dataframe containing the Player Leaders table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2004, `metric` is invalid, or `conf_only` is used with an 
-				invalid `season`.
+			ValueError: If `season` is less than 2004 or `conf_only` is used with an invalid `season`.
+			KeyError: If `metric` is invalid.
 	"""
 
 	# `metric` parameter checking.
+	metric = metric.upper()
 	metrics = {'ORTG': 'ORtg', 'MIN': 'PctMin', 'EFG': 'eFG', 'POSS': 'PctPoss', 'SHOTS': 'PctShots', 'OR': 'ORPct', 
 			   'DR': 'DRPct', 'TO': 'TORate', 'ARATE': 'ARate', 'BLK': 'PctBlocks', 'FTRATE': 'FTRate', 
 			   'STL': 'PctStls', 'TS': 'TS', 'FC40': 'FCper40', 'FD40': 'FDper40', '2P': 'FG2Pct', '3P': 'FG3Pct', 
 			   'FT': 'FTPct'}
-	if metric.upper() not in metrics:
-		raise ValueError(
+	if metric not in metrics:
+		raise KeyError(
 			"""Metric is invalid, must be one of: 'ORtg', 'Min', 'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 
 			'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', '3P', 'FT'""")
 	else:
@@ -325,7 +327,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 		if int(season) < 2004:
 			raise ValueError(
 				'Season cannot be less than 2004, as data only goes back that far.')
-		elif int(season) < 2014 & conf_only:
+		elif int(season) < 2014 and conf_only:
 			raise ValueError(
 				'Conference only stats only available for seasons after 2013.'
 			)
@@ -339,7 +341,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 
 	browser.open(url)
 	playerstats = browser.get_current_page()
-	if metric.upper() == 'ORTG':
+	if metric == 'ORTG':
 		ps_dfs = []
 		tables = playerstats.find_all('table')
 		for t in tables:
@@ -372,6 +374,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 		ps_df = ps_df.dropna()
 
 	return ps_df
+
 
 def get_kpoy(browser, season=None):
 	"""
