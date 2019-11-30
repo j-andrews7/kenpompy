@@ -11,8 +11,15 @@ As with many web scrapers, the responsibility to use this package in a reasonabl
 ---
 
 ## Installation
-This package is available on [pypi]() and can be easily installed with `pip`:
-```pip install kenpompy```
+This package will be put on pypi when finished, but it can currently be easily installed with:
+
+```
+git clone https://github.com/j-andrews7/kenpompy.git
+pip install .
+```
+
+## What It Can (and Can't) Do
+This a work in progress - currently all of the miscellaneous and summary page scraping modules are functional. `Team` and `Player` classes are planned, but they're more complicated.
 
 ## Usage
 `kenpompy` is simple to use. Generally, tables on each page are scraped into `pandas` dataframes with simple parameters to select different seasons or tables. As many tables have headers that don't parse well, some are manually altered to a small degree to make the resulting dataframe easier to interpret and manipulate. 
@@ -32,8 +39,6 @@ import kenpompy.summary as kp
 # Returns a pandas dataframe containing the efficiency and tempo stats for the current season (https://kenpom.com/summary.php).
 eff_stats = kp.get_efficiency(browser)
 ```
-
-Full documentation can be found [here]().
 
 ---
 

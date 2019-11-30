@@ -22,4 +22,5 @@ setuptools.setup(
         "Intended Audience :: Science/Research",
         "Intended Audience :: Developers"
     ],
+    install_requires = ["mechanicalsoup", "pandas", "bs4"],
 )

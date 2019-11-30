@@ -43,7 +43,7 @@ def get_efficiency(browser, season=None):
 	eff_df = eff_df[0]
 
 	# Handle seasons prior to 2010 having fewer columns.
-	if len(eff_df.columns) == 34:
+	if len(eff_df.columns) == 18:
 		eff_df = eff_df.iloc[:, 0:18]
 		eff_df.columns = ['Team', 'Conference', 'Tempo-Adj', 'Tempo-Adj.Rank', 'Tempo-Raw', 'Tempo-Raw.Rank',
 						  'Avg. Poss Length-Offense', 'Avg. Poss Length-Offense.Rank', 'Avg. Poss Length-Defense',
