@@ -45,7 +45,7 @@ eff_stats = kp.get_efficiency(browser)
 ---
 
 ## Contributing
-You can contribute by creating issues to highlight bugs and make suggestions for additional features. I also welcome pull requests that fix bugs or add functionality.
+You can contribute by creating [issues](https://github.com/j-andrews7/kenpompy/issues) to highlight bugs and make suggestions for additional features. [Pull requests](https://github.com/j-andrews7/kenpompy/pulls) are also very welcome.
 
 ## License
 `kenpompy` is released on the GNU GPL v3.0 license. You are free to use, modify, or redistribute it in almost any way, provided you state changes to the code, disclose the source, and use the same license. It is released with zero warranty for any purpose and I retain no liability for its use. [Read the full license](https://github.com/j-andrews7/kenpompy/blob/master/LICENSE) for additional details.
