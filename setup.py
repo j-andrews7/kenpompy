@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/j-andrews7/kenpompy",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=("tests", "docs")),
     license="GNU GPLv3",
     classifiers=[
         "Programming Language :: Python :: 3",

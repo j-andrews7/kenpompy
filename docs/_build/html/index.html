@@ -1,0 +1,615 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>kenpompy: College Basketball for Nerds &mdash; kenpompy 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> kenpompy
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">kenpompy: College Basketball for Nerds</a></li>
+<li><a class="reference internal" href="#objective">Objective</a></li>
+<li><a class="reference internal" href="#responsible-use">Responsible Use</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#what-it-can-and-can-t-do">What It Can (and Can’t) Do</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#full-api-reference">Full API Reference</a><ul>
+<li><a class="reference internal" href="#module-kenpompy.utils">utils</a></li>
+<li><a class="reference internal" href="#module-kenpompy.misc">misc</a></li>
+<li><a class="reference internal" href="#module-kenpompy.summary">summary</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contributing">Contributing</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">kenpompy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>kenpompy: College Basketball for Nerds</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="kenpompy-college-basketball-for-nerds">
+<h1>kenpompy: College Basketball for Nerds<a class="headerlink" href="#kenpompy-college-basketball-for-nerds" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>This python package serves as a convenient web scraper for <a class="reference external" href="kenpom.com">kenpom</a>, which provides tons of great NCAA basketball statistics and metrics. It <strong>requires a subscription to KenPomeroy’s site for use</strong>, otherwise only the home page will be accessible. It’s a small fee for a year of access, and totally worth it in my opinion.</p>
+</div>
+<div class="section" id="objective">
+<h1>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h1>
+<p>Ultimately, this package is to allow both hobbyist and reknown sports analysts alike to get data from kenpom in a format more suitable for visualization, transformation, and additional analysis. It’s meant to be simple, easy to use, and to yield information in a way that is immediately usable.</p>
+</div>
+<div class="section" id="responsible-use">
+<h1>Responsible Use<a class="headerlink" href="#responsible-use" title="Permalink to this headline">¶</a></h1>
+<p>As with many web scrapers, the responsibility to use this package in a reasonable manner falls upon the user. Don’t be a jerk and constantly scrape the site a thousand times a minute or you run the risk of potentially getting barred from it, which you’d likely deserve. I am in no way responsible for how you use (or abuse) this package. Be sensible.</p>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>This package will be put on pypi when finished, but it can currently be easily installed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">j</span><span class="o">-</span><span class="n">andrews7</span><span class="o">/</span><span class="n">kenpompy</span><span class="o">.</span><span class="n">git</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="what-it-can-and-can-t-do">
+<h1>What It Can (and Can’t) Do<a class="headerlink" href="#what-it-can-and-can-t-do" title="Permalink to this headline">¶</a></h1>
+<p>This a work in progress - currently all of the miscellaneous and summary page scraping modules are functional. <code class="code docutils literal notranslate"><span class="pre">Team</span></code> and <code class="code docutils literal notranslate"><span class="pre">Player</span></code> classes are planned, but they’re more complicated.</p>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p><code class="code docutils literal notranslate"><span class="pre">kenpompy</span></code> is simple to use. Generally, tables on each page are scraped into <code class="code docutils literal notranslate"><span class="pre">pandas</span></code> dataframes with simple parameters to select different seasons or tables. As many tables have headers that don’t parse well, some are manually altered to a small degree to make the resulting dataframe easier to interpret and manipulate.</p>
+<p>First, you must login:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">kenpompy.utils</span> <span class="k">import</span> <span class="n">login</span>
+
+<span class="c1"># Returns an authenticated browser that can then be used to scrape pages that require authorization.</span>
+<span class="n">browser</span> <span class="o">=</span> <span class="n">login</span><span class="p">(</span><span class="n">your_email</span><span class="p">,</span> <span class="n">your_password</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then you can request specific pages that will be parsed into convenient dataframes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">kenpompy.summary</span> <span class="k">as</span> <span class="nn">kp</span>
+
+<span class="c1"># Returns a pandas dataframe containing the efficiency and tempo stats for the current season (https://kenpom.com/summary.php).</span>
+<span class="n">eff_stats</span> <span class="o">=</span> <span class="n">kp</span><span class="o">.</span><span class="n">get_efficiency</span><span class="p">(</span><span class="n">browser</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="full-api-reference">
+<h1>Full API Reference<a class="headerlink" href="#full-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-kenpompy.utils">
+<span id="utils"></span><h2>utils<a class="headerlink" href="#module-kenpompy.utils" title="Permalink to this headline">¶</a></h2>
+<p>The utils module provides utility functions, such as logging in.</p>
+<dl class="function">
+<dt id="kenpompy.utils.login">
+<code class="sig-prename descclassname">kenpompy.utils.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><em class="sig-param">email</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.utils.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs in to kenpom.com using user credentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>email</strong> (<em>str</em>) – User e-mail for login to kenpom.com.</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – User password for login to kenpom.com.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Authenticated browser with full access to kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>browser (mechanicalsoup StatefulBrowser)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-kenpompy.misc">
+<span id="misc"></span><h2>misc<a class="headerlink" href="#module-kenpompy.misc" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions for scraping the miscellaneous stats kenpom.com pages into more
+usable pandas dataframes.</p>
+<dl class="function">
+<dt id="kenpompy.misc.get_arenas">
+<code class="sig-prename descclassname">kenpompy.misc.</code><code class="sig-name descname">get_arenas</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.misc.get_arenas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the arenas table (<a class="reference external" href="https://kenpom.com/arenas.php">https://kenpom.com/arenas.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2010 is the earliest available season.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the arenas table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>arenas_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2010.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.misc.get_gameattribs">
+<code class="sig-prename descclassname">kenpompy.misc.</code><code class="sig-name descname">get_gameattribs</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em>, <em class="sig-param">metric='Excitement'</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.misc.get_gameattribs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Game Attributes tables (<a class="reference external" href="https://kenpom.com/game_attrs.php">https://kenpom.com/game_attrs.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2010 is the earliest available season. Current
+season is the default.</p></li>
+<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to get highest ranking games for different metrics. Available values are:
+‘Excitement’, ‘Tension’, ‘Dominance’, ‘ComeBack’, ‘FanMatch’, ‘Upsets’, and ‘Busts’. Default is
+‘Excitement’. ‘FanMatch’, ‘Upsets’, and ‘Busts’ are only valid for seasons after 2010.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the Game Attributes table from kenpom.com for a
+given metric.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ga_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2010.</p></li>
+<li><p><strong>KeyError</strong> – If <cite>metric</cite> is invalid.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.misc.get_hca">
+<code class="sig-prename descclassname">kenpompy.misc.</code><code class="sig-name descname">get_hca</code><span class="sig-paren">(</span><em class="sig-param">browser</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.misc.get_hca" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the home court advantage table (<a class="reference external" href="https://kenpom.com/hca.php">https://kenpom.com/hca.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2010 is the earliest available season.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the home court advantage table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hca_df (pandas dataframe)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.misc.get_refs">
+<code class="sig-prename descclassname">kenpompy.misc.</code><code class="sig-name descname">get_refs</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.misc.get_refs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the officials rankings table (<a class="reference external" href="https://kenpom.com/officials.php">https://kenpom.com/officials.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2016 is the earliest available season.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the officials rankings table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>refs_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2016.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.misc.get_trends">
+<code class="sig-prename descclassname">kenpompy.misc.</code><code class="sig-name descname">get_trends</code><span class="sig-paren">(</span><em class="sig-param">browser</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.misc.get_trends" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the statistical trends table (<a class="reference external" href="https://kenpom.com/trends.php">https://kenpom.com/trends.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the statistical trends table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>trends_df (pandas dataframe)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-kenpompy.summary">
+<span id="summary"></span><h2>summary<a class="headerlink" href="#module-kenpompy.summary" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions for scraping the summary stats kenpom.com pages into more
+usable pandas dataframes.</p>
+<dl class="function">
+<dt id="kenpompy.summary.get_efficiency">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_efficiency</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_efficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Efficiency stats table (<a class="reference external" href="https://kenpom.com/summary.php">https://kenpom.com/summary.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2002 is the earliest available season but
+possession length data wasn’t available until 2010.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>eff_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2002.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.summary.get_fourfactors">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_fourfactors</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_fourfactors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Four Factors table (<a class="reference external" href="https://kenpom.com/stats.php">https://kenpom.com/stats.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2002 is the earliest available season.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the summary Four Factors table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ff_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2002.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.summary.get_height">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_height</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Height/Experience table (<a class="reference external" href="https://kenpom.com/height.php">https://kenpom.com/height.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2007 is the earliest available season but
+continuity data wasn’t available until 2008.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the Height/Experience table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>h_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2007.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.summary.get_kpoy">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_kpoy</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_kpoy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the kenpom Player of the Year tables (<a class="reference external" href="https://kenpom.com/kpoy.php">https://kenpom.com/kpoy.php</a>) into dataframes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2011 is the earliest available season.
+Retrieves most current season by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of dandas dataframes containing the kenpom Player of the Year</dt><dd><p>and Game MVP leaders tables from kenpom.com. Game MVP table only available from 2013 season onwards.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>kpoy_dfs (list of pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2011.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.summary.get_playerstats">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_playerstats</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em>, <em class="sig-param">metric='EFG'</em>, <em class="sig-param">conf=None</em>, <em class="sig-param">conf_only=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_playerstats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Player Leaders tables (<a class="reference external" href="https://kenpom.com/playerstats.php">https://kenpom.com/playerstats.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2004 is the earliest available season. Current
+season is the default.</p></li>
+<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to get leaders for different metrics. Available values are: ‘ORtg’, ‘Min’,
+‘eFG’, ‘Poss’, ‘Shots’, ‘OR’, ‘DR’, ‘TO’, ‘ARate’, ‘Blk’, ‘FTRate’, ‘Stl’, ‘TS’, ‘FC40’, ‘FD40’, ‘2P’,
+‘3P’, ‘FT’. Default is ‘eFG’. ‘ORtg’ returns a list of four dataframes, as there are four tables:
+players that used &gt;28% of possessions, &gt;24% of possessions, &gt;20% of possessions, and with no possession
+restriction.</p></li>
+<li><p><strong>conf</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to limit to players in a specific conference. Allowed values are: ‘A10’, ‘ACC’,
+‘AE’, ‘AMER’, ‘ASUN’, ‘B10’, ‘B12’, ‘BE’, ‘BSKY’, ‘BSTH’, ‘BW’, ‘CAA’, ‘CUSA’, ‘HORZ’, ‘IND’, IVY’,
+‘MAAC’, ‘MAC’, ‘MEAC’, ‘MVC’, ‘MWC’, ‘NEC’, ‘OVC’, ‘P12’, ‘PAT’, ‘SB’, ‘SC’, ‘SEC’, ‘SLND’, ‘SUM’,
+‘SWAC’, ‘WAC’, ‘WCC’. If you try to use a conference that doesn’t exist for a given season, like ‘IND’
+and ‘2018’, you’ll get an empty table, as kenpom.com doesn’t serve 404 pages for invalid table queries
+like that. No filter applied by default.</p></li>
+<li><p><strong>conf_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Used to define whether stats should reflect conference games only. Only
+available if specific conference is defined. Only available for seasons after 2013. False by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the Player Leaders table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ps_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2004 or <cite>conf_only</cite> is used with an invalid <cite>season</cite>.</p></li>
+<li><p><strong>KeyError</strong> – If <cite>metric</cite> is invalid.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.summary.get_pointdist">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_pointdist</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_pointdist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Team Points Distribution table (<a class="reference external" href="https://kenpom.com/pointdist.php">https://kenpom.com/pointdist.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2002 is the earliest available season.
+Retrieves most current season by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the Team Points Distribution table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dist_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2002.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="kenpompy.summary.get_teamstats">
+<code class="sig-prename descclassname">kenpompy.summary.</code><code class="sig-name descname">get_teamstats</code><span class="sig-paren">(</span><em class="sig-param">browser</em>, <em class="sig-param">defense=False</em>, <em class="sig-param">season=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kenpompy.summary.get_teamstats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scrapes the Miscellaneous Team Stats table (<a class="reference external" href="https://kenpom.com/teamstats.php">https://kenpom.com/teamstats.php</a>) into a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>browser</strong> (<em>mechanicalsoup StatefulBrowser</em>) – Authenticated browser with full access to kenpom.com generated
+by the <cite>login</cite> function.</p></li>
+<li><p><strong>defense</strong> (<em>bool</em><em>, </em><em>optional</em>) – Used to flag whether the defensive teamstats table is wanted or not. False by
+default.</p></li>
+<li><p><strong>season</strong> (<em>str</em><em>, </em><em>optional</em>) – Used to define different seasons. 2002 is the earliest available season.
+Retrieves most current season by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas dataframe containing the Miscellaneous Team Stats table from kenpom.com.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ts_df (pandas dataframe)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>season</cite> is less than 2002.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>You can contribute by creating <a class="reference external" href="https://github.com/j-andrews7/kenpompy/issues">issues</a> to highlight bugs and make suggestions for additional features. <a class="reference external" href="https://github.com/j-andrews7/kenpompy/pulls">Pull requests</a> are also welcome.</p>
+</div>
+<div class="section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p><cite>kenpompy</cite> is released on the GNU GPL v3.0 license. You are free to use, modify, or redistribute it in almost any way, provided you state changes to the code, disclose the source, and use the same license. It is released with zero warranty for any purpose and I retain no liability for its use. <a class="reference external" href="https://github.com/j-andrews7/kenpompy/blob/master/LICENSE">Read the full license</a> for additional details.</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jared Andrews
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -14,16 +14,16 @@ def get_efficiency(browser, season=None):
 	Scrapes the Efficiency stats table (https://kenpom.com/summary.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2002 is the earliest available season but 
-				possession length data wasn't available until 2010.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2002 is the earliest available season but 
+			possession length data wasn't available until 2010.
 
 	Returns:
-			eff_df (pandas dataframe): Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.
+		eff_df (pandas dataframe): Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 2002.
 	"""
 
 	url = 'https://kenpom.com/summary.php'
@@ -72,15 +72,15 @@ def get_fourfactors(browser, season=None):
 	Scrapes the Four Factors table (https://kenpom.com/stats.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 
 	Returns:
-			ff_df (pandas dataframe): Pandas dataframe containing the summary Four Factors table from kenpom.com.
+		ff_df (pandas dataframe): Pandas dataframe containing the summary Four Factors table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 2002.
 	"""
 
 	url = 'https://kenpom.com/stats.php'
@@ -119,12 +119,12 @@ def get_teamstats(browser, defense=False, season=None):
 	Scrapes the Miscellaneous Team Stats table (https://kenpom.com/teamstats.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by 
-				default.
-			season (str, optional): Used to define different seasons. 2002 is the earliest available season.
-					Retrieves most current season by default.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by 
+			default.
+		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+				Retrieves most current season by default.
 
 	Returns:
 			ts_df (pandas dataframe): Pandas dataframe containing the Miscellaneous Team Stats table from kenpom.com.
@@ -176,16 +176,16 @@ def get_pointdist(browser, season=None):
 	Scrapes the Team Points Distribution table (https://kenpom.com/pointdist.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2002 is the earliest available season.
-					Retrieves most current season by default.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+			Retrieves most current season by default.
 
 	Returns:
-			dist_df (pandas dataframe): Pandas dataframe containing the Team Points Distribution table from kenpom.com.
+		dist_df (pandas dataframe): Pandas dataframe containing the Team Points Distribution table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 2002.
 	"""
 
 	url = 'https://kenpom.com/pointdist.php'
@@ -223,16 +223,16 @@ def get_height(browser, season=None):
 	Scrapes the Height/Experience table (https://kenpom.com/height.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2007 is the earliest available season but 
-					continuity data wasn't available until 2008.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2007 is the earliest available season but 
+			continuity data wasn't available until 2008.
 
 	Returns:
-			h_df (pandas dataframe): Pandas dataframe containing the Height/Experience table from kenpom.com.
+		h_df (pandas dataframe): Pandas dataframe containing the Height/Experience table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2007.
+		ValueError: If `season` is less than 2007.
 	"""
 
 	url = 'https://kenpom.com/height.php'
@@ -280,31 +280,31 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 	Scrapes the Player Leaders tables (https://kenpom.com/playerstats.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2004 is the earliest available season. Current 
-				season is the default.
-			metric (str, optional): Used to get leaders for different metrics. Available values are: 'ORtg', 'Min', 
-				'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', 
-				'3P', 'FT'. Default is 'eFG'. 'ORtg' returns a list of four dataframes, as there are four tables: 
-				players that used >28% of possessions, >24% of possessions, >20% of possessions, and with no possession 
-				restriction.
-			conf (str, optional): Used to limit to players in a specific conference. Allowed values are: 'A10', 'ACC',
-				'AE', 'AMER', 'ASUN', 'B10', 'B12', 'BE', 'BSKY', 'BSTH', 'BW', 'CAA', 'CUSA', 'HORZ', 'IND', IVY', 
-				'MAAC', 'MAC', 'MEAC', 'MVC', 'MWC', 'NEC', 'OVC', 'P12', 'PAT', 'SB', 'SC', 'SEC', 'SLND', 'SUM', 
-				'SWAC', 'WAC', 'WCC'. If you try to use a conference that doesn't exist for a given season, like 'IND'
-				and '2018', you'll get an empty table, as kenpom.com doesn't serve 404 pages for invalid table queries
-				like that. No filter applied by default.
-			conf_only (bool, optional): Used to define whether stats should reflect conference games only. Only
-				available if specific conference is defined. Only available for seasons after 2013. False by default.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2004 is the earliest available season. Current 
+			season is the default.
+		metric (str, optional): Used to get leaders for different metrics. Available values are: 'ORtg', 'Min', 
+			'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', 
+			'3P', 'FT'. Default is 'eFG'. 'ORtg' returns a list of four dataframes, as there are four tables: 
+			players that used >28% of possessions, >24% of possessions, >20% of possessions, and with no possession 
+			restriction.
+		conf (str, optional): Used to limit to players in a specific conference. Allowed values are: 'A10', 'ACC',
+			'AE', 'AMER', 'ASUN', 'B10', 'B12', 'BE', 'BSKY', 'BSTH', 'BW', 'CAA', 'CUSA', 'HORZ', 'IND', IVY', 
+			'MAAC', 'MAC', 'MEAC', 'MVC', 'MWC', 'NEC', 'OVC', 'P12', 'PAT', 'SB', 'SC', 'SEC', 'SLND', 'SUM', 
+			'SWAC', 'WAC', 'WCC'. If you try to use a conference that doesn't exist for a given season, like 'IND'
+			and '2018', you'll get an empty table, as kenpom.com doesn't serve 404 pages for invalid table queries
+			like that. No filter applied by default.
+		conf_only (bool, optional): Used to define whether stats should reflect conference games only. Only
+			available if specific conference is defined. Only available for seasons after 2013. False by default.
 
 
 	Returns:
-			ps_df (pandas dataframe): Pandas dataframe containing the Player Leaders table from kenpom.com.
+		ps_df (pandas dataframe): Pandas dataframe containing the Player Leaders table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2004 or `conf_only` is used with an invalid `season`.
-			KeyError: If `metric` is invalid.
+		ValueError: If `season` is less than 2004 or `conf_only` is used with an invalid `season`.
+		KeyError: If `metric` is invalid.
 	"""
 
 	# `metric` parameter checking.
@@ -381,17 +381,17 @@ def get_kpoy(browser, season=None):
 	Scrapes the kenpom Player of the Year tables (https://kenpom.com/kpoy.php) into dataframes.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2011 is the earliest available season.
-					Retrieves most current season by default.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2011 is the earliest available season.
+			Retrieves most current season by default.
 
 	Returns:
-			kpoy_dfs (list of pandas dataframe): List of dandas dataframes containing the kenpom Player of the Year
-				and Game MVP leaders tables from kenpom.com. Game MVP table only available from 2013 season onwards.
+		kpoy_dfs (list of pandas dataframe): List of dandas dataframes containing the kenpom Player of the Year
+			and Game MVP leaders tables from kenpom.com. Game MVP table only available from 2013 season onwards.
 
 	Raises:
-			ValueError: If `season` is less than 2011.
+		ValueError: If `season` is less than 2011.
 	"""
 
 	kpoy_dfs = []

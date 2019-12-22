@@ -1,5 +1,5 @@
 """
-This module provides utility functions for scraping kenpom.com into pandas dataframes.
+The utils module provides utility functions, such as logging in.
 """
 
 import mechanicalsoup
@@ -11,11 +11,11 @@ def login(email, password):
 	Logs in to kenpom.com using user credentials.
 
 	Args:
-			email (str): User e-mail for login to kenpom.com.
-			password (str): User password for login to kenpom.com.
+		email (str): User e-mail for login to kenpom.com.
+		password (str): User password for login to kenpom.com.
 
 	Returns:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
 	"""
 
 	browser = mechanicalsoup.StatefulBrowser()

@@ -13,11 +13,11 @@ def get_trends(browser):
 	Scrapes the statistical trends table (https://kenpom.com/trends.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
 
 	Returns:
-			trends_df (pandas dataframe): Pandas dataframe containing the statistical trends table from kenpom.com.
+		trends_df (pandas dataframe): Pandas dataframe containing the statistical trends table from kenpom.com.
 	"""
 
 	url = 'https://kenpom.com/trends.php'
@@ -39,15 +39,15 @@ def get_refs(browser, season=None):
 	Scrapes the officials rankings table (https://kenpom.com/officials.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2016 is the earliest available season.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2016 is the earliest available season.
 
 	Returns:
-			refs_df (pandas dataframe): Pandas dataframe containing the officials rankings table from kenpom.com.
+		refs_df (pandas dataframe): Pandas dataframe containing the officials rankings table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2016.
+		ValueError: If `season` is less than 2016.
 	"""
 
 	url = 'https://kenpom.com/officials.php'
@@ -78,12 +78,12 @@ def get_hca(browser):
 	Scrapes the home court advantage table (https://kenpom.com/hca.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2010 is the earliest available season.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
 
 	Returns:
-			hca_df (pandas dataframe): Pandas dataframe containing the home court advantage table from kenpom.com.
+		hca_df (pandas dataframe): Pandas dataframe containing the home court advantage table from kenpom.com.
 	"""
 
 	url = 'https://kenpom.com/hca.php'
@@ -107,15 +107,15 @@ def get_arenas(browser, season=None):
 	Scrapes the arenas table (https://kenpom.com/arenas.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2010 is the earliest available season.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
 
 	Returns:
-			arenas_df (pandas dataframe): Pandas dataframe containing the arenas table from kenpom.com.
+		arenas_df (pandas dataframe): Pandas dataframe containing the arenas table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2010.
+		ValueError: If `season` is less than 2010.
 	"""
 
 	url = 'https://kenpom.com/arenas.php'
@@ -147,21 +147,21 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 	Scrapes the Game Attributes tables (https://kenpom.com/game_attrs.php) into a dataframe.
 
 	Args:
-			browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-				by the `login` function.
-			season (str, optional): Used to define different seasons. 2010 is the earliest available season. Current
-				season is the default.
-			metric (str, optional): Used to get highest ranking games for different metrics. Available values are:
-				'Excitement', 'Tension', 'Dominance', 'ComeBack', 'FanMatch', 'Upsets', and 'Busts'. Default is
-				'Excitement'. 'FanMatch', 'Upsets', and 'Busts' are only valid for seasons after 2010.
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2010 is the earliest available season. Current
+			season is the default.
+		metric (str, optional): Used to get highest ranking games for different metrics. Available values are:
+			'Excitement', 'Tension', 'Dominance', 'ComeBack', 'FanMatch', 'Upsets', and 'Busts'. Default is
+			'Excitement'. 'FanMatch', 'Upsets', and 'Busts' are only valid for seasons after 2010.
 
 	Returns:
-			ga_df (pandas dataframe): Pandas dataframe containing the Game Attributes table from kenpom.com for a
-				given metric.
+		ga_df (pandas dataframe): Pandas dataframe containing the Game Attributes table from kenpom.com for a
+		given metric.
 
 	Raises:
-			ValueError: If `season` is less than 2010.
-			KeyError: If `metric` is invalid.
+		ValueError: If `season` is less than 2010.
+		KeyError: If `metric` is invalid.
 	"""
 
 	# `metric` parameter checking.
