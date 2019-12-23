@@ -9,8 +9,6 @@ install:
 - pip install codecov pytest pytest-cov
 - pip install .
 script:
-- pytest
 - pytest --cov=./
 after_success:
-- ls -la
 - codecov
