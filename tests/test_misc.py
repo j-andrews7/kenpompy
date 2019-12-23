@@ -9,6 +9,7 @@ def test_get_trends(browser):
 				'  51.9  9.3  8.9  9.7  76.8  47.8     59.0  71.9')
 	print(os.environ["EMAIL"])
 	print(os.environ["PASSWORD"])
+	print(os.environ)
 	print("weee")
 	df = kpmisc.get_trends(browser)
 	assert df.to_string() == expected
