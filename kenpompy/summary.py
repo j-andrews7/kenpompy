@@ -17,7 +17,7 @@ def get_efficiency(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season but 
-			possession length data wasn't available until 2010.
+			possession length data wasn't available until 2010. Most recent season is the default.
 
 	Returns:
 		eff_df (pandas dataframe): Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.
@@ -75,6 +75,7 @@ def get_fourfactors(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+			Most recent season is the default.
 
 	Returns:
 		ff_df (pandas dataframe): Pandas dataframe containing the summary Four Factors table from kenpom.com.
@@ -124,7 +125,7 @@ def get_teamstats(browser, defense=False, season=None):
 		defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by 
 			default.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
-				Retrieves most current season by default.
+			Most recent season is the default.
 
 	Returns:
 			ts_df (pandas dataframe): Pandas dataframe containing the Miscellaneous Team Stats table from kenpom.com.
@@ -179,7 +180,7 @@ def get_pointdist(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
-			Retrieves most current season by default.
+			Most recent season is the default.
 
 	Returns:
 		dist_df (pandas dataframe): Pandas dataframe containing the Team Points Distribution table from kenpom.com.
@@ -226,7 +227,7 @@ def get_height(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2007 is the earliest available season but 
-			continuity data wasn't available until 2008.
+			continuity data wasn't available until 2008. Most recent season is the default.
 
 	Returns:
 		h_df (pandas dataframe): Pandas dataframe containing the Height/Experience table from kenpom.com.
@@ -282,8 +283,8 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 	Args:
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2004 is the earliest available season. Current 
-			season is the default.
+		season (str, optional): Used to define different seasons. 2004 is the earliest available season. 
+			Most recent season is the default.
 		metric (str, optional): Used to get leaders for different metrics. Available values are: 'ORtg', 'Min', 
 			'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', 
 			'3P', 'FT'. Default is 'eFG'. 'ORtg' returns a list of four dataframes, as there are four tables: 
@@ -384,7 +385,7 @@ def get_kpoy(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2011 is the earliest available season.
-			Retrieves most current season by default.
+			Most recent season is the default.
 
 	Returns:
 		kpoy_dfs (list of pandas dataframe): List of dandas dataframes containing the kenpom Player of the Year

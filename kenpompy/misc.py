@@ -42,6 +42,7 @@ def get_refs(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2016 is the earliest available season.
+			Most recent season is the default.
 
 	Returns:
 		refs_df (pandas dataframe): Pandas dataframe containing the officials rankings table from kenpom.com.
@@ -110,6 +111,7 @@ def get_arenas(browser, season=None):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
+			Most recent season is the default.
 
 	Returns:
 		arenas_df (pandas dataframe): Pandas dataframe containing the arenas table from kenpom.com.
@@ -149,8 +151,8 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 	Args:
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2010 is the earliest available season. Current
-			season is the default.
+		season (str, optional): Used to define different seasons. 2010 is the earliest available season. 
+			Most recent season is the default.
 		metric (str, optional): Used to get highest ranking games for different metrics. Available values are:
 			'Excitement', 'Tension', 'Dominance', 'ComeBack', 'FanMatch', 'Upsets', and 'Busts'. Default is
 			'Excitement'. 'FanMatch', 'Upsets', and 'Busts' are only valid for seasons after 2010.
