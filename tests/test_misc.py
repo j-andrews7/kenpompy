@@ -9,3 +9,18 @@ def test_get_trends(browser):
 				'  51.9  9.3  8.9  9.7  76.8  47.8     59.0  71.9')
 	df = kpmisc.get_trends(browser)
 	assert df[df.Season == "2019"].to_string() == expected
+
+
+def test_get_refs(browser):
+	expected = ('   Rank          Name  Rating  Games Last Game                                     Game Score\n1     2'
+				'  Keith Kimble   67.08    107   Sat 4/6  1 Virginia 63, 11 Auburn 62 (Minneapolis, MN)')
+	df = kpmisc.get_refs(browser, season = "2019")
+	assert df[df.Name == "Keith Kimble"].to_string() == expected
+
+
+def test_get_hca(browser):
+	expected = ('           Team Conference  HCA HCA.Rank    PF PF.Rank  Pts Pts.Rank   NST NST.Rank  Blk Blk.Rank Elev'
+				' Elev.Rank\n120  Louisville        ACC  3.4      119  -4.1      44  4.5      269  -2.1       14  1.1  '
+				'    228  400       185')
+	df = kpmisc.get_hca(browser)
+	assert df[df.Team == "Louisville"].to_string() == expected

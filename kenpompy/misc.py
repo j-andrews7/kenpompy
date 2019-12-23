@@ -66,7 +66,6 @@ def get_refs(browser, season=None):
 
 	# Dataframe tidying.
 	refs_df = refs_df[0]
-	refs_df.drop(refs_df.head(1).index, inplace=True)
 	refs_df.columns = ['Rank', 'Name', 'Rating', 'Games', 'Last Game', 'Game Score', 'Box']
 	refs_df = refs_df[refs_df.Rating != 'Rating']
 	refs_df = refs_df.drop(['Box'], axis=1)
