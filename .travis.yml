@@ -1,0 +1,19 @@
+language: python
+python:
+  - '3.4'
+  - '3.5'
+  - '3.6'
+  - '3.7'
+  - '3.8'
+  - 3.8-dev
+  - nightly
+install:
+  - pip install -r requirements.txt
+script:
+  - export EMAIL=$EMAIL
+  - export PASSWORD=$PASSWORD
+  - pytest
+env:
+  global:
+    - secure: hwfzsUgjW8/9DShIAjQP4LphpVSH7iuKR4fP7v6RZYwTJwLIyW7MRaK4wDtkh3NhJ7pqQC/c8jLk38IEltKZ8nhbArY0HN3Cz2VX62tb9ziUxkhLcKaX3uVuxgpLZnF8QEViQmby9c7DPvsMBSz8h8DbsDzvBC7xQBy7p52W6d8bex7oKgWaUyAjBM98nF1ZZQR7YJYf34XX6NCVcy6J4RUWeRwa5GV8dhbHcXNCcCLSj/2Uj0EWRDg46FWjhMiq8hpwgLkICEc/OzZpLZNuDMOVhfgFSXHN90D7xDUyqsx84rlHrEqV44HDw7T1DP3MSRvBCwjdJdyG/ANo0qDP/nMndtZv5PvAu/lCbxqzzoLlp7e0KfDcLpthVYjqm/woVPVD9wS9xHmfGJMg1cv2FgYWm9Ls5E0upKQebEvAspLqBs5qTvlbl7TmUd1iuEoDTrzrYeJ6/Hf/tpgeRg4kzRsEv5YBPZ3ZzGQCplTPTG/RkKdwKiUHLZX7TPm6yi+qh7gOaTrGWPYatQd1ih/D0drNbqGlsKhzpf/mbYHEH2AErWy2FQ4LDh1ok17yJlkGEoCMg9rWwAckqV28kv1HW3hAsmNN+V+vi5jIoc1Am3roy35N3a52MFDSerpuH6xs4z/cNlYWoeQyUlbPg29K1m5OZ7pRTrh4rQSRe/DlKsI=
+    - secure: R21UT93JR4tsqsXCQSQfxUQiBAQ7I8OFzyRtisqFJkNminJ11alWdFLHB8XKcsTsZX+IVptHhaauH9d8xvvQbbEMJ3cAVQkUo95Qi+4gKTlY6t3n8Ei0rBOaFJN3cgBbm6hG8r97T0TXgfEh5XmSRapyeyzBiifSRVb08B+GUyGug+PLmGet3MvM4BnReRSG9jiruTwR5X6ZmBPctX988Ug/inSCjzdAGbsJZ3IKSyVDU/wcMRzI0USoh6MV7v7/gnJg/EruzpicuE3mxTgDRaATEjG/7Yvzola8Y0IduK3zv44ft3yI+dRbYyjYAFntKcQrPClIfYrow4SSE+0XVKPafAwrE2nQThdp3Yugwo1BVLRo1xUaxDNJas4+UnRpwtjHmlukxOVnK70UpAK4S6JiY0OQlkRJb+2tsWWsW3uY+lBCogSDcCjm56ZXgmntLBmFfHYwDyZGheqeKCOJRd44RTaHcwCjgFb3BKeoTju7u3SHqxhXCzYUwgxx8RbtmsUvIVTxJ84yPWY2SaT9QtfwTNIsG3BD1g6ogSG4QgBNBoHVr1sYvE9UjYjTYg44w/f7z1WrObbxckzAMwnyoLtTI0eeDQ7Wo3eQ/6vtxoWOJ/wRyG1ZN2CKJkD32ea/RZbXDAQlzlJUHraWhvhtPYnYZpVqNn948iWjGTxZ6ts=
