@@ -6,11 +6,11 @@ python:
 - '3.8'
 install:
 - pip install -r requirements.txt
-- pip install codecov
-- pip install coverage
+- pip install codecov pytest pytest-cov
 - pip install .
 script:
 - pytest
+- pytest --cov=./
 after_success:
 - ls -la
 - codecov
