@@ -1,7 +1,6 @@
 import pytest
 import kenpompy.misc as kpmisc
 import pandas as pd
-import os
 
 def test_get_trends(browser):
 	expected = ('  Season Efficiency Tempo  eFG%   TO%   OR% FTRate   2P%   3P%  3PA%   FT%    A% Blk% Stl% NST% AvgHt'
@@ -24,3 +23,8 @@ def test_get_hca(browser):
 				'    228  400       185')
 	df = kpmisc.get_hca(browser)
 	assert df[df.Team == "Louisville"].to_string() == expected
+
+def test_get_program_ratings(browser):
+	expected = (352, 16)
+	df = kpmisc.get_programs_ratings(browser)
+	assert df.shape == expected
