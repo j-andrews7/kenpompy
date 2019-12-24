@@ -24,6 +24,7 @@ def test_get_hca(browser):
 	df = kpmisc.get_hca(browser)
 	assert df[df.Team == "Louisville"].to_string() == expected
 
+
 def test_get_program_ratings(browser):
 	expected = (352, 16)
 	df = kpmisc.get_programs_ratings(browser)

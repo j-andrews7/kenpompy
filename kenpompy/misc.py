@@ -217,18 +217,19 @@ def get_program_ratings(browser):
 		programs_df (pandas dataframe): Pandas dataframe containing the program ratings table from kenpom.com.
 	"""
 
-    url = 'https://kenpom.com/programs.php'
+	url = 'https://kenpom.com/programs.php'
 
-    browser.open(url)
-    programs = browser.get_current_page()
-    table = programs.find_all('table')[0]
-    programs_df = pd.read_html(str(table))
-    programs_df = programs_df[0]
+	browser.open(url)
+	programs = browser.get_current_page()
+	table = programs.find_all('table')[0]
+	programs_df = pd.read_html(str(table))
+	programs_df = programs_df[0]
 
-    programs_df.columns = ['Rank', 'Team', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
-                          'kenpom.Worst.Season', 'kenpom.Median.Rank', 'kenpom.Top10.Finishes', 'kenpom.Top25.Finishes',
-                          'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4', 'NCAA.E8', 'NCAA.S16', 'NCAA.R1']
+	programs_df.columns = ['Rank', 'Team', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
+							'kenpom.Worst.Season', 'kenpom.Median.Rank', 'kenpom.Top10.Finishes', 
+							'kenpom.Top25.Finishes', 'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4', 'NCAA.E8', 
+							'NCAA.S16', 'NCAA.R1']
 
-    programs_df = programs_df[programs_df.Team != 'Team']
+	programs_df = programs_df[programs_df.Team != 'Team']
 
 	return programs_df
