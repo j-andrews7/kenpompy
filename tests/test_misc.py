@@ -43,13 +43,12 @@ def test_get_arenas(browser):
 
 def test_get_gameattribs(browser):
 	expected = ['1',
-				'Fri Nov 14',
-				'187 High Point 100, 277 Cal St. Bakersfield 99 (4OT)',
-				'Honolulu, HI',
-				'nan',
-				'4.19',
-				'Stan Sheriff Center']
-
+				'Tue Feb 26',
+				'126 West Virginia 104, 42 TCU 96 (3OT)',
+				'Morgantown, WV',
+				'B12',
+				'4.08',
+				'WVU Coliseum']
 	df = kpmisc.get_gameattribs(browser, season = "2019")
 	assert [str(i) for i in df.iloc[0].to_list()] == expected
 
