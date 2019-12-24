@@ -134,7 +134,7 @@ def get_arenas(browser, season=None):
 
 	# Dataframe tidying.
 	arenas_df = arenas_df[0]
-	arenas_df.columns = ['Team', 'Conference', 'Arena', 'Alternate']
+	arenas_df.columns = ['Rank', 'Team', 'Conference', 'Arena', 'Alternate']
 	arenas_df['Arena'], arenas_df['Arena.Capacity'] = arenas_df['Arena'].str.split(' \(').str
 	arenas_df['Arena.Capacity'] = arenas_df['Arena.Capacity'].str.rstrip(')')
 	arenas_df['Alternate'], arenas_df['Alternate.Capacity'] = arenas_df['Alternate'].str.split(' \(').str
