@@ -7,7 +7,7 @@ def test_get_trends(browser):
 				'76.8','47.8','59.0','71.9']
 
 	df = kpmisc.get_trends(browser)
-	assert [string(i) for i in df[df.Season == "2019"].iloc[0].to_list()] == expected
+	assert [str(i) for i in df[df.Season == "2019"].iloc[0].to_list()] == expected
 
 
 def test_get_refs(browser):
@@ -18,7 +18,7 @@ def test_get_refs(browser):
 				'Sat 4/6',
 				'1 Virginia 63, 11 Auburn 62 (Minneapolis, MN)']
 	df = kpmisc.get_refs(browser, season = "2019")
-	assert [string(i) for i in df[df.Name == "Keith Kimble"].iloc[0].to_list()] == expected
+	assert [str(i) for i in df[df.Name == "Keith Kimble"].iloc[0].to_list()] == expected
 
 	with pytest.raises(ValueError):
 		kpmisc.get_refs(browser, season = "2014")
@@ -35,7 +35,7 @@ def test_get_arenas(browser):
 	expected = ['3', 'Louisville', 'ACC', 'KFC Yum! Center', 'nan', '22,000', 'nan']
 
 	df = kpmisc.get_arenas(browser, season = "2019")
-	assert [string(i) for i in df[df.Team == "Louisville"].iloc[0].to_list()] == expected
+	assert [str(i) for i in df[df.Team == "Louisville"].iloc[0].to_list()] == expected
 
 	with pytest.raises(ValueError):
 		kpmisc.get_arenas(browser, season = "2009")
@@ -51,7 +51,7 @@ def test_get_gameattribs(browser):
 				'Stan Sheriff Center']
 
 	df = kpmisc.get_gameattribs(browser, season = "2019")
-	assert [string(i) for i in df.iloc[0].to_list()] == expected
+	assert [str(i) for i in df.iloc[0].to_list()] == expected
 
 	with pytest.raises(ValueError):
 		kpmisc.get_gameattribs(browser, season = "2009")
