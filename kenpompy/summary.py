@@ -402,7 +402,7 @@ def get_kpoy(browser, season=None):
 	if season:
 		if int(season) < 2011:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 2011, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 	else:
 		season = 2013
