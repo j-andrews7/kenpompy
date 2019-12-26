@@ -24,10 +24,9 @@ Yeah, yeah, but have you heard of `reticulate <https://rstudio.github.io/reticul
 Installation
 ============
 
-This package will be put on pypi once in a stable state, but it can currently be easily installed with::
+:code:`kenpompy` is easily installed via :code:`pip`::
 
-	git clone https://github.com/j-andrews7/kenpompy.git
-	pip install .
+	pip install kenpompy
 
 
 What It Can (and Can't) Do
