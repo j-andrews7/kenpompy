@@ -16,7 +16,7 @@ def test_get_efficiency(browser):
 	assert [str(i) for i in df[df.Team == "Louisville"].iloc[0].to_list()] == expected
 
 	with pytest.raises(ValueError):
-		kpmisc.get_efficiency(browser, season = "2001")
+		kpsum.get_efficiency(browser, season = "2001")
 
 
 def test_get_fourfactors(browser):
@@ -27,7 +27,7 @@ def test_get_fourfactors(browser):
 	assert [str(i) for i in df[df.Team == "Louisville"].iloc[0].to_list()] == expected
 
 	with pytest.raises(ValueError):
-		kpmisc.get_fourfactors(browser, season = "2001")
+		kpsum.get_fourfactors(browser, season = "2001")
 
 
 def test_get_teamstats(browser):
@@ -44,5 +44,5 @@ def test_get_teamstats(browser):
 	assert [str(i) for i in df[df.Team == "Louisville"].iloc[0].to_list()] == expected
 
 	with pytest.raises(ValueError):
-		kpmisc.get_teamstats(browser, season = "2001")
+		kpsum.get_teamstats(browser, season = "2001")
 
