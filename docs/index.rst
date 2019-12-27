@@ -4,6 +4,12 @@ kenpompy: College Basketball for Nerds
    :maxdepth: 2
    :caption: Contents:
 
+.. image:: https://travis-ci.com/j-andrews7/kenpompy.svg?branch=master
+    :target: https://travis-ci.com/j-andrews7/kenpompy
+
+.. image:: https://codecov.io/gh/j-andrews7/kenpompy/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/j-andrews7/kenpompy
+
 .. image:: https://github.com/j-andrews7/kenpompy/raw/master/docs/_static/images/kenpompy_unsplash.png 
 	:alt: kenpompy logo
 	:align: center
