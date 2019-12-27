@@ -4,6 +4,9 @@ kenpompy: College Basketball for Nerds
    :maxdepth: 2
    :caption: Contents:
 
+.. image:: https://github.com/j-andrews7/kenpompy/raw/master/docs/_static/images/kenpompy_unsplash.png 
+	:alt: kenpompy logo
+
 This python package serves as a convenient web scraper for `kenpom <kenpom.com>`_, which provides tons of great NCAA basketball statistics and metrics. It **requires a subscription to KenPomeroy's site for use**, otherwise only the home page will be accessible. It's a small fee for a year of access, and totally worth it in my opinion.
 
 Objective
