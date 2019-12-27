@@ -1,7 +1,9 @@
 # kenpompy - Basketball for Nerds
 [![Documentation Status](https://readthedocs.org/projects/kenpompy/badge/?version=latest)](https://kenpompy.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.com/j-andrews7/kenpompy.svg?branch=master)](https://travis-ci.com/j-andrews7/kenpompy) [![codecov](https://codecov.io/gh/j-andrews7/kenpompy/branch/master/graph/badge.svg)](https://codecov.io/gh/j-andrews7/kenpompy)
-![kenpomypy logo](https://github.com/j-andrews7/kenpompy/raw/master/docs/_static/images/kenpompy_unsplash.png "kenpompy")
 
+<p align="center"> 
+<img src="https://github.com/j-andrews7/kenpompy/raw/master/docs/_static/images/kenpompy_unsplash.png">
+</p>
 
 This python package serves as a convenient web scraper for [kenpom.com](kenpom.com), which provides tons of great NCAA basketball statistics and metrics. It **requires a subscription to Ken Pomeroy's site for use**, otherwise only the home page will be accessible. It's a small fee for a year of access, and totally worth it in my opinion.
 
