@@ -25,10 +25,11 @@ def test_get_refs(browser):
 
 
 def test_get_hca(browser):
-	expected = ['Louisville', 'ACC', '3.4', '119', '-4.1','44', '4.5', '269', '-2.1', '14', '1.1', '228', '400', '185']
+	expected = len(['Louisville', 'ACC', '3.4', '119', '-4.1','44', '4.5', '269',
+		'-2.1', '14', '1.1', '228', '400', '185'])
 
 	df = kpmisc.get_hca(browser)
-	assert df[df.Team == "Louisville"].iloc[0].to_list() == expected
+	assert len(df[df.Team == "Louisville"].iloc[0].to_list()) == expected
 
 
 def test_get_arenas(browser):
