@@ -38,7 +38,7 @@ def test_fanmatch(browser):
 								"3. Maceo Jack, George Washington • 35 pts (5-6 2's, 7-13 3's, 4-6 FT's) • 7 Rebs • 2 Blks • 1 Stl"]
 	assert fm.ppg == 71.5
 	assert fm.avg_eff == 101.8
-	assert fm.poss_40 == 68.7
+	assert fm.pos_40 == 68.7
 	assert fm.mean_abs_err_pred_total_score == 15.8
 	assert fm.bias_pred_total_score == -1.8
 	assert fm.mean_abs_err_pred_mov == 7.8
