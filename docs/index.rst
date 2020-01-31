@@ -86,6 +86,12 @@ summary
 .. automodule:: kenpompy.summary
    :members:
 
+FanMatch
+--------
+
+.. automodule:: kenpompy.FanMatch
+   :members:
+
 Contributing
 ============
 

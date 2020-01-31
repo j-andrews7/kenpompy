@@ -26,7 +26,7 @@ pip install kenpompy
 ```
 
 ## What It Can (and Can't) Do
-This a work in progress - it can currently scrape all of the summary and miscellaneous tables, pretty much all of those under the Stats and Miscellany headings. `Team` and `Player` classes are planned, but they're more complicated and will take some time.
+This a work in progress - it can currently scrape all of the summary, FanMatch, and miscellaneous tables, pretty much all of those under the Stats and Miscellany headings. `Team` and `Player` classes are planned, but they're more complicated and will take some time.
 
 ## Usage
 `kenpompy` is simple to use. Generally, tables on each page are scraped into `pandas` dataframes with simple parameters to select different seasons or tables. As many tables have headers that don't parse well, some are manually altered to a small degree to make the resulting dataframe easier to interpret and manipulate. 

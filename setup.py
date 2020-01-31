@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kenpompy",
-    version="0.1.0",
+    version="0.2.0",
     author="Jared Andrews",
     author_email="jared.andrews07@gmail.com",
     description="A python package for scraping kenpom.com NCAA data.",

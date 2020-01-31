@@ -16,7 +16,7 @@ class Team:
 		self.url = self.base_url + '?team=' + self.name
 		self.season = season
 
-		if self.season:
+		if self.season is not None:
 			if int(self.season) < 2002:
 				raise ValueError(
 					'season cannot be less than 2002, as data only goes back that far.')
@@ -34,7 +34,7 @@ class Team:
 			self.scout_point_distribution_conf, self.scout_sos, self.scout_personnel) = self.__parse_scout()
 
 
-	def __parse_title(self):
+	def _parse_title(self):
 		coach = self.page.find_all(class_ = "coach")[0]
 		coach = coach.get_text()
 		coach = coach.lstrip('Head coach: ')
@@ -59,7 +59,7 @@ class Team:
 		return (coach, mascot, location, rank, record, wins, losses, conference)
 
 
-	def __parse_scout(self):
+	def _parse_scout(self):
 		drop_these = ['Miscellaneous Components', 'Four Factors', 'Style Components', 'Strength of Schedule', 
 			'Point Distribution (% of total points)', 'Personnel', 'Category']
 		table = page.find_all(id = "report-table")[0]
