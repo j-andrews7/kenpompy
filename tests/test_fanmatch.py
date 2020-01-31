@@ -12,14 +12,14 @@ def test_fanmatch(browser):
 				"8",
 				"2.96",
 				"2",
-				nan,
-				nan,
+				"nan",
+				"nan",
 				"Sacar Anim (28p/5r/2a/1b/4s)",
 				"79",
 				"Marquette",
 				"73-72",
 				"51%",
-				1,
+				"1",
 				"2OT",
 				"Xavier",
 				"59",
@@ -27,10 +27,10 @@ def test_fanmatch(browser):
 				"Marquette",
 				"31",
 				"84",
-				2]
+				"2"]
 
 	fm = FanMatch(browser, date)
-	assert fm.fm_df.iloc[1,].tolist() == expected
+	assert fm.fm_df.iloc[1,].astype("str").tolist() == expected
 	assert fm.date == "2020-01-29"
 	assert fm.url == 'https://kenpom.com/fanmatch.php?d=2020-01-29'
 	assert fm.lines_o_night == ["1. Max Mahoney, Boston University • 29 pts (11-15 2's, 7-11 FT's) • 10 Rebs (5 Off) • 4 Assists • 3 Stls",
