@@ -119,7 +119,39 @@ class FanMatch:
 
         fm_df.drop(["Prediction", "Time (ET)"], axis = 1, inplace = True)
         
+        # Parse predicted loser.
+        teams = fm_df.Game.str.split(", ").tolist()
+        teams_np = fm_df.Game.str.split(" at ").tolist()
+        
+        i = 0
+        pred_loser = []
+        for x in teams:
+            if not len(x) == 2:
+                x = teams_np[i]
+                
+                # Account for neutral games.
+                if len(x) < 2:
+                    x = x[0].split(" vs. ")
+                x[0] = " ".join(x[0].split()[1:])
+                x[1] = " ".join(x[1].split()[1:])
+                
+            else:
+                x[1] = x[1].split(" (")[0]
+
+                x[0] = " ".join(x[0].split()[1:-1])
+                x[1] = " ".join(x[1].split()[1:-1])
+            
+            if x[0] != pred_winner[i]:
+                pred_loser.append(x[0])
+            else:
+                pred_loser.append(x[1])
+                
+            i = i + 1
+            
+        fm_df["PredictedLoser"] = pred_loser
+        
         winner = fm_df.Game.str.split(", ").str[0].tolist()
+        self.winner = fm_df.Game.str.split(", ").str[0].tolist()
         loser = fm_df.Game.str.split(", ").str[1].tolist()
         
         if not all(pd.isnull(loser)):
@@ -137,11 +169,17 @@ class FanMatch:
             fm_df["LoserRank"] = float("nan")
             fm_df["LoserScore"] = float("nan")
         
-        fm_df["Winner"] = [" ".join(x.split()[1:-1]) if len(x.split(" at ")) < 2 else float("nan") for x in winner]
-        fm_df["WinnerRank"] = [x.split()[0] if len(x.split(" at ")) < 2 else float("nan") for x in winner]
-        fm_df["WinnerScore"] = [x.split()[-1] if len(x.split(" at ")) < 2 else float("nan") for x in winner]
+        fm_df["Winner"] = [" ".join(x.split()[1:-1]) if (len(x.split(" at ")) < 2 and 
+            len(x.split(" vs. ")) < 2) else float("nan") for x in winner]
+        fm_df["WinnerRank"] = [x.split()[0] if (len(x.split(" at ")) < 2 and 
+            len(x.split(" vs. ")) < 2) else float("nan") for x in winner]
+        fm_df["WinnerScore"] = [x.split()[-1] if (len(x.split(" at ")) < 2 and 
+            len(x.split(" vs. ")) < 2) else float("nan") for x in winner]
         
-        fm_df["ActualMOV"] = [(int(x[0]) - int(x[1])) if not pd.isnull(x[0]) else float("nan") for x 
-                              in list(zip(fm_df.WinnerScore.tolist(), fm_df.LoserScore.tolist()))]
+        if not all(pd.isnull(loser)):
+            fm_df["ActualMOV"] = [(int(x[0]) - int(x[1])) if not pd.isnull(x[0]) else float("nan") for x 
+                                  in list(zip(fm_df.WinnerScore.tolist(), fm_df.LoserScore.tolist()))]
+        else:
+            fm_df["ActualMOV"] = float("nan")
         
         self.fm_df = fm_df

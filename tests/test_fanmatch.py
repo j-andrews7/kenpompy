@@ -20,6 +20,7 @@ def test_fanmatch(browser):
 				"73-72",
 				"51%",
 				"1",
+				"Xavier",
 				"2OT",
 				"Xavier",
 				"59",
