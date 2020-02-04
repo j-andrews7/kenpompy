@@ -151,12 +151,11 @@ class FanMatch:
         fm_df["PredictedLoser"] = pred_loser
         
         winner = fm_df.Game.str.split(", ").str[0].tolist()
-        self.winner = fm_df.Game.str.split(", ").str[0].tolist()
         loser = fm_df.Game.str.split(", ").str[1].tolist()
         
         if not all(pd.isnull(loser)):
             loser = [str(x).split("(")[0] for x in loser]
-            ot = fm_df.Game.str.split("(").str[1].str.strip(")").tolist()
+            ot = fm_df.Game.str.split("(").str[1].astype("str").str.strip(")").tolist()
             fm_df["OT"] = ot
             
             fm_df["Loser"] = [" ".join(x.split()[1:-1]) if len(x.split(" at ")) < 2 else float("nan") for x in loser]
