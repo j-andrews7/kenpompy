@@ -108,14 +108,15 @@ class FanMatch:
         fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(" \[").str[0], pos.astype("str")
         fm_df.Possessions = fm_df.Possessions.str.strip("\]")
         predict_info = fm_df.Prediction.str.split()
-        pred_winner = fm_df.Prediction.str.split().str[0:-2]
-        pred_winner = [" ".join(i) for i in pred_winner]
+        pred_winner = fm_df.Prediction.astype("str").str.split().str[0:-2].tolist()
+        pred_winner = [" ".join(i) if not any(pd.isnull(i)) else float("nan") for i in pred_winner]
         fm_df["PredictedWinner"] = pred_winner
         fm_df["PredictedScore"] = fm_df.Prediction.str.split().str[-2]
         fm_df["WinProbability"] = fm_df.Prediction.str.split().str[-1]
         fm_df.WinProbability = fm_df.WinProbability.str.strip("()")
 
-        fm_df["PredictedMOV"] = [(int(x[0]) - int(x[1])) for x in fm_df.PredictedScore.str.split("-")]
+        fm_df["PredictedMOV"] = [(int(x[0]) - int(x[1])) if len(x) > 1 else float("nan") for x 
+                                 in fm_df.PredictedScore.astype("str").str.split("-")]
 
         fm_df.drop(["Prediction", "Time (ET)"], axis = 1, inplace = True)
         
