@@ -26,8 +26,8 @@ def test_get_refs(browser):
 
 
 def test_get_hca(browser):
-	expected = len(["Louisville", "ACC", "3.4", "119", "-4.1","44", "4.5", "269", "-2.1", "14", "1.1", "228", 
-		"400", "185"])
+	expected = len(['Louisville', 'ACC', '3.4', '119', '-4.1','44', '4.5', '269',
+		'-2.1', '14', '1.1', '228', '400', '185'])
 
 	df = kpmisc.get_hca(browser)
 	assert len(df[df.Team == "Louisville"].iloc[0].to_list()) == expected
