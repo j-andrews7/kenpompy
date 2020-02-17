@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kenpompy",
-    version="0.1.0",
+    version="0.2.0",
     author="Jared Andrews",
     author_email="jared.andrews07@gmail.com",
-    description="A python package for scraping kenpom.com NCAA data.",
+    description="A python package for scraping kenpom.com NCAA basketball data.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/j-andrews7/kenpompy",
