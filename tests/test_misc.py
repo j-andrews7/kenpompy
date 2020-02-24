@@ -3,6 +3,11 @@ import kenpompy.misc as kpmisc
 from kenpompy.FanMatch import FanMatch
 import pandas as pd
 
+def test_get_pomeroy_ratings(browser):
+    expected = ['1', 'Virginia', 'ACC', '35-3', '+34.22', '123.4', '2', '89.2', '5', '59.4', '353', '+.050', '62', '+11.18', '22', '109.2', '34', '98.1', '14', '-3.24', '255', '1']
+    df = kpmisc.get_pomeroy_ratings(browser, season=2019)
+    assert df.iloc[0].to_list() == expected
+
 def test_get_trends(browser):
 	expected = ["2019","103.2","69.0","50.7","18.5","28.4","33.0","50.1","34.4","38.7","70.7","51.9","9.3","8.9","9.7",
 				"76.8","47.8","59.0","71.9"]

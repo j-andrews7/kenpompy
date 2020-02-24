@@ -7,6 +7,37 @@ import mechanicalsoup
 import pandas as pd
 from bs4 import BeautifulSoup
 
+def get_pomeroy_ratings(browser, season=None):
+    """
+    Scrapes the Pomeroy College Basketball Ratings table (https://kenpom.com/index.php) into a dataframe.
+
+    Args:
+        browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+            by the `login` function.
+        season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+            Most recent season is the default.
+    Returns:
+        refs_df (pandas dataframe): Pandas dataframe containing the Pomeroy College Basketball Ratings table from kenpom.com.
+    Raises:
+        ValueError: If `season` is less than 2002.
+    """
+    url = 'https://kenpom.com/index.php'
+    if season and int(season) < 2002:
+        raise ValueError("season cannot be less than 2002")
+    url += '?y={}'.format(season)
+    browser.open(url)
+    page = browser.get_current_page()
+    table = page.find_all('table')[0]
+    ratings_df = pd.read_html(str(table))
+    # Dataframe tidying.
+    ratings_df = ratings_df[0]
+    ratings_df.columns = ratings_df.columns.map(lambda x: x[1])
+    # Parse out seed, most current won't have this
+    tmp = ratings_df['Team'].str.extract('(?P<Team>[a-zA-Z]+\s*[a-zA-Z]+\.*)\s*(?P<Seed>\d*)')
+    ratings_df["Team"] = tmp["Team"]
+    ratings_df["Seed"] = tmp["Seed"]
+    return ratings_df
+
 
 def get_trends(browser):
 	"""
@@ -150,7 +181,7 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 	Args:
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2010 is the earliest available season. 
+		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
 			Most recent season is the default.
 		metric (str, optional): Used to get highest ranking games for different metrics. Available values are:
 			'Excitement', 'Tension', 'Dominance', 'ComeBack', 'FanMatch', 'Upsets', and 'Busts'. Default is
@@ -226,8 +257,8 @@ def get_program_ratings(browser):
 	programs_df = programs_df[0]
 
 	programs_df.columns = ['Rank', 'Team', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
-							'kenpom.Worst.Season', 'kenpom.Median.Rank', 'kenpom.Top10.Finishes', 
-							'kenpom.Top25.Finishes', 'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4', 'NCAA.E8', 
+							'kenpom.Worst.Season', 'kenpom.Median.Rank', 'kenpom.Top10.Finishes',
+							'kenpom.Top25.Finishes', 'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4', 'NCAA.E8',
 							'NCAA.S16', 'NCAA.R1']
 
 	programs_df = programs_df[programs_df.Team != 'Team']
