@@ -10,7 +10,7 @@ def test_fanmatch(browser):
 				"Cincinnati, OH Cintas Center",
 				"68.2",
 				"8",
-				"2.95",
+				"2.94",
 				"2",
 				"nan",
 				"nan",
