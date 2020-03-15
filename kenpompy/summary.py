@@ -368,7 +368,12 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 
 		# Dataframe tidying.
 		ps_df = ps_df[0]
-		ps_df.columns = ['Rank', 'Player', 'Team', metric, 'Ht', 'Wt', 'Yr'] 
+
+		if metric.upper() in ['2P', '3P', 'FT']:
+			ps_df.columns = ['Rank', 'Player', 'Team', metric.rstrip('%') + 'M', 
+			metric.rstrip('%') + 'A', metric, 'Ht', 'Wt', 'Yr'] 
+		else:
+			ps_df.columns = ['Rank', 'Player', 'Team', metric, 'Ht', 'Wt', 'Yr'] 
 
 		# Remove the header rows that are interjected for readability.
 		ps_df = ps_df[ps_df.Rank != 'Rk']
