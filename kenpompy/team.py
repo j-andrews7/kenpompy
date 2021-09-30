@@ -44,7 +44,7 @@ def get_valid_teams(browser, season=None):
 
 def get_schedule(browser, team=None, season=None):
 	"""
-	Scrapes the teams (https://kenpom.com) into a list.
+	Scrapes a team's schedule from (https://kenpom.com) into a list.
 
 	Args:
 		browser (mechanicalsoul StatefulBrowser): Authenticated browser with full access to kenpom.com generated
