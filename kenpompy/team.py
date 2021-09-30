@@ -97,7 +97,4 @@ def get_schedule(browser, team=None, season=None):
 	schedule_df = schedule_df.drop(columns = ['A', 'B'])
 	schedule_df = schedule_df.fillna('')
 
-
-	print(schedule_df.iloc[10])
-
 	return schedule_df
