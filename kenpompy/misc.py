@@ -27,7 +27,6 @@ def get_pomeroy_ratings(browser, season=None):
     url += '?y={}'.format(season)
     browser.open(url)
     page = browser.get_current_page()
-	# print(page)
     table = page.find_all('table')[0]
     ratings_df = pd.read_html(str(table))
     # Dataframe tidying.
