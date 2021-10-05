@@ -42,9 +42,12 @@ def get_valid_teams(browser, season=None):
 
 	return team_list
 
+
+
+
 def get_schedule(browser, team=None, season=None):
 	"""
-	Scrapes a team's schedule from (https://kenpom.com) into a list.
+	Scrapes a team's schedule from (https://kenpom.com/team.php) into a dataframe.
 
 	Args:
 		browser (mechanicalsoul StatefulBrowser): Authenticated browser with full access to kenpom.com generated
@@ -53,7 +56,7 @@ def get_schedule(browser, team=None, season=None):
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 
 	Returns:
-		team_list (list): List containing all valid teams for the given season on kenpom.com.
+		team_df (pandas dataframe): Dataframe containing a team's schedule for the given season.
 
 	Raises:
 		ValueError if `season` is less than 2002.
