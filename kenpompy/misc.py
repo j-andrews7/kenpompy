@@ -33,7 +33,7 @@ def get_pomeroy_ratings(browser, season=None):
     ratings_df = ratings_df[0]
     ratings_df.columns = ratings_df.columns.map(lambda x: x[1])
     # Parse out seed, most current won't have this
-    tmp = ratings_df['Team'].str.extract('(?P<Team>[a-zA-Z]+\s*[a-zA-Z]+\.*)\s*(?P<Seed>\d*)')
+    tmp = ratings_df['Team'].str.extract('(?P<Team>[a-zA-Z.]+\s*[a-zA-Z]+\.*)\s*(?P<Seed>\d*)')
     ratings_df["Team"] = tmp["Team"]
     ratings_df["Seed"] = tmp["Seed"]
     return ratings_df
@@ -259,7 +259,7 @@ def get_program_ratings(browser):
 	programs_df.columns = ['Rank', 'Team', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
 							'kenpom.Worst.Season', 'kenpom.Median.Rank', 'kenpom.Top10.Finishes',
 							'kenpom.Top25.Finishes', 'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4', 'NCAA.E8',
-							'NCAA.S16', 'NCAA.R1']
+							'NCAA.S16', 'NCAA.R1', 'Change']
 
 	programs_df = programs_df[programs_df.Team != 'Team']
 

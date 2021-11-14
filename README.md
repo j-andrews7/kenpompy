@@ -1,5 +1,5 @@
 # kenpompy - Basketball for Nerds
-[![Documentation Status](https://readthedocs.org/projects/kenpompy/badge/?version=latest)](https://kenpompy.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.com/j-andrews7/kenpompy.svg?branch=master)](https://travis-ci.com/j-andrews7/kenpompy) [![codecov](https://codecov.io/gh/j-andrews7/kenpompy/branch/master/graph/badge.svg)](https://codecov.io/gh/j-andrews7/kenpompy)
+[![Documentation Status](https://readthedocs.org/projects/kenpompy/badge/?version=latest)](https://kenpompy.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/j-andrews7/kenpompy/branch/master/graph/badge.svg)](https://codecov.io/gh/j-andrews7/kenpompy)
 
 <p align="center"> 
 <img src="https://github.com/j-andrews7/kenpompy/raw/master/docs/_static/images/kenpompy_unsplash.png">

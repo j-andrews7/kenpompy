@@ -41,7 +41,7 @@ def test_fanmatch(browser):
 	assert fm.avg_eff == 101.9
 	assert fm.pos_40 == 68.7
 	assert fm.mean_abs_err_pred_total_score == 15.8
-	assert fm.bias_pred_total_score == -1.8
+	assert fm.bias_pred_total_score == -1.6
 	assert fm.mean_abs_err_pred_mov == 7.8
 	assert fm.record_favs == "40-13"
 	assert fm.expected_record_favs == "38-15"
