@@ -51,7 +51,7 @@ class FanMatch:
 
         browser.open(self.url)
         fm = browser.get_current_page()
-        table = fm.find_all('table')[0]
+        table = fm.find_all("table")[0]
         fm_df = pd.read_html(str(table))
         fm_df = fm_df[0]
         fm_df.ThrillScore = fm_df.ThrillScore.astype("str")

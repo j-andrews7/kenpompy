@@ -92,6 +92,12 @@ FanMatch
 .. automodule:: kenpompy.FanMatch
    :members:
 
+Team pages
+--------
+
+.. automodule:: kenpompy.team
+   :members:
+
 Contributing
 ============
 
