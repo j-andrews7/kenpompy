@@ -147,7 +147,7 @@ def get_teamstats(browser, defense=False, season=None):
 			url = url + '&od=d'
 			last_cols = ['AdjDE', 'AdjDE.Rank']
 	elif defense:
-		url = url + '&od=d'
+		url = url + '?od=d'
 		last_cols = ['AdjDE', 'AdjDE.Rank']
 
 	browser.open(url)
