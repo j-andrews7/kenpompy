@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.1
+
+**Release date: 01/23/2022**
+
+ - Fix a bug in `get_teamstats` when no season was provided and defense was requested - [#12](https://github.com/j-andrews7/kenpompy/issues/12).
+
 ## v0.3.0
 
 **Release date: 11/14/2021**
