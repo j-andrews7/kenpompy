@@ -3,10 +3,12 @@ This module provides functions for scraping the summary stats kenpom.com pages i
 usable pandas dataframes.
 """
 
+from atexit import register
 import mechanicalsoup
 import pandas as pd
 import re
 from bs4 import BeautifulSoup
+from pyparsing import Regex
 
 
 def get_efficiency(browser, season=None):
@@ -60,7 +62,7 @@ def get_efficiency(browser, season=None):
 	# Remove the header rows that are interjected for readability.
 	eff_df = eff_df[eff_df.Team != 'Team']
 	# Remove NCAA tourny seeds for previous seasons.
-	eff_df['Team'] = eff_df['Team'].str.replace('\d+', '')
+	eff_df['Team'] = eff_df['Team'].str.replace('\d+', '', regex=True)
 	eff_df['Team'] = eff_df['Team'].str.rstrip()
 	eff_df = eff_df.dropna()
 
@@ -108,7 +110,7 @@ def get_fourfactors(browser, season=None):
 	# Remove the header rows that are interjected for readability.
 	ff_df = ff_df[ff_df.Team != 'Team']
 	# Remove NCAA tourny seeds for previous seasons.
-	ff_df['Team'] = ff_df['Team'].str.replace('\d+', '')
+	ff_df['Team'] = ff_df['Team'].str.replace('\d+', '', regex=True)
 	ff_df['Team'] = ff_df['Team'].str.rstrip()
 	ff_df = ff_df.dropna()
 
@@ -165,7 +167,7 @@ def get_teamstats(browser, defense=False, season=None):
 	# Remove the header rows that are interjected for readability.
 	ts_df = ts_df[ts_df.Team != 'Team']
 	# Remove NCAA tourny seeds for previous seasons.
-	ts_df['Team'] = ts_df['Team'].str.replace('\d+', '')
+	ts_df['Team'] = ts_df['Team'].str.replace('\d+', '', regex=True)
 	ts_df['Team'] = ts_df['Team'].str.rstrip()
 	ts_df = ts_df.dropna()
 
@@ -212,7 +214,7 @@ def get_pointdist(browser, season=None):
 	# Remove the header rows that are interjected for readability.
 	dist_df = dist_df[dist_df.Team != 'Team']
 	# Remove NCAA tourny seeds for previous seasons.
-	dist_df['Team'] = dist_df['Team'].str.replace('\d+', '')
+	dist_df['Team'] = dist_df['Team'].str.replace('\d+', '', regex=True)
 	dist_df['Team'] = dist_df['Team'].str.rstrip()
 	dist_df = dist_df.dropna()
 
@@ -269,7 +271,7 @@ def get_height(browser, season=None):
 	# Remove the header rows that are interjected for readability.
 	h_df = h_df[h_df.Team != 'Team']
 	# Remove NCAA tourny seeds for previous seasons.
-	h_df['Team'] = h_df['Team'].str.replace('\d+', '')
+	h_df['Team'] = h_df['Team'].str.replace('\d+', '', regex=True)
 	h_df['Team'] = h_df['Team'].str.rstrip()
 	h_df = h_df.dropna()
 
@@ -423,8 +425,8 @@ def get_kpoy(browser, season=None):
 	# Some mildly moronic dataframe tidying.
 	kpoy_df['Player'], kpoy_df['Weight'], kpoy_df['Year'], kpoy_df['Hometown'] = kpoy_df['Player'].str.split(' · ').str
 	kpoy_df['Player'], kpoy_df['Info'] = kpoy_df['Player'].str.split(', ', 1).str
-	kpoy_df['Team'] = kpoy_df['Info'].str.replace('\d+', '').str.rstrip('-')
-	kpoy_df['Height'] = kpoy_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE).str.strip('. ').str.strip()
+	kpoy_df['Team'] = kpoy_df['Info'].str.replace('\d+', '', regex=True).str.rstrip('-')
+	kpoy_df['Height'] = kpoy_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE, regex=True).str.strip('. ').str.strip()
 	kpoy_df = kpoy_df.drop(['Info'], axis=1)
 
 	kpoy_dfs.append(kpoy_df)
@@ -439,8 +441,8 @@ def get_kpoy(browser, season=None):
 		# More tidying.
 		mvp_df['Player'], mvp_df['Weight'], mvp_df['Year'], mvp_df['Hometown'] = mvp_df['Player'].str.split(' · ').str
 		mvp_df['Player'], mvp_df['Info'] = mvp_df['Player'].str.split(', ', 1).str
-		mvp_df['Team'] = mvp_df['Info'].str.replace('\d+', '').str.rstrip('-')
-		mvp_df['Height'] = mvp_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE).str.strip('. ').str.strip()
+		mvp_df['Team'] = mvp_df['Info'].str.replace('\d+', '', regex=True).str.rstrip('-')
+		mvp_df['Height'] = mvp_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE, regex=True).str.strip('. ').str.strip()
 		mvp_df = mvp_df.drop(['Info'], axis=1)
 
 		kpoy_dfs.append(mvp_df)
