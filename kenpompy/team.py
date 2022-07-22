@@ -8,7 +8,6 @@ import pandas as pd
 import re
 from bs4 import BeautifulSoup
 import datetime
-import urllib.parse
 
 
 def get_valid_teams(browser, season=None):
