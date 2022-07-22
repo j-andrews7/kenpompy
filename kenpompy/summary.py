@@ -3,12 +3,10 @@ This module provides functions for scraping the summary stats kenpom.com pages i
 usable pandas dataframes.
 """
 
-from atexit import register
 import mechanicalsoup
 import pandas as pd
 import re
 from bs4 import BeautifulSoup
-from pyparsing import Regex
 
 
 def get_efficiency(browser, season=None):
