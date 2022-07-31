@@ -83,8 +83,9 @@ def get_schedule(browser, team=None, season=None):
 			raise ValueError(
 				'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
 	
-	# Sanatize team name
+	# Sanitize team name
 	team = team.replace(" ", "+")
+	team = team.replace("&", "%26")
 	url = url + "?team=" + str(team)
 	url = url + "&y=" + str(season)
 
