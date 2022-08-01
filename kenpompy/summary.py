@@ -351,7 +351,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 			
 			# Split ortg column.
 			ps_df.columns = ['Rank', 'Player', 'Team', 'ORtg', 'Ht', 'Wt', 'Yr']
-			ps_df['ORtg'], ps_df['Poss%'] = ps_df['ORtg'].str.split(' ', 1).str
+			ps_df[['ORtg', 'Poss%']] = ps_df['ORtg'].str.split(' ', 1, expand=True)
 			ps_df['Poss%'] = ps_df['Poss%'].str.strip('()')
 
 			ps_df = ps_df[ps_df.Rank != 'Rk']
@@ -421,8 +421,8 @@ def get_kpoy(browser, season=None):
 	kpoy_df.columns = ['Rank', 'Player', 'KPOY Rating']
 
 	# Some mildly moronic dataframe tidying.
-	kpoy_df['Player'], kpoy_df['Weight'], kpoy_df['Year'], kpoy_df['Hometown'] = kpoy_df['Player'].str.split(' · ').str
-	kpoy_df['Player'], kpoy_df['Info'] = kpoy_df['Player'].str.split(', ', 1).str
+	kpoy_df[['Player', 'Weight', 'Year', 'Hometown']] = kpoy_df['Player'].str.split(' · ', expand=True)
+	kpoy_df[['Player', 'Info']] = kpoy_df['Player'].str.split(', ', 1, expand=True)
 	kpoy_df['Team'] = kpoy_df['Info'].str.replace('\d+', '', regex=True).str.rstrip('-')
 	kpoy_df['Height'] = kpoy_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE, regex=True).str.strip('. ').str.strip()
 	kpoy_df = kpoy_df.drop(['Info'], axis=1)
@@ -437,8 +437,8 @@ def get_kpoy(browser, season=None):
 		mvp_df.columns = ['Rank', 'Player', 'Game MVPs']
 
 		# More tidying.
-		mvp_df['Player'], mvp_df['Weight'], mvp_df['Year'], mvp_df['Hometown'] = mvp_df['Player'].str.split(' · ').str
-		mvp_df['Player'], mvp_df['Info'] = mvp_df['Player'].str.split(', ', 1).str
+		mvp_df[['Player', 'Weight', 'Year', 'Hometown']] = mvp_df['Player'].str.split(' · ', expand=True)
+		mvp_df[['Player', 'Info']] = mvp_df['Player'].str.split(', ', 1, expand=True)
 		mvp_df['Team'] = mvp_df['Info'].str.replace('\d+', '', regex=True).str.rstrip('-')
 		mvp_df['Height'] = mvp_df['Info'].str.replace(r'[a-z]+', '', flags=re.IGNORECASE, regex=True).str.strip('. ').str.strip()
 		mvp_df = mvp_df.drop(['Info'], axis=1)

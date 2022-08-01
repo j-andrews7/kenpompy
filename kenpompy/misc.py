@@ -166,9 +166,9 @@ def get_arenas(browser, season=None):
 	# Dataframe tidying.
 	arenas_df = arenas_df[0]
 	arenas_df.columns = ['Rank', 'Team', 'Conference', 'Arena', 'Alternate']
-	arenas_df['Arena'], arenas_df['Arena.Capacity'] = arenas_df['Arena'].str.split(' \(').str
+	arenas_df[['Arena', 'Arena.Capacity']] = arenas_df['Arena'].str.split(' \(', expand=True)
 	arenas_df['Arena.Capacity'] = arenas_df['Arena.Capacity'].str.rstrip(')')
-	arenas_df['Alternate'], arenas_df['Alternate.Capacity'] = arenas_df['Alternate'].str.split(' \(').str
+	arenas_df[['Alternate', 'Alternate.Capacity']] = arenas_df['Alternate'].str.split(' \(', expand=True)
 	arenas_df['Alternate.Capacity'] = arenas_df['Alternate.Capacity'].str.rstrip(')')
 
 	return arenas_df
@@ -230,7 +230,7 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 	ga_df = ga_df[0]
 	ga_df.columns = ['Rank', 'Date', 'Game', 'Box', 'Location', 'Conf.Matchup', 'Value']
 	ga_df = ga_df.drop(['Box'], axis=1)
-	ga_df['Location'], ga_df['Arena'] = ga_df['Location'].str.split(' \(').str
+	ga_df[['Location', 'Arena']] = ga_df['Location'].str.split(' \(', expand=True)
 	ga_df['Arena'] = ga_df['Arena'].str.rstrip(')')
 
 	return ga_df
