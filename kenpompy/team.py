@@ -33,7 +33,7 @@ def get_valid_teams(browser, season=None):
 	# Get only the team column.
 	team_df = team_df[0].iloc[:, 1]
  	# Remove NCAA tourny seeds for previous seasons.
-	team_df = team_df.str.replace(r'\d+', '')
+	team_df = team_df.str.replace(r'\d+', '', regex=True)
 	team_df = team_df.str.rstrip()
 	team_df = team_df.dropna()
 	# Remove leftover team headers
