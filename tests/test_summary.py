@@ -60,13 +60,13 @@ def test_get_pointdist(browser):
 
 def test_get_height(browser):
 	expected = ['Louisville', 'ACC', '76.8', '181', '+0.6', '87', '+1.3', '44', '-0.1', '190', '-0.1', '189', '-0.9', 
-				'272', '-0.5', '233', '1.92', '102', '33.3', '97', '36.7', '273']
+				'272', '-0.5', '233', '2.18', '29', '33.3', '97', '36.7', '273']
 
 	df = kpsum.get_height(browser, season = '2019')
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
 
 	expected = ['Louisville', 'BE', '77.1', '90', '+2.2', '56', '+1.3', '49', '+0.8', '83', '-0.6', '225', '-0.8', 
-				'226', '+0.7', '99', '1.20', '296', '34.8', '66']
+				'226', '+0.7', '99', '1.45', '161', '34.8', '66']
 
 	df = kpsum.get_height(browser, season = '2007')
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
