@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.3.2
+
+**Release date: 08/03/2022**
+
+ - Fix a parsing error in `team.get_schedule()` when ampersand in team name - [#14](https://github.com/j-andrews7/kenpompy/issues/14).
+ - Fix a bunch of pandas deprecation warnings - [#18](https://github.com/j-andrews7/kenpompy/issues/18).
+ - Fix a test failing due to a change in how experience is quantified- [#21](https://github.com/j-andrews7/kenpompy/issues/21).
+
+Big thanks to [@esqew](https://github.com/esqew) for the fixes.
+
 ## v0.3.1
 
 **Release date: 01/23/2022**
