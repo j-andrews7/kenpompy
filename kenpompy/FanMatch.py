@@ -56,7 +56,7 @@ class FanMatch:
         fm_df = fm_df[0]
         fm_df = fm_df.rename(columns={"Thrill Score": "ThrillScore", "Come back": "Comeback", "Excite ment": "Excitement"})
         fm_df.ThrillScore = fm_df.ThrillScore.astype("str")
-        fm_df["ThrillScoreRank"] = fm_df.ThrillScore.str[4:]
+        fm_df["ThrillScoreRank"] = fm_df.ThrillScore.str[4:].str.strip()
         fm_df.ThrillScore = fm_df.ThrillScore.str[0:4]
         
         # Take care of parsing if some/all games have been completed.
@@ -105,9 +105,9 @@ class FanMatch:
         mvp = fm_df.Game.str.split(" MVP: ").str[1]
         fm_df["Game"], fm_df["MVP"] = fm_df.Game.str.split(" MVP: ").str[0], mvp
 
-        pos = fm_df.Game.str.split(" \[").str[1]
-        fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(" \[").str[0], pos.astype("str")
-        fm_df.Possessions = fm_df.Possessions.str.strip("\]")
+        pos = fm_df.Game.str.split(r" \[").str[1]
+        fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(r" \[").str[0], pos.astype("str")
+        fm_df.Possessions = fm_df.Possessions.str.strip(r"\]")
         predict_info = fm_df.Prediction.str.split()
         pred_winner = fm_df.Prediction.astype("str").str.split().str[0:-2].tolist()
         pred_winner = [" ".join(i) if not any(pd.isnull(i)) else float("nan") for i in pred_winner]
