@@ -5,7 +5,6 @@ The utils module provides utility functions, such as logging in.
 import mechanicalsoup
 from bs4 import BeautifulSoup
 
-
 def login(email, password):
 	"""
 	Logs in to kenpom.com using user credentials.
@@ -19,7 +18,12 @@ def login(email, password):
 	"""
 
 	browser = mechanicalsoup.StatefulBrowser()
+	browser.set_user_agent('Mozilla/5.0')
 	browser.open('https://kenpom.com/index.php')
+
+	if 'Cloudflare' in browser.page.title.string:
+		raise Exception(
+			'Opening kenpom.com failed - request was intercepted by Cloudflare protection')
 
 	# Response page actually throws an error but further navigation works and will show you as logged in.
 	browser.get_current_page()
