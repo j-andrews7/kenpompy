@@ -56,7 +56,8 @@ class FanMatch:
         fm_df = fm_df[0]
         fm_df = fm_df.rename(columns={"Thrill Score": "ThrillScore", "Come back": "Comeback", "Excite ment": "Excitement"})
         fm_df.ThrillScore = fm_df.ThrillScore.astype("str")
-        fm_df["ThrillScoreRank"] = fm_df.ThrillScore.str[4:].str.strip()
+        fm_df["ThrillScoreRank"] = fm_df.ThrillScore.str[4:]
+        fm_df["ThrillScoreRank"] = fm_df["ThrillScoreRank"].str.strip()
         fm_df.ThrillScore = fm_df.ThrillScore.str[0:4]
         
         # Take care of parsing if some/all games have been completed.
