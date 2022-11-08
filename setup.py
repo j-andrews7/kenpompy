@@ -23,4 +23,5 @@ setuptools.setup(
         "Intended Audience :: Developers"
     ],
     install_requires = ["mechanicalsoup", "pandas", "bs4"],
+    python_requires='>=3.8',
 )
