@@ -4,12 +4,13 @@
 
 **Release date: 11/07/2022**
 
-* Add explicit user-agent to MechanicalSoup instance to bypass Cloudflare (fixes j-andrews7/kenpompy#24) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/25
-* Add keyword arguments for str.split (resolves j-andrews7/kenpompy#27) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/28
-* Enhancement: Add login failure detection by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/23
-* Update expected shape of program ratings DataFrame (resolves j-andrews7/kenpompy#29) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/30
-* Fix for FanMatch parsing and test warnings (fixes j-andrews7/kenpompy#26) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/31
-* Enhancement: Add GitHub Actions CI/CD for pytest by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/32
+ - Add explicit user-agent to MechanicalSoup instance to bypass Cloudflare (fixes j-andrews7/kenpompy#24) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/25
+ - Add keyword arguments for str.split (resolves j-andrews7/kenpompy#27) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/28
+ - Enhancement: Add login failure detection by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/23
+ - Update expected shape of program ratings DataFrame (resolves j-andrews7/kenpompy#29) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/30
+ - Fix for FanMatch parsing and test warnings (fixes j-andrews7/kenpompy#26) by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/31
+ - Enhancement: Add GitHub Actions CI/CD for pytest by [@esqew](https://github.com/esqew) in https://github.com/j-andrews7/kenpompy/pull/32
+ - Set minimum python version to 3.8 to avoid dependency deprecation changes.
 
 
 **Full Changelog**: https://github.com/j-andrews7/kenpompy/compare/v0.3.2...v0.3.3
