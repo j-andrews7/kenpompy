@@ -3,10 +3,7 @@ This module contains functions for scraping the team page kenpom.com tables into
 pandas dataframes
 """
 
-import mechanicalsoup
 import pandas as pd
-import re
-from bs4 import BeautifulSoup
 import datetime
 
 
