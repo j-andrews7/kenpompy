@@ -39,6 +39,10 @@ def get_pomeroy_ratings(browser, season=None):
     tmp = ratings_df['Team'].str.extract(r'(?P<Team>[a-zA-Z.&\'\s]+(?<!\s))\s*(?P<Seed>\d*)')
     ratings_df["Team"] = tmp["Team"]
     ratings_df["Seed"] = tmp["Seed"]
+    ratings_df.columns = ['Rk', 'Team', 'Conf', 'W-L', 'AdjEM', 'AdjO',
+                          'AdjO.Rank', 'AdjD', 'AdjD.Rank', 'AdjT', 'AdjT.Rank',
+						  'Luck', 'Luck.Rank', 'SOS-AdjEM', 'SOS-AdjEM.Rank', 'SOS-OppO', 'SOS-OppO.Rank',
+						  'SOS-OppD', 'SOS-OppD.Rank', 'NCSOS-AdjEM', 'NCSOS-AdjEM.Rank', 'Seed']
     return ratings_df
 
 
