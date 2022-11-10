@@ -32,6 +32,8 @@ def get_pomeroy_ratings(browser, season=None):
     # Dataframe tidying.
     ratings_df = ratings_df[0]
     ratings_df.columns = ratings_df.columns.map(lambda x: x[1])
+    ratings_df.dropna(inplace=True)
+    ratings_df = ratings_df[ratings_df["Rk"] != "Rk"]
     # Parse out seed, most current won't have this
     tmp = ratings_df['Team'].str.extract(r'(?P<Team>[a-zA-Z.&\'\s]+(?<!\s))\s*(?P<Seed>\d*)')
     ratings_df["Team"] = tmp["Team"]
