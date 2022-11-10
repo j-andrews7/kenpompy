@@ -12,6 +12,10 @@ def test_get_pomeroy_ratings(browser):
     expected = ['31', "Saint Mary's", 'WCC', '22-12', '+17.31', '114.7', '23', '97.4', '55', '62.7', '348', '-.045', '285', '+3.66', '82', '106.6', '76', '103.0', '100', '-0.90', '183', '11']
     assert df.iloc[30].to_list() == expected
 
+	# Shape test to ensure header rows are correctly filtered
+    expected = (353, 22)
+    assert df.shape == expected
+
 def test_get_trends(browser):
 	expected = ["2019","103.2","69.0","50.7","18.5","28.4","33.0","50.1","34.4","38.7","70.7","51.9","9.3","8.9","9.7",
 				"76.8","47.8","59.0","71.9"]
