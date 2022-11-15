@@ -3,7 +3,6 @@ The utils module provides utility functions, such as logging in.
 """
 
 import mechanicalsoup
-from bs4 import BeautifulSoup
 
 def login(email, password):
 	"""
