@@ -3,8 +3,8 @@ name: Python package
 on: [push, workflow_dispatch]
 
 jobs:
-  build:
-
+  pytest:
+    name: pytest suite
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
