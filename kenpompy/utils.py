@@ -5,7 +5,7 @@ The utils module provides utility functions, such as logging in.
 import mechanicalsoup
 from bs4 import BeautifulSoup
 from requests import Session
-from _DESAdapter import DESAdapter, environment_requires_DES_adapter
+from ._DESAdapter import DESAdapter, environment_requires_DES_adapter
 
 def login(email, password):
 	"""
