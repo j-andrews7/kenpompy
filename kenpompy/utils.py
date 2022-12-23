@@ -3,6 +3,9 @@ The utils module provides utility functions, such as logging in.
 """
 
 import mechanicalsoup
+from bs4 import BeautifulSoup
+from requests import Session
+from _DESAdapter import DESAdapter, environment_requires_DES_adapter
 
 def login(email, password):
 	"""
@@ -16,7 +19,12 @@ def login(email, password):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
 	"""
 
-	browser = mechanicalsoup.StatefulBrowser()
+	# Fix for Cloudflare SSL profiling (https://github.com/j-andrews7/kenpompy/issues/33) provided by Nick Ostendorf (@nickostendorf)
+	session = Session()
+	if environment_requires_DES_adapter():
+		session.mount('https://kenpom.com/', DESAdapter())
+
+	browser = mechanicalsoup.StatefulBrowser(session)
 	browser.set_user_agent('Mozilla/5.0')
 	browser.open('https://kenpom.com/index.php')
 
