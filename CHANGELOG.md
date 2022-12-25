@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.4
+
+**Release date: 12/25/2022**
+
+ - * Fix for Cloudflare SSL profiling by @esqew in https://github.com/j-andrews7/kenpompy/pull/38
+
 ## v0.3.3
 
 **Release date: 11/07/2022**
