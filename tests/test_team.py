@@ -51,3 +51,28 @@ def test_get_schedule(browser):
 	# Make sure that the valid team check is triggered
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, season = '2013', team="LMU")
+
+def test_get_stats(browser):
+	expectedAdjEff = ['Adj. Efficiency', '124.5', '91.6', '104.3']
+	expectedFT = ['Free Throws:', '18.6', '17.0', '18.7']
+
+	df = kpteam.get_stats(browser, team="Gonzaga", season = '2019')
+	assert [str(i) for i in df[df.Category == 'Adj. Efficiency'].iloc[0].to_list()] == expectedAdjEff
+	assert [str(i) for i in df[df.Category == 'Free Throws:'].iloc[0].to_list()] == expectedFT
+    
+	date = datetime.date.today()
+	currentYear = date.strftime("%Y")
+	nextYear = str(int(currentYear)+1)
+
+	with pytest.raises(ValueError):
+		kpteam.get_stats(browser, team="Iowa", season = '2001')
+
+	with pytest.raises(ValueError):
+		kpteam.get_stats(browser, team="Kansas", season = nextYear)
+
+	with pytest.raises(ValueError):
+		kpteam.get_stats(browser, season = "2009")
+
+	# Make sure that the valid team check is triggered
+	with pytest.raises(ValueError):
+		kpteam.get_stats(browser, season = '2013', team="LMU")
