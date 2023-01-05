@@ -2,3 +2,5 @@ mechanicalsoup
 pandas
 bs4
 sphinx>2.2.0
+requests-file==1.5.1
+requests-html==0.10.0
