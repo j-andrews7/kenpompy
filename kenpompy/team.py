@@ -9,8 +9,9 @@ import re
 from bs4 import BeautifulSoup
 import datetime
 import tempfile
+import sys
 
-from requests_html import HTMLSession
+from requests_html import HTMLSession, AsyncHTMLSession
 from requests_file import FileAdapter
 
 
@@ -106,7 +107,7 @@ def get_schedule(browser, team=None, season=None):
 	return schedule_df
 
 
-def get_stats(browser, team=None, season=None):
+async def get_stats(browser, team=None, season=None, _async=False):
 	"""
 	Scrapes a team's stats from (https://kenpom.com/team.php) into a dataframe.
 
@@ -115,6 +116,7 @@ def get_stats(browser, team=None, season=None):
 			by the `login` function
 		team: Used to determine which team to scrape for stats.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		_async (bool, optional): Used to run asynchronous HTMLSession()
 
 	Returns:
 		stats_df (pandas dataframe): Dataframe containing a team's stats for the given season.
@@ -157,17 +159,28 @@ def get_stats(browser, team=None, season=None):
 	with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as file:
 		file.write(team_page.encode())
 
+	# Correct filename format based on platform
+	if sys.platform == 'win32':
+		filename = file.name.replace('\\', '//')
+	else:
+		filename = file.name
+
 	# Open saved paged with requests_html session
 	"""
-	While using requests_html and request_file
-	we are able to render the javascript on teams page
-	that mechanicalSoup is unable to do.
-	"""
-	sess = HTMLSession()
-	sess.mount('file://', FileAdapter())
-	r = sess.get(f'file:///{file.name}')
-	r.html.render()
-
+	If _async is True, use AsyncHTMLSession() and 
+	await on the session to get() and arender() the html page
+	""" 
+	if _async:
+		sess = AsyncHTMLSession()
+		sess.mount('file://', FileAdapter())
+		r = await sess.get(f'file:///{filename}')
+		await r.html.arender()
+	else:
+		sess = HTMLSession()
+		sess.mount('file://', FileAdapter())
+		r = sess.get(f'file:///{filename}')
+		r.html.render()
+		
 	# Create soup object from rendered page
 	soup = BeautifulSoup(r.html.html, 'html.parser')
 
