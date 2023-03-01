@@ -42,5 +42,9 @@ def login(email, password):
 	if response.status_code != 200 or 'PHPSESSID=' not in response.headers['set-cookie']:
 		raise Exception(
 			'Logging in to kenpom.com failed - check that the site is available and your credentials are correct.')
+	
+	if 'subscription expired' in str(browser.get('https://kenpom.com/index.php').content):
+		raise Exception(
+			'Logging in to kenpom.com failed - account subscription is expired')
 
 	return browser
