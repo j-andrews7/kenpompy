@@ -112,7 +112,7 @@ async def get_stats(browser, team=None, season=None, _async=False):
 	Scrapes a team's stats from (https://kenpom.com/team.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoul StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		team: Used to determine which team to scrape for stats.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
@@ -191,8 +191,10 @@ async def get_stats(browser, team=None, season=None, _async=False):
 	# DataFrame cleaning, drop repeated column names
 	stats_df.drop([3, 8, 15, 18, 22, 26], inplace=True)
 
-	# Remove stat rankings
+	# Split Off/Def stats and rankings into their own columns
+	stats_df['OffenseRank'] = stats_df['Offense'].str.split().str[1]
 	stats_df['Offense'] = stats_df['Offense'].str.split().str[0]
+	stats_df['DefenseRank'] = stats_df['Defense'].str.split().str[1]
 	stats_df['Defense'] = stats_df['Defense'].str.split().str[0]
 
 	return stats_df
