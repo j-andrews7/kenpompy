@@ -5,7 +5,6 @@ This module contains the FanMatch class for scraping the FanMatch pages into mor
 import mechanicalsoup
 import pandas as pd
 from bs4 import BeautifulSoup
-import re
 
 class FanMatch:
     """Object to hold FanMatch page scraping results.
@@ -46,7 +45,6 @@ class FanMatch:
         self.record_favs = None
         self.expected_record_favs = None
         self.exact_mov = None
-        self.conf_tourneys = ['Amer-T', 'P12-T', 'SEC-T', 'BE-T', 'B10-T', 'B12-T', 'WCC-T', 'MWC-T', 'CUSA-T', 'ACC-T', 'Conf-T', 'ASun-T', 'Sum-T', 'WAC-T', 'Ivy-T', 'CAA-T', 'A10-T', 'MAAC-T', 'MAC-T', 'MVC-T', 'SB-T', 'SC-T', 'BW-T', 'BSky-T', 'Pat-T', 'Horz-T', 'AE-T', 'BSth-T', 'Slnd-T', 'SWAC-T', 'MEAC-T', 'OVC-T']
         
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
@@ -61,10 +59,6 @@ class FanMatch:
         fm_df["ThrillScoreRank"] = fm_df.ThrillScore.str[4:]
         fm_df["ThrillScoreRank"] = fm_df["ThrillScoreRank"].str.strip()
         fm_df.ThrillScore = fm_df.ThrillScore.str[0:4]
-        
-        # Remove Conf. Tourneys
-        p = re.compile('|'.join(map(re.escape, self.conf_tourneys)))
-        fm_df['Game'] = [p.sub('', text) for text in fm_df['Game']] 
 
         # Take care of parsing if some/all games have been completed.
         if not all(pd.isnull(fm_df["Excitement"])):
