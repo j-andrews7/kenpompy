@@ -15,6 +15,7 @@ def test_fanmatch(browser):
 				"nan",
 				"nan",
 				"Sacar Anim (28p/5r/2a/1b/4s)",
+				"nan",
 				"79",
 				"Marquette",
 				"73-72",
@@ -46,3 +47,14 @@ def test_fanmatch(browser):
 	assert fm.record_favs == "40-13"
 	assert fm.expected_record_favs == "38-15"
 	assert fm.exact_mov == "1/53"
+
+	# Tests for tournament label parsing (j-andrews7/kenpompy#47)
+	date = "2023-03-03"
+	fm = FanMatch(browser, date)
+	assert "MVC-T" not in fm.fm_df.Game.loc[3]
+	assert fm.fm_df.Tournament.loc[6] == "WCC-T"
+
+	date = "2016-04-02"
+	fm = FanMatch(browser, date)
+	assert fm.fm_df.Tournament.loc[0] == "NCAA"
+	assert "NCAA" not in fm.fm_df.Game.loc[0]
