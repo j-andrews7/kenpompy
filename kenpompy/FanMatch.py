@@ -112,7 +112,7 @@ class FanMatch:
 
         pos = fm_df.Game.str.split(r" \[").str[1]
         fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(r" \[").str[0], pos.astype("str")
-        fm_df.Possessions = fm_df.Possessions.str.strip(r"\]")
+        fm_df.Possessions = fm_df.Possessions.str.rstrip(r"\] ")
         predict_info = fm_df.Prediction.str.split()
         pred_winner = fm_df.Prediction.astype("str").str.split().str[0:-2].tolist()
         pred_winner = [" ".join(i) if not any(pd.isnull(i)) else float("nan") for i in pred_winner]
