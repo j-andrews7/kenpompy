@@ -1,5 +1,5 @@
 """
-This module contains functions for scraping the confernce page kenpom.com tables into
+This module contains functions for scraping the conference page kenpom.com tables into
 pandas dataframes
 """
 
