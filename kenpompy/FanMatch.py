@@ -106,9 +106,13 @@ class FanMatch:
         mvp = fm_df.Game.str.split(" MVP: ").str[1]
         fm_df["Game"], fm_df["MVP"] = fm_df.Game.str.split(" MVP: ").str[0], mvp
 
+        # Conference tournament label handling (fixes j-andrews7/kenpompy#47)
+        fm_df["Tournament"] = fm_df.Game.str.extract(r"([A-Za-z]{2,}-T|NCAA)$")
+        fm_df["Game"] = fm_df.Game.str.replace(r"(\s+[A-Za-z]{2,}-T|NCAA)$", "", regex=True)
+
         pos = fm_df.Game.str.split(r" \[").str[1]
         fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(r" \[").str[0], pos.astype("str")
-        fm_df.Possessions = fm_df.Possessions.str.strip(r"\]")
+        fm_df.Possessions = fm_df.Possessions.str.rstrip(r"\] ")
         predict_info = fm_df.Prediction.str.split()
         pred_winner = fm_df.Prediction.astype("str").str.split().str[0:-2].tolist()
         pred_winner = [" ".join(i) if not any(pd.isnull(i)) else float("nan") for i in pred_winner]
