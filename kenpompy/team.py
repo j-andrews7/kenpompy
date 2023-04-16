@@ -3,10 +3,7 @@ This module contains functions for scraping the team page kenpom.com tables into
 pandas dataframes
 """
 
-import mechanicalsoup
 import pandas as pd
-import re
-from bs4 import BeautifulSoup
 import datetime
 
 
@@ -100,5 +97,7 @@ def get_schedule(browser, team=None, season=None):
 					  'A', 'Location', 'Record', 'Conference', 'B']
 	schedule_df = schedule_df.drop(columns = ['A', 'B'])
 	schedule_df = schedule_df.fillna('')
+	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Team Rank']]
+	schedule_df = schedule_df[schedule_df['Date'] != 'Date']
 
 	return schedule_df

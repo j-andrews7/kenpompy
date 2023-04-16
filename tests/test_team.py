@@ -34,6 +34,7 @@ def test_get_schedule(browser):
 
 	df = kpteam.get_schedule(browser, team="Loyola Marymount", season = '2019')
 	assert [str(i) for i in df[df.Date == 'Sat Dec 15'].iloc[0].to_list()] == expected
+	assert df.shape == (34, 9)
 
 	date = datetime.date.today()
 	currentYear = date.strftime("%Y")

@@ -9,6 +9,5 @@
 # Testing notebooks, etc.
 /*.ipynb
 /.ipynb_checkpoints/
-/__pycache__/
-/kenpompy/__pycache__/
+__pycache__/
 /.sos/

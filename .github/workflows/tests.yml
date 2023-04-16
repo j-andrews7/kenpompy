@@ -1,19 +1,21 @@
 name: Python package
 
-on: [push, workflow_dispatch]
+on: [push]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  pytest:
+    name: pytest suite
     strategy:
       max-parallel: 1
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+      
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }} (${{ matrix.os }})
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
@@ -27,4 +29,4 @@ jobs:
           EMAIL: ${{ secrets.EMAIL }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          pytest
+          pytest -vvl
