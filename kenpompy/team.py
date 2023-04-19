@@ -5,7 +5,9 @@ pandas dataframes
 
 import pandas as pd
 import datetime
-
+import re
+from bs4 import BeautifulSoup
+from codecs import encode, decode
 
 def get_valid_teams(browser, season=None):
 	"""
@@ -38,9 +40,6 @@ def get_valid_teams(browser, season=None):
 	team_list = [team for team in team_df if team != "Team"]
 
 	return team_list
-
-
-
 
 def get_schedule(browser, team=None, season=None):
 	"""
@@ -101,3 +100,46 @@ def get_schedule(browser, team=None, season=None):
 	schedule_df = schedule_df[schedule_df['Date'] != 'Date']
 
 	return schedule_df
+
+def get_scouting_report(browser, team=None, season=None, conference_only=False):
+	url = 'https://kenpom.com/team.php'
+
+	date = datetime.date.today()
+	currentYear = date.strftime("%Y")
+
+	if season:
+		if int(season) < 2002:
+			raise ValueError(
+				'season cannot be less than 2002, as data only goes back that far.')
+		if int(season) > int(currentYear):
+			raise ValueError(
+				'season cannot be greater than the current year.')
+	else:
+		season = int(currentYear)
+
+	if team==None or team not in get_valid_teams(browser, season):
+			raise ValueError(
+				'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
+	
+	# Sanitize team name
+	team = team.replace(" ", "+")
+	team = team.replace("&", "%26")
+	url = url + "?team=" + str(team)
+	url = url + "&y=" + str(season)
+
+	browser.open(url)
+	scouting_report_scripts = browser.page.find("script", { "type": "text/javascript", "src": ""} )
+
+	extraction_pattern = re.compile("\$\(\"td#(?P<token>[A-Za-z0-9]+)\"\)\.html\(\"(.+)\"\);")
+	if conference_only:
+		pattern = re.compile("\$\(':checkbox'\).click\(function\(\) \{([^\}]+)}")
+	else:
+		pattern = re.compile("function tableStart\(\) \{([^\}]+)}")
+
+	stats = extraction_pattern.findall(decode(encode(pattern.search(str(scouting_report_scripts.contents[0])).groups()[0], 'latin-1', 'backslashreplace'), 'unicode-escape'))
+	stats = list(map(lambda x: (x[0], float(BeautifulSoup(x[1], "lxml").find('a').contents[0]), int(str(BeautifulSoup(x[1], "lxml").find('span', { "class": "seed" }).contents[0]))), stats[2:]))
+	stats_df = {}	
+	for stat in stats:
+		stats_df[stat[0]] = stat[1]
+		stats_df[stat[0]+'.Rank'] = stat[2]
+	return stats_df
