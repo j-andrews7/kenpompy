@@ -5,7 +5,7 @@ def test_get_team_stats(browser):
     team_stats_2022 = get_team_stats(browser, season=2022)
     assert team_stats_2022.shape == (358, 21)
     expected = ['Villanova', 'BE', '35.9', '57', '49.5', '187', '83.0', '1', '11.2', '323', '7.4', '22', '8.1', '83', '48.9', '227', '46.3', '17', '117.5', '9', '2']
-    assert team_stats_2022.iloc[56] == expected
+    assert team_stats_2022.iloc[56].to_list() == expected
 
     team_stats_2022 = get_team_stats(browser, season=2022, defense=True)
     assert team_stats_2022.shape == (358, 21)
