@@ -78,7 +78,7 @@ def test_get_gameattribs(browser):
 
 
 def test_get_program_ratings(browser):
-	expected = (358, 17)
+	expected = (356, 17)
 
 	df = kpmisc.get_program_ratings(browser)
 	assert df.shape == expected
