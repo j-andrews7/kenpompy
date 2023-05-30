@@ -21,7 +21,7 @@ def test_get_valid_teams(browser):
 	assert len(teams_2003) == 327
 
 	valid_2003_teams = ['Kentucky', 'Kansas', 'Georgetown', 'Dayton', 'South Carolina', 'Fresno St.', 'Iowa', 'SMU', 'TCU', 'North Carolina A&T']
-	for team in teams_2003:
+	for team in valid_2003_teams:
 		assert team in teams_2003
 	
 	invalid_2003_teams = ['Loyola Marymnt University', 'YRU', 'Praget', 'Invalid U', 'SRTU', 'Kennesaw St.']
