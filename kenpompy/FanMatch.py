@@ -59,7 +59,7 @@ class FanMatch:
         fm_df["ThrillScoreRank"] = fm_df.ThrillScore.str[4:]
         fm_df["ThrillScoreRank"] = fm_df["ThrillScoreRank"].str.strip()
         fm_df.ThrillScore = fm_df.ThrillScore.str[0:4]
-        
+
         # Take care of parsing if some/all games have been completed.
         if not all(pd.isnull(fm_df["Excitement"])):
             fm_df["Excitement"] = fm_df.Excitement.str.split("·").str[0]
