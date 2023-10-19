@@ -6,6 +6,7 @@ usable pandas dataframes.
 import mechanicalsoup
 import pandas as pd
 from bs4 import BeautifulSoup
+from io import StringIO
 
 def get_pomeroy_ratings(browser, season=None):
     """
@@ -28,7 +29,7 @@ def get_pomeroy_ratings(browser, season=None):
     browser.open(url)
     page = browser.get_current_page()
     table = page.find_all('table')[0]
-    ratings_df = pd.read_html(str(table))
+    ratings_df = pd.read_html(StringIO(str(table)))
     # Dataframe tidying.
     ratings_df = ratings_df[0]
     ratings_df.columns = ratings_df.columns.map(lambda x: x[1])
@@ -66,7 +67,7 @@ def get_trends(browser):
 	browser.open(url)
 	trends = browser.get_current_page()
 	table = trends.find_all('table')[0]
-	trends_df = pd.read_html(str(table))
+	trends_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	trends_df = trends_df[0]
@@ -103,7 +104,7 @@ def get_refs(browser, season=None):
 	browser.open(url)
 	refs = browser.get_current_page()
 	table = refs.find_all('table')[0]
-	refs_df = pd.read_html(str(table))
+	refs_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	refs_df = refs_df[0]
@@ -132,7 +133,7 @@ def get_hca(browser):
 	browser.open(url)
 	hca = browser.get_current_page()
 	table = hca.find_all('table')[0]
-	hca_df = pd.read_html(str(table))
+	hca_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	hca_df = hca_df[0]
@@ -171,7 +172,7 @@ def get_arenas(browser, season=None):
 	browser.open(url)
 	arenas = browser.get_current_page()
 	table = arenas.find_all('table')[0]
-	arenas_df = pd.read_html(str(table))
+	arenas_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	arenas_df = arenas_df[0]
@@ -234,7 +235,7 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 	playerstats = browser.get_current_page()
 
 	table = playerstats.find_all('table')[0]
-	ga_df = pd.read_html(str(table))
+	ga_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	ga_df = ga_df[0]
@@ -263,7 +264,7 @@ def get_program_ratings(browser):
 	browser.open(url)
 	programs = browser.get_current_page()
 	table = programs.find_all('table')[0]
-	programs_df = pd.read_html(str(table))
+	programs_df = pd.read_html(StringIO(str(table)))
 	programs_df = programs_df[0]
 
 	programs_df.columns = ['Rank', 'Team', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
