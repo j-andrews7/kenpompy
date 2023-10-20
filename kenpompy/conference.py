@@ -8,7 +8,7 @@ import pandas as pd
 import re
 from bs4 import BeautifulSoup
 import datetime
-
+from io import StringIO
 
 def get_valid_conferences(browser, season=None):
 	"""
@@ -60,10 +60,10 @@ def get_aggregate_stats(browser, conf=None, season=None):
 		confs = browser.get_current_page()
 		#get first table
 		table = confs.find_all('table')[-3]
-		conf_df = pd.read_html(str(table))[0]
+		conf_df = pd.read_html(StringIO(str(table)))[0]
 		#get second table
 		table = confs.find_all('table')[-2]
-		conf2_df = pd.read_html(str(table))[0]
+		conf2_df = pd.read_html(StringIO(str(table)))[0]
 		conf2_df['Value'] = conf2_df['Value'].str.replace('%', '').astype(float)
 		conf_df = pd.concat([conf_df, conf2_df])
 		#clean table
@@ -80,7 +80,7 @@ def get_aggregate_stats(browser, conf=None, season=None):
 		confs = browser.get_current_page()
 		#get table
 		table = confs.find_all('table')[0]
-		conf_df = pd.read_html(str(table))[0]
+		conf_df = pd.read_html(StringIO(str(table)))[0]
 		# Clean table
 		conf_df = conf_df.set_index('Conf')
 		conf_df.columns = [stat[:-1] + 'Rank' if '.1' in stat else stat for stat in conf_df.columns]
@@ -107,7 +107,7 @@ def get_standings(browser, conf, season=None):
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[0]
-	conf_df = pd.read_html(str(table))[0]
+	conf_df = pd.read_html(StringIO(str(table)))[0]
 	# Parse out seed
 	conf_df['Seed'] = conf_df['Team'].str.extract('([0-9]+)')
 	conf_df['Team'] = conf_df['Team'].str.replace('([0-9]+)', '', regex=True).str.rstrip()
@@ -139,7 +139,7 @@ def get_offense(browser, conf, season=None):
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[1]
-	conf_df = pd.read_html(str(table))[0]
+	conf_df = pd.read_html(StringIO(str(table)))[0]
 
 	# Rename Rank headers
 	conf_df.columns = [stat[:-1] + 'Rank' if '.1' in stat else stat for stat in conf_df.columns]
@@ -168,7 +168,7 @@ def get_defense(browser, conf, season=None):
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[2]
-	conf_df = pd.read_html(str(table))[0]
+	conf_df = pd.read_html(StringIO(str(table)))[0]
 
 	# Rename Rank headers
 	conf_df.columns = [stat[:-1] + 'Rank' if '.1' in stat else stat for stat in conf_df.columns]
