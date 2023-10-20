@@ -7,7 +7,7 @@ import mechanicalsoup
 import pandas as pd
 import re
 from bs4 import BeautifulSoup
-
+from io import StringIO
 
 def get_efficiency(browser, season=None):
 	"""
@@ -37,7 +37,7 @@ def get_efficiency(browser, season=None):
 	browser.open(url)
 	eff = browser.get_current_page()
 	table = eff.find_all('table')[0]
-	eff_df = pd.read_html(str(table))
+	eff_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	eff_df = eff_df[0]
@@ -95,7 +95,7 @@ def get_fourfactors(browser, season=None):
 	browser.open(url)
 	ff = browser.get_current_page()
 	table = ff.find_all('table')[0]
-	ff_df = pd.read_html(str(table))
+	ff_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	ff_df = ff_df[0]
@@ -153,7 +153,7 @@ def get_teamstats(browser, defense=False, season=None):
 	browser.open(url)
 	ts = browser.get_current_page()
 	table = ts.find_all('table')[0]
-	ts_df = pd.read_html(str(table))
+	ts_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	ts_df = ts_df[0]
@@ -201,7 +201,7 @@ def get_pointdist(browser, season=None):
 	browser.open(url)
 	dist = browser.get_current_page()
 	table = dist.find_all('table')[0]
-	dist_df = pd.read_html(str(table))
+	dist_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	dist_df = dist_df[0]
@@ -247,7 +247,7 @@ def get_height(browser, season=None):
 	browser.open(url)
 	height = browser.get_current_page()
 	table = height.find_all('table')[0]
-	h_df = pd.read_html(str(table))
+	h_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe tidying.
 	h_df = h_df[0]
@@ -346,7 +346,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 		ps_dfs = []
 		tables = playerstats.find_all('table')
 		for t in tables:
-			ps_df = pd.read_html(str(t))
+			ps_df = pd.read_html(StringIO(str(t)))
 			ps_df = ps_df[0]
 			
 			# Split ortg column.
@@ -364,7 +364,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 		if metric.upper() in perc_mets:
 			metric = metric + '%'
 		table = playerstats.find_all('table')[0]
-		ps_df = pd.read_html(str(table))
+		ps_df = pd.read_html(StringIO(str(table)))
 
 		# Dataframe tidying.
 		ps_df = ps_df[0]
@@ -415,7 +415,7 @@ def get_kpoy(browser, season=None):
 	browser.open(url)
 	kpoy = browser.get_current_page()
 	table = kpoy.find_all('table')[0]
-	df = pd.read_html(str(table))
+	df = pd.read_html(StringIO(str(table)))
 
 	kpoy_df = df[0]
 	kpoy_df.columns = ['Rank', 'Player', 'KPOY Rating']
@@ -431,7 +431,7 @@ def get_kpoy(browser, season=None):
 	# Now the MVP table.
 	if int(season) >= 2013:
 		table = kpoy.find_all('table')[-1]
-		df = pd.read_html(str(table))
+		df = pd.read_html(StringIO(str(table)))
 
 		mvp_df = df[0]
 		mvp_df.columns = ['Rank', 'Player', 'Game MVPs']

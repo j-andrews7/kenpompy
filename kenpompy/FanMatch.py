@@ -5,6 +5,7 @@ This module contains the FanMatch class for scraping the FanMatch pages into mor
 import mechanicalsoup
 import pandas as pd
 from bs4 import BeautifulSoup
+from io import StringIO
 
 class FanMatch:
     """Object to hold FanMatch page scraping results.
@@ -52,7 +53,7 @@ class FanMatch:
         browser.open(self.url)
         fm = browser.get_current_page()
         table = fm.find_all("table")[0]
-        fm_df = pd.read_html(str(table))
+        fm_df = pd.read_html(StringIO(str(table)))
         fm_df = fm_df[0]
         fm_df = fm_df.rename(columns={"Thrill Score": "ThrillScore", "Come back": "Comeback", "Excite ment": "Excitement"})
         fm_df.ThrillScore = fm_df.ThrillScore.astype("str")
