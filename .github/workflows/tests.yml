@@ -1,5 +1,12 @@
 name: Python package
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 concurrency:
   group: ${{ github.repository }}
   cancel-in-progress: true
