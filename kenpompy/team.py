@@ -5,6 +5,7 @@ pandas dataframes
 
 import pandas as pd
 import datetime
+from io import StringIO
 import re
 from bs4 import BeautifulSoup
 from codecs import encode, decode
@@ -28,7 +29,7 @@ def get_valid_teams(browser, season=None):
 	browser.open(url)
 	teams = browser.get_current_page()
 	table = teams.find_all('table')[0]
-	team_df = pd.read_html(str(table))
+	team_df = pd.read_html(StringIO(str(table)))
 	# Get only the team column.
 	team_df = team_df[0].iloc[:, 1]
  	# Remove NCAA tourny seeds for previous seasons.
@@ -88,7 +89,7 @@ def get_schedule(browser, team=None, season=None):
 	browser.open(url)
 	schedule = browser.get_current_page()
 	table = schedule.find_all('table')[1]
-	schedule_df = pd.read_html(str(table))
+	schedule_df = pd.read_html(StringIO(str(table)))
 
 	# Dataframe Tidying
 	schedule_df = schedule_df[0]
