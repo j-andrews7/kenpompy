@@ -27,9 +27,6 @@ def login(email, password):
 	browser.set_user_agent('Mozilla/5.0')
 	browser.open('https://kenpom.com/index.php')
 
-	# Get current season based on home page's title contents
-	browser._current_season = browser.page.select_one('#content-header h2').text
-
 	if 'Cloudflare' in browser.page.title.string:
 		raise Exception(
 			'Opening kenpom.com failed - request was intercepted by Cloudflare protection')
