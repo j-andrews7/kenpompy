@@ -64,17 +64,16 @@ def get_schedule(browser, team=None, season=None):
 	url = 'https://kenpom.com/team.php'
 
 	date = datetime.date.today()
-	currentYear = date.strftime("%Y")
 
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		if int(season) > int(currentYear):
+		if int(season) > int(browser._current_season):
 			raise ValueError(
 				'season cannot be greater than the current year.')
 	else:
-		season = int(currentYear)
+		season = int(browser._current_season)
 
 	if team==None or team not in get_valid_teams(browser, season):
 			raise ValueError(
