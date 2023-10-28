@@ -4,7 +4,6 @@ pandas dataframes
 """
 
 import pandas as pd
-import datetime
 from io import StringIO
 from .misc import get_current_season
 
@@ -60,9 +59,6 @@ def get_schedule(browser, team=None, season=None):
 	"""
 
 	url = 'https://kenpom.com/team.php'
-
-	date = datetime.date.today()
-
 	current_season = get_current_season(browser)
 
 	if season:
