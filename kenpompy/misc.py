@@ -7,47 +7,54 @@ import mechanicalsoup
 import pandas as pd
 from bs4 import BeautifulSoup
 from io import StringIO
+import urllib.parse
 
 def get_pomeroy_ratings(browser, season=None):
-    """
-    Scrapes the Pomeroy College Basketball Ratings table (https://kenpom.com/index.php) into a dataframe.
+	"""
+	Scrapes the Pomeroy College Basketball Ratings table (https://kenpom.com/index.php) into a dataframe.
 
-    Args:
-        browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
-            by the `login` function.
-        season (str, optional): Used to define different seasons. 2002 is the earliest available season.
-            Most recent season is the default.
-    Returns:
-        refs_df (pandas dataframe): Pandas dataframe containing the Pomeroy College Basketball Ratings table from kenpom.com.
-    Raises:
-        ValueError: If `season` is less than 2002.
-    """
-    url = 'https://kenpom.com/index.php'
-    if season and int(season) < 2002:
-        raise ValueError("season cannot be less than 2002")
-    url += '?y={}'.format(season)
-    browser.open(url)
-    page = browser.get_current_page()
-    table = page.find_all('table')[0]
-    ratings_df = pd.read_html(StringIO(str(table)))
-    # Dataframe tidying.
-    ratings_df = ratings_df[0]
-    ratings_df.columns = ratings_df.columns.map(lambda x: x[1])
-    ratings_df.dropna(inplace=True)
-    ratings_df = ratings_df[ratings_df['Rk'] != 'Rk']
-    ratings_df.reset_index(drop=True, inplace=True)
-    # Parse out seed, most current won't have this
-    tmp = ratings_df['Team'].str.extract(r'(?P<Team>[a-zA-Z.&\'\s]+(?<!\s))\s*(?P<Seed>\d*)')
-    ratings_df["Team"] = tmp["Team"]
-    ratings_df["Seed"] = tmp["Seed"]
-    
-    # Disambiguate column names for easier reference
-    ratings_df.columns = ['Rk', 'Team', 'Conf', 'W-L', 'AdjEM', 'AdjO',
-                          'AdjO.Rank', 'AdjD', 'AdjD.Rank', 'AdjT', 'AdjT.Rank',
-						  'Luck', 'Luck.Rank', 'SOS-AdjEM', 'SOS-AdjEM.Rank', 'SOS-OppO', 'SOS-OppO.Rank',
-						  'SOS-OppD', 'SOS-OppD.Rank', 'NCSOS-AdjEM', 'NCSOS-AdjEM.Rank', 'Seed']
-    
-    return ratings_df
+	Args:
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+			Most recent season is the default.
+	Returns:
+		refs_df (pandas dataframe): Pandas dataframe containing the Pomeroy College Basketball Ratings table from kenpom.com.
+	Raises:
+		ValueError: If `season` is less than 2002.
+	"""
+	params = {}
+	url = 'https://kenpom.com/index.php'
+
+	if season and int(season) < 2002:
+		raise ValueError("season cannot be less than 2002")
+
+	params['y'] = str(season)
+
+	url = url + '?' + urllib.parse.urlencode(params)
+
+	browser.open(url)
+	page = browser.get_current_page()
+	table = page.find_all('table')[0]
+	ratings_df = pd.read_html(StringIO(str(table)))
+	# Dataframe tidying.
+	ratings_df = ratings_df[0]
+	ratings_df.columns = ratings_df.columns.map(lambda x: x[1])
+	ratings_df.dropna(inplace=True)
+	ratings_df = ratings_df[ratings_df['Rk'] != 'Rk']
+	ratings_df.reset_index(drop=True, inplace=True)
+	# Parse out seed, most current won't have this
+	tmp = ratings_df['Team'].str.extract(r'(?P<Team>[a-zA-Z.&\'\s]+(?<!\s))\s*(?P<Seed>\d*)')
+	ratings_df["Team"] = tmp["Team"]
+	ratings_df["Seed"] = tmp["Seed"]
+
+	# Disambiguate column names for easier reference
+	ratings_df.columns = ['Rk', 'Team', 'Conf', 'W-L', 'AdjEM', 'AdjO',
+							'AdjO.Rank', 'AdjD', 'AdjD.Rank', 'AdjT', 'AdjT.Rank',
+							'Luck', 'Luck.Rank', 'SOS-AdjEM', 'SOS-AdjEM.Rank', 'SOS-OppO', 'SOS-OppO.Rank',
+							'SOS-OppD', 'SOS-OppD.Rank', 'NCSOS-AdjEM', 'NCSOS-AdjEM.Rank', 'Seed']
+
+	return ratings_df
 
 
 def get_trends(browser):
@@ -93,13 +100,16 @@ def get_refs(browser, season=None):
 		ValueError: If `season` is less than 2016.
 	"""
 
+	params = {}
 	url = 'https://kenpom.com/officials.php'
 
 	if season:
 		if int(season) < 2016:
 			raise ValueError(
 				'season cannot be less than 2016, as data only goes back that far.')
-		url = url + '?y=' + str(season)
+	params['y'] = str(season)
+
+	url = url + '?' + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	refs = browser.get_current_page()
@@ -161,13 +171,17 @@ def get_arenas(browser, season=None):
 		ValueError: If `season` is less than 2010.
 	"""
 
+	params = {}
 	url = 'https://kenpom.com/arenas.php'
 
 	if season:
 		if int(season) < 2010:
 			raise ValueError(
 				'season cannot be less than 2010, as data only goes back that far.')
-		url = url + '?y=' + str(season)
+	
+		params['y'] = str(season)
+
+	url = url + '?' + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	arenas = browser.get_current_page()
@@ -207,6 +221,8 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 		KeyError: If `metric` is invalid.
 	"""
 
+	params = {}
+
 	# `metric` parameter checking.
 	metric = metric.upper()
 	metrics = {'EXCITEMENT': 'Excitement', 'TENSION': 'Tension', 'DOMINANCE': 'Dominance', 'COMEBACK': 'MinWP',
@@ -216,9 +232,9 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 			"""Metric is invalid, must be one of: 'Excitement',
 				'Tension', 'Dominance', 'ComeBack', 'FanMatch', 'Upsets', and 'Busts'""")
 	else:
-		met_url = 's=' + metrics[metric]
+		params['s'] = metrics[metric]
 
-	url = 'https://kenpom.com/game_attrs.php?' + met_url
+	url = 'https://kenpom.com/game_attrs.php?'
 
 	# Season selection and an additional check.
 	if season:
@@ -229,7 +245,9 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 			raise ValueError(
 				'FanMatch, Upsets, and Busts tables only available for seasons after 2010.'
 			)
-		url = url + '&y=' + str(season)
+		params['y'] = str(season)
+	
+	url = url + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	playerstats = browser.get_current_page()

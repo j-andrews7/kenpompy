@@ -6,6 +6,7 @@ pandas dataframes
 import pandas as pd
 import datetime
 from io import StringIO
+import urllib.parse
 
 def get_valid_teams(browser, season=None):
 	"""
@@ -20,8 +21,10 @@ def get_valid_teams(browser, season=None):
 		team_list (list): List containing all valid teams for the given season on kenpom.com.
 	"""
 
+	params = {}
 	url = "https://kenpom.com"
-	url = url + '?y=' + str(season)
+	params['y'] = str(season)
+	url = url + '?' + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	teams = browser.get_current_page()
@@ -61,6 +64,7 @@ def get_schedule(browser, team=None, season=None):
 		ValueError if `team` is not in the valid team list.
 	"""
 
+	params = {}
 	url = 'https://kenpom.com/team.php'
 
 	date = datetime.date.today()
@@ -77,14 +81,13 @@ def get_schedule(browser, team=None, season=None):
 		season = int(currentYear)
 
 	if team==None or team not in get_valid_teams(browser, season):
-			raise ValueError(
-				'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
+		raise ValueError(
+			'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
 	
-	# Sanitize team name
-	team = team.replace(" ", "+")
-	team = team.replace("&", "%26")
-	url = url + "?team=" + str(team)
-	url = url + "&y=" + str(season)
+	params['team'] = str(team)
+	params['y'] = str(season)
+
+	url = url + '?' + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	schedule = browser.get_current_page()
