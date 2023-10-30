@@ -8,6 +8,7 @@ def test_get_efficiency(browser):
 
 	df = kpsum.get_efficiency(browser, season = '2019')
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
+	assert df.loc[44]['Team'] == 'Cal St. Northridge'
 
 	expected = ['Louisville', 'BE', '65.3', '160', '67.1', '169', '113.1', '40', '107.3', '67', '87.7', '4', '91.2', 
 				'7']
