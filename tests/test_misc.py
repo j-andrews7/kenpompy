@@ -8,6 +8,9 @@ def test_get_pomeroy_ratings(browser):
     df = kpmisc.get_pomeroy_ratings(browser, season=2019)
     assert df.iloc[0].to_list() == expected
 
+    expected = ['253', 'Cal St. Northridge', 'BW', '13-21', '-7.74', '104.8', '170', '112.5', '318', '70.9', '43', '-.018', '232', '-4.63', '263', '101.7', '282', '106.3', '225', '-4.09', '279', '']
+    assert df.loc[252].to_list() == expected
+
     # Also test proper handling of team names with special characters like ' and &
     expected = ['31', "Saint Mary's", 'WCC', '22-12', '+17.31', '114.7', '23', '97.4', '55', '62.7', '348', '-.045', '285', '+3.66', '82', '106.6', '76', '103.0', '100', '-0.90', '183', '11']
     assert df.iloc[30].to_list() == expected
