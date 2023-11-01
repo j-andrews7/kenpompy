@@ -3,6 +3,15 @@ import kenpompy.misc as kpmisc
 from kenpompy.FanMatch import FanMatch
 import pandas as pd
 
+def test_get_current_season(browser):
+	current_season = kpmisc.get_current_season(browser)
+
+	# Test that the current season is indeed published on the homepage
+	assert browser.request(url='https://kenpom.com/?y=' + str(current_season), method='GET', allow_redirects=False).status_code == 200
+
+	# Test that there are isn't a season beyond the "current" one (that it is indeed the latest)
+	assert browser.request(url='https://kenpom.com/?y=' + str(current_season + 1), method='GET', allow_redirects=False).status_code == 302
+
 def test_get_pomeroy_ratings(browser):
     expected = ['1', 'Virginia', 'ACC', '35-3', '+34.22', '123.4', '2', '89.2', '5', '59.4', '353', '+.050', '62', '+11.18', '22', '109.2', '34', '98.1', '14', '-3.24', '255', '1']
     df = kpmisc.get_pomeroy_ratings(browser, season=2019)

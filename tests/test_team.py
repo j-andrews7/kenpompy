@@ -1,6 +1,7 @@
 import pytest
 import datetime
 import kenpompy.team as kpteam
+import kenpompy.misc as kpmisc
 import pandas as pd
 
 def test_get_valid_teams(browser):
@@ -37,7 +38,7 @@ def test_get_schedule(browser):
 	assert df.shape == (34, 9)
 
 	date = datetime.date.today()
-	currentYear = date.strftime("%Y")
+	currentYear = kpmisc.get_current_season(browser)
 	nextYear = str(int(currentYear)+1)
 
 	with pytest.raises(ValueError):

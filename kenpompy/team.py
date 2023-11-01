@@ -4,8 +4,8 @@ pandas dataframes
 """
 
 import pandas as pd
-import datetime
 from io import StringIO
+from .misc import get_current_season
 
 def get_valid_teams(browser, season=None):
 	"""
@@ -39,9 +39,6 @@ def get_valid_teams(browser, season=None):
 
 	return team_list
 
-
-
-
 def get_schedule(browser, team=None, season=None):
 	"""
 	Scrapes a team's schedule from (https://kenpom.com/team.php) into a dataframe.
@@ -62,19 +59,17 @@ def get_schedule(browser, team=None, season=None):
 	"""
 
 	url = 'https://kenpom.com/team.php'
-
-	date = datetime.date.today()
-	currentYear = date.strftime("%Y")
+	current_season = get_current_season(browser)
 
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		if int(season) > int(currentYear):
+		if int(season) > int(current_season):
 			raise ValueError(
 				'season cannot be greater than the current year.')
 	else:
-		season = int(currentYear)
+		season = current_season
 
 	if team==None or team not in get_valid_teams(browser, season):
 			raise ValueError(
