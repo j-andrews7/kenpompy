@@ -9,7 +9,7 @@ def test_get_valid_teams(browser):
 	teams_2021 = kpteam.get_valid_teams(browser, season = '2021')
 	assert len(teams_2021) == expected
 
-	valid_2021_teams = ['Gonzaga', 'Penn St.', 'Florida', 'Xavier', 'VMI', 'Kennesaw St.', 'Wagner', 'Bucknell', 'Maryland Eastern Shore']
+	valid_2021_teams = ['Gonzaga', 'Penn St.', 'Florida', 'Xavier', 'VMI', 'Kennesaw St.', 'Wagner', 'Bucknell', 'Maryland Eastern Shore', 'Cal St. Fullerton']
 	for team in valid_2021_teams:
 		assert team in teams_2021
 
