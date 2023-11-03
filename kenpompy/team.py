@@ -88,11 +88,14 @@ def get_schedule(browser, team=None, season=None):
 
 	# Dataframe Tidying
 	schedule_df = schedule_df[0]
+	# Teams 2010 and earlier do not show their team rank, add column for consistency
+	if(len(schedule_df.columns) == 10):
+		schedule_df.insert(1, 'Team Rank', '')
 	schedule_df.columns = ['Date', 'Team Rank', 'Opponent Rank', 'Opponent Name', 'Result', 'Possession Number',
 					  'A', 'Location', 'Record', 'Conference', 'B']
 	schedule_df = schedule_df.drop(columns = ['A', 'B'])
 	schedule_df = schedule_df.fillna('')
-	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Team Rank']]
+	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Result']]
 	schedule_df = schedule_df[schedule_df['Date'] != 'Date']
 
 	return schedule_df
