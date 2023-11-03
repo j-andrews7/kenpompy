@@ -50,6 +50,12 @@ def test_get_schedule(browser):
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, season = "2009")
 
+	with pytest.raises(ValueError):
+		kpteam.get_schedule(browser, team='Merrimack', season=2019)
+
+	with pytest.raises(ValueError):
+		kpteam.get_schedule(browser, team='Incorrect Team Name', season=2017)
+
 	# Make sure that the valid team check is triggered
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, season = '2013', team="LMU")
