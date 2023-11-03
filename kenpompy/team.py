@@ -131,15 +131,16 @@ def get_scouting_report(browser, team=None, season=None, conference_only=False):
 	browser.open(url)
 	scouting_report_scripts = browser.page.find("script", { "type": "text/javascript", "src": ""} )
 
-	extraction_pattern = re.compile("\$\(\"td#(?P<token>[A-Za-z0-9]+)\"\)\.html\(\"(.+)\"\);")
+	extraction_pattern = re.compile(r"\$\(\"td#(?P<token>[A-Za-z0-9]+)\"\)\.html\(\"(.+)\"\);")
 	if conference_only:
-		pattern = re.compile("\$\(':checkbox'\).click\(function\(\) \{([^\}]+)}")
+		pattern = re.compile(r"\$\(':checkbox'\).click\(function\(\) \{([^\}]+)}")
 	else:
-		pattern = re.compile("function tableStart\(\) \{([^\}]+)}")
+		pattern = re.compile(r"function tableStart\(\) \{([^\}]+)}")
 
 	stats = extraction_pattern.findall(decode(encode(pattern.search(str(scouting_report_scripts.contents[0])).groups()[0], 'latin-1', 'backslashreplace'), 'unicode-escape'))
 	stats = list(map(lambda x: (x[0], float(BeautifulSoup(x[1], "lxml").find('a').contents[0]), int(str(BeautifulSoup(x[1], "lxml").find('span', { "class": "seed" }).contents[0]))), stats[2:]))
-	stats_df = {}	
+	# Defaulting each stat to '' for earlier years which might not have all the stats
+	stats_df = {'OE': '', 'OE.Rank': '', 'DE': '', 'DE.Rank': '', 'Tempo': '', 'Tempo.Rank': '', 'APLO': '', 'APLO.Rank': '', 'APLD': '', 'APLD.Rank': '', 'eFG': '', 'eFG.Rank': '', 'DeFG': '', 'DeFG.Rank': '', 'TOPct': '', 'TOPct.Rank': '', 'DTOPct': '', 'DTOPct.Rank': '', 'ORPct': '', 'ORPct.Rank': '', 'DORPct': '', 'DORPct.Rank': '', 'FTR': '', 'FTR.Rank': '', 'DFTR': '', 'DFTR.Rank': '', '3Pct': '', '3Pct.Rank': '', 'D3Pct': '', 'D3Pct.Rank': '', '2Pct': '', '2Pct.Rank': '', 'D2Pct': '', 'D2Pct.Rank': '', 'FTPct': '', 'FTPct.Rank': '', 'DFTPct': '', 'DFTPct.Rank': '', 'BlockPct': '', 'BlockPct.Rank': '', 'DBlockPct': '', 'DBlockPct.Rank': '', 'StlRate': '', 'StlRate.Rank': '', 'DStlRate': '', 'DStlRate.Rank': '', 'NSTRate': '', 'NSTRate.Rank': '', 'DNSTRate': '', 'DNSTRate.Rank': '', '3PARate': '', '3PARate.Rank': '', 'D3PARate': '', 'D3PARate.Rank': '', 'ARate': '', 'ARate.Rank': '', 'DARate': '', 'DARate.Rank': '', 'PD3': '', 'PD3.Rank': '', 'DPD3': '', 'DPD3.Rank': '', 'PD2': '', 'PD2.Rank': '', 'DPD2': '', 'DPD2.Rank': '', 'PD1': '', 'PD1.Rank': '', 'DPD1': '', 'DPD1.Rank': ''}	
 	for stat in stats:
 		stats_df[stat[0]] = stat[1]
 		stats_df[stat[0]+'.Rank'] = stat[2]
