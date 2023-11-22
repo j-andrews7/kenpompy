@@ -8,7 +8,6 @@ import pandas as pd
 import re
 from bs4 import BeautifulSoup
 from io import StringIO
-import urllib.parse
 
 def get_efficiency(browser, season=None):
 	"""
@@ -29,13 +28,11 @@ def get_efficiency(browser, season=None):
 
 	url = 'https://kenpom.com/summary.php'
 
-	params = {}
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		params['y'] = str(season)
-		url = url + '?' + urllib.parse.urlencode(params)
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	eff = browser.get_current_page()
@@ -89,13 +86,11 @@ def get_fourfactors(browser, season=None):
 
 	url = 'https://kenpom.com/stats.php'
 
-	params = {}
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		params['y'] = str(season)
-		url = url + '?' + urllib.parse.urlencode(params)
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	ff = browser.get_current_page()
@@ -143,18 +138,17 @@ def get_teamstats(browser, defense=False, season=None):
 	last_cols = ['AdjOE', 'AdjOE.Rank']
 
 	# Create URL.
-	params = {}
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		params['y'] = str(season)
-
-	if defense:
-		params['od'] = 'd'
+		url = url + '?y=' + str(season)
+		if defense:
+			url = url + '&od=d'
+			last_cols = ['AdjDE', 'AdjDE.Rank']
+	elif defense:
+		url = url + '?od=d'
 		last_cols = ['AdjDE', 'AdjDE.Rank']
-
-	url = url + '?' + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	ts = browser.get_current_page()
@@ -197,15 +191,12 @@ def get_pointdist(browser, season=None):
 
 	url = 'https://kenpom.com/pointdist.php'
 
-	params = {}
 	# Create URL.
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		
-		params['y'] = str(season)
-		url = url + '?' + urllib.parse.urlencode((season))
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	dist = browser.get_current_page()
@@ -247,14 +238,11 @@ def get_height(browser, season=None):
 
 	url = 'https://kenpom.com/height.php'
 
-	params = {}
 	if season:
 		if int(season) < 2007:
 			raise ValueError(
 				'Season cannot be less than 2007, as data only goes back that far.')
-		params['y'] = str(season)
-
-	url = url + '?' + urllib.parse.urlencode(params)
+		url = url + '?y=' + str(season)
 
 	browser.open(url)
 	height = browser.get_current_page()
@@ -320,8 +308,6 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 		KeyError: If `metric` is invalid.
 	"""
 
-	params = {}
-
 	# `metric` parameter checking.
 	metric = metric.upper()
 	metrics = {'ORTG': 'ORtg', 'MIN': 'PctMin', 'EFG': 'eFG', 'POSS': 'PctPoss', 'SHOTS': 'PctShots', 'OR': 'ORPct', 
@@ -333,9 +319,10 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 			"""Metric is invalid, must be one of: 'ORtg', 'Min', 'eFG', 'Poss', 'Shots', 'OR', 'DR', 'TO', 'ARate', 
 			'Blk', 'FTRate', 'Stl', 'TS', 'FC40', 'FD40', '2P', '3P', 'FT'""")
 	else:
-		params['s'] = metrics[metric]
+		met_url = 's=' + metrics[metric]
 
-	url = 'https://kenpom.com/playerstats.php?'
+
+	url = 'https://kenpom.com/playerstats.php?' + met_url
 
 	if season:
 		if int(season) < 2004:
@@ -345,15 +332,13 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 			raise ValueError(
 				'Conference only stats only available for seasons after 2013.'
 			)
-		params['y'] = str(season)
+		url = url + '&y=' + str(season)
 
 	if conf_only:
-		params['c'] = 'c'
+		url = url + '&c=c'
 
 	if conf:
-		params['f'] = conf
-
-	url = url + urllib.parse.urlparse(params)
+		url = url + '&f=' + conf
 
 	browser.open(url)
 	playerstats = browser.get_current_page()
@@ -418,17 +403,14 @@ def get_kpoy(browser, season=None):
 	kpoy_dfs = []
 	url = 'https://kenpom.com/kpoy.php'
 
-	params = {}
 	# Create URL.
 	if season:
 		if int(season) < 2011:
 			raise ValueError(
 				'season cannot be less than 2011, as data only goes back that far.')
-		params['y'] = str(season)
+		url = url + '?y=' + str(season)
 	else:
 		season = 2013
-	
-	url = url + urllib.parse.urlencode(params)
 
 	browser.open(url)
 	kpoy = browser.get_current_page()
