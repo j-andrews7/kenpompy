@@ -9,7 +9,6 @@ import re
 from bs4 import BeautifulSoup
 import datetime
 from io import StringIO
-import urllib.parse
 
 def get_valid_conferences(browser, season=None):
 	"""
@@ -24,14 +23,10 @@ def get_valid_conferences(browser, season=None):
 		conference_list (list): List containing all valid conferences for the given season on kenpom.com.
 	"""
 
-	params = {}
 	url = "https://kenpom.com/conf.php"
-	params['c'] = 'B10'
-	if season:
-		params['y'] = str(season)
-	
-	url = url + '?' + urllib.parse.urlencode(params)
-
+	url = url + '?c=B10'
+	if(season):
+		url = url + '&y=' + str(season)
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[-1]
@@ -56,16 +51,11 @@ def get_aggregate_stats(browser, conf=None, season=None):
 	Returns:
 		conference_df (dataframe): Dataframe containing aggregate stats of the conference for the given season on kenpom.com.
 	"""
-	params = {}
-
-	if conf:
+	if(conf):
 		url = "https://kenpom.com/conf.php"
-		params['c'] = conf
-		if season:
-			params['y'] = str(season)
-		
-		url = url + '?' + urllib.parse.urlencode(params)
-
+		url = url + f'?c={conf}'
+		if(season):
+			url = url + '&y=' + str(season)
 		browser.open(url)
 		confs = browser.get_current_page()
 		#get first table
@@ -84,9 +74,8 @@ def get_aggregate_stats(browser, conf=None, season=None):
 		return conf_df
 	else:
 		url = "https://kenpom.com/confstats.php"
-		if season:
-			params['y'] = str(season)
-		url = url + '?' + urllib.parse.urlencode(params)
+		if(season):
+			url = url + '?y=' + str(season)
 		browser.open(url)
 		confs = browser.get_current_page()
 		#get table
@@ -110,12 +99,11 @@ def get_standings(browser, conf, season=None):
 	Returns:
 		conference_df (dataframe): Dataframe containing standing stats of the conference for the given season on kenpom.com.
 	"""
-	params = {}
+
 	url = "https://kenpom.com/conf.php"
-	params['c'] = conf
-	if season:
-		params['y'] = str(season)
-	url = url + '?' + urllib.parse.urlencode(params)
+	url = url + f'?c={conf}'
+	if(season):
+		url = url + '&y=' + str(season)
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[0]
@@ -144,12 +132,10 @@ def get_offense(browser, conf, season=None):
 		conference_df (dataframe): Dataframe containing offensive stats of the conference for the given season on kenpom.com.
 	"""
 
-	params = {}
-
 	url = "https://kenpom.com/conf.php"
-	params['c'] = conf
-	if season:
-		params['y'] = str(season)
+	url = url + f'?c={conf}'
+	if(season):
+		url = url + '&y=' + str(season)
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[1]
@@ -174,11 +160,11 @@ def get_defense(browser, conf, season=None):
 	Returns:
 		conference_df (dataframe): Dataframe containing defensive stats of the conference for the given season on kenpom.com.
 	"""
-	params = {}
+
 	url = "https://kenpom.com/conf.php"
-	params['c'] = conf
-	if season:
-		params['y'] = str(season)
+	url = url + f'?c={conf}'
+	if(season):
+		url = url + '&y=' + str(season)
 	browser.open(url)
 	confs = browser.get_current_page()
 	table = confs.find_all('table')[2]
