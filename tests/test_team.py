@@ -50,6 +50,20 @@ def test_get_schedule(browser):
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, season = "2009")
 
+	with pytest.raises(ValueError):
+		kpteam.get_schedule(browser, team='Merrimack', season=2019)
+
+	with pytest.raises(ValueError):
+		kpteam.get_schedule(browser, team='Incorrect Team Name', season=2017)
+
+	centenary_expected = ['Sat Nov 11', '', '172', 'TCU', 'L, 72-66', '76', 'Away', '0-1', '']
+	centenary_df = kpteam.get_schedule(browser, team='Centenary', season=2007)
+	assert [str(i) for i in centenary_df[centenary_df.Date == 'Sat Nov 11'].iloc[0].to_list()] == centenary_expected
+	assert centenary_df.shape == (31, 9)
+
+	with pytest.raises(ValueError):
+		kpteam.get_schedule(browser, team='Centenary', season=2017)
+
 	# Make sure that the valid team check is triggered
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, season = '2013', team="LMU")
