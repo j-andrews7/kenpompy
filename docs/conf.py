@@ -20,11 +20,11 @@ def setup(app):
 # -- Project information -----------------------------------------------------
 
 project = "kenpompy"
-copyright = "2019, Jared Andrews"
+copyright = "2023, Jared Andrews"
 author = "Jared Andrews"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+release = "0.3.5"
 
 
 # -- General configuration ---------------------------------------------------
