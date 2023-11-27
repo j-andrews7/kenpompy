@@ -28,6 +28,10 @@ def test_get_valid_teams(browser):
 	invalid_2003_teams = ['Loyola Marymnt University', 'YRU', 'Praget', 'Invalid U', 'SRTU', 'Kennesaw St.']
 	for team in invalid_2003_teams:
 		assert team not in teams_2003
+	
+	teams_2020 = kpteam.get_valid_teams(browser, season = '2020')
+	for team in teams_2020:
+		assert '*' not in team
 
 
 def test_get_schedule(browser):
