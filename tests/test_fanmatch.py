@@ -1,7 +1,4 @@
-import pytest
-import kenpompy.misc as kpmisc
 from kenpompy.FanMatch import FanMatch
-import pandas as pd
 
 def test_fanmatch(browser):
 	date = "2020-01-29"

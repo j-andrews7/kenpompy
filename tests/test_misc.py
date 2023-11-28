@@ -1,7 +1,5 @@
 import pytest
 import kenpompy.misc as kpmisc
-from kenpompy.FanMatch import FanMatch
-import pandas as pd
 
 def test_get_current_season(browser):
 	current_season = kpmisc.get_current_season(browser)

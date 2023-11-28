@@ -2,7 +2,6 @@ import pytest
 import datetime
 import kenpompy.team as kpteam
 import kenpompy.misc as kpmisc
-import pandas as pd
 
 def test_get_valid_teams(browser):
 	expected = 357
