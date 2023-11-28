@@ -35,11 +35,15 @@ def test_get_valid_teams(browser):
 
 
 def test_get_schedule(browser):
-	expected = ['Sat Dec 15', '122', '286', 'Portland St.', 'W, 85-58', '70', 'Away', '10-1', '']
+	expected = ['Sat Dec 15', '122', '286', 'Portland St.', 'W, 85-58', '70', 'Away', '10-1', '', 'False']
 
 	df = kpteam.get_schedule(browser, team="Loyola Marymount", season = '2019')
 	assert [str(i) for i in df[df.Date == 'Sat Dec 15'].iloc[0].to_list()] == expected
-	assert df.shape == (34, 9)
+	assert df.shape == (34, 10)
+
+	expected = ['Mon Apr 2', '1', '7', 'Michigan', 'W, 79-62', '67', 'Neutral', '36-4', '', True]
+	df = kpteam.get_schedule(browser, team='Villanova', season=2018)
+	assert df[df.Date == 'Mon Apr 2'].iloc[0].to_list() == expected
 
 	date = datetime.date.today()
 	currentYear = kpmisc.get_current_season(browser)
@@ -60,10 +64,10 @@ def test_get_schedule(browser):
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, team='Incorrect Team Name', season=2017)
 
-	centenary_expected = ['Sat Nov 11', '', '172', 'TCU', 'L, 72-66', '76', 'Away', '0-1', '']
+	centenary_expected = ['Sat Nov 11', '', '172', 'TCU', 'L, 72-66', '76', 'Away', '0-1', '', 'False']
 	centenary_df = kpteam.get_schedule(browser, team='Centenary', season=2007)
 	assert [str(i) for i in centenary_df[centenary_df.Date == 'Sat Nov 11'].iloc[0].to_list()] == centenary_expected
-	assert centenary_df.shape == (31, 9)
+	assert centenary_df.shape == (31, 10)
 
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, team='Centenary', season=2017)

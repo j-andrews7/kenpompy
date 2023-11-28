@@ -95,7 +95,11 @@ def get_schedule(browser, team=None, season=None):
 					  'A', 'Location', 'Record', 'Conference', 'B']
 	schedule_df = schedule_df.drop(columns = ['A', 'B'])
 	schedule_df = schedule_df.fillna('')
+	schedule_df['Postseason'] = False
+	tournament_label_indices = sorted(schedule_df[(schedule_df['Team Rank'].str.contains('Tournament')) | (schedule_df['Team Rank'].str.contains('Postseason'))].index.to_list())
+	if len(tournament_label_indices) > 0:
+		schedule_df.loc[tournament_label_indices[0]:, 'Postseason'] = True
 	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Result']]
 	schedule_df = schedule_df[schedule_df['Date'] != 'Date']
 
-	return schedule_df
+	return schedule_df.reset_index(drop=True)
