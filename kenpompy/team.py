@@ -6,6 +6,7 @@ pandas dataframes
 import pandas as pd
 from io import StringIO
 from .misc import get_current_season
+import re
 
 def get_valid_teams(browser, season=None):
 	"""
@@ -95,7 +96,23 @@ def get_schedule(browser, team=None, season=None):
 					  'A', 'Location', 'Record', 'Conference', 'B']
 	schedule_df = schedule_df.drop(columns = ['A', 'B'])
 	schedule_df = schedule_df.fillna('')
+
+	# Add postseason tournament info to a distinct column
+	schedule_df['Postseason'] = None
+	# Enumerate tournament names and their row indices
+	postseason_labels = schedule_df[(schedule_df['Team Rank'].str.contains('Tournament')) | (schedule_df['Team Rank'].str.contains('Postseason'))].reset_index()[['index', 'Date']].values.tolist()
+	# Tournament name preprocessing
+	postseason_labels = list(map(lambda x: [x[0], re.sub(r'(?:\sConference)?\sTournament.*?$', '', x[1])], postseason_labels))
+	# Loop tournaments in schedule and apply to associated games
+	i = 0
+	while i < len(postseason_labels):
+		if i != len(postseason_labels) - 1:
+			schedule_df.loc[postseason_labels[i][0]:postseason_labels[i+1][0]-1, 'Postseason'] = postseason_labels[i][1]
+		else:
+			schedule_df.loc[postseason_labels[i][0]:, 'Postseason'] = postseason_labels[i][1]
+		i += 1
+	# Remove table data not corresponding to a scheduled competition
 	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Result']]
 	schedule_df = schedule_df[schedule_df['Date'] != 'Date']
 
-	return schedule_df
+	return schedule_df.reset_index(drop=True)
