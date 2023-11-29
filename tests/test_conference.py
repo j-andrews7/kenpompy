@@ -1,7 +1,4 @@
-import pytest
-import datetime
 import kenpompy.conference as kpconf
-import pandas as pd
 
 def test_get_valid_conferences(browser):
 	expected = 32

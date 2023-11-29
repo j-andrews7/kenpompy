@@ -1,6 +1,5 @@
 import pytest
 import kenpompy.summary as kpsum
-import pandas as pd
 
 def test_get_efficiency(browser):
 	expected = ['Louisville', 'ACC', '67.2', '199', '68.3', '217', '17.6', '183', '17.5', '175', '113.7', '28', '107.6',

@@ -3,11 +3,7 @@ This module contains functions for scraping the conference page kenpom.com table
 pandas dataframes
 """
 
-import mechanicalsoup
 import pandas as pd
-import re
-from bs4 import BeautifulSoup
-import datetime
 from io import StringIO
 
 def get_valid_conferences(browser, season=None):

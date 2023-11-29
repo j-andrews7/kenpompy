@@ -2,9 +2,7 @@
 This module contains the FanMatch class for scraping the FanMatch pages into more usable objects.
 """
 
-import mechanicalsoup
 import pandas as pd
-from bs4 import BeautifulSoup
 from io import StringIO
 
 class FanMatch:
