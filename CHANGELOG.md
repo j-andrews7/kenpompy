@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.3.5
+
+**Release date: 11/22/2023**
+
+* Fix for ambiguous column names in DataFrame returned by get_pomeroy_ratings by @esqew in https://github.com/j-andrews7/kenpompy/pull/34
+* Update parsing for team name and seed (fixes for j-andrews7/kenpompy#41) by @nickostendorf in https://github.com/j-andrews7/kenpompy/pull/42
+* Added check for expired subscription (closes #37) by @esqew in https://github.com/j-andrews7/kenpompy/pull/45
+* Fixed parsing for tournament labels on FanMatch pages (fixes #47) by @esqew in https://github.com/j-andrews7/kenpompy/pull/48
+* Enhancement: Conference stats by @WakeUpWaffles in https://github.com/j-andrews7/kenpompy/pull/50
+* Fixed shape test for test_get_program_ratings after patch to remove extraneous rows by @esqew in https://github.com/j-andrews7/kenpompy/pull/51
+* Fix for typo'd reference in test_team.py by @esqew in https://github.com/j-andrews7/kenpompy/pull/52
+* Update to test_get_program_ratings to use dynamic verification of df shape by @esqew in https://github.com/j-andrews7/kenpompy/pull/54
+* HTML string literal FutureWarning fixes (closes #55) by @esqew in https://github.com/j-andrews7/kenpompy/pull/56
+* CI/CD updates by @esqew in https://github.com/j-andrews7/kenpompy/pull/58
+* Remove cancel-in-progress from CI/CD concurrency config by @esqew in https://github.com/j-andrews7/kenpompy/pull/69
+* Add name parsing tests for previously problematic team names by @esqew in https://github.com/j-andrews7/kenpompy/pull/73
+* Fix for calculation of current season/year (fixes #64) by @esqew in https://github.com/j-andrews7/kenpompy/pull/67
+* Fixed team schedules before 2010 by @WakeUpWaffles in https://github.com/j-andrews7/kenpompy/pull/75
+* Add new ReadTheDocs config so that docs properly build.
+
 ## v0.3.4
 
 **Release date: 12/25/2022**

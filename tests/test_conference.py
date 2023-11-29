@@ -1,7 +1,4 @@
-import pytest
-import datetime
 import kenpompy.conference as kpconf
-import pandas as pd
 
 def test_get_valid_conferences(browser):
 	expected = 32
@@ -121,3 +118,6 @@ def test_get_defense(browser):
 	assert confs_2003.iloc[0, :]['Team'] == expectedTeam1
 	assert confs_2003.iloc[0, :]['Stl%'] == expectedTeam1Stl
 	assert confs_2003.iloc[0, :]['Stl%.Rank'] == expectedTeam1StlRank
+
+	confs_2021 = kpconf.get_defense(browser, 'BW', season = '2021')
+	assert confs_2021.loc[5]['Team'] == 'Cal St. Bakersfield'

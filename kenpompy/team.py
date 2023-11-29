@@ -4,8 +4,8 @@ pandas dataframes
 """
 
 import pandas as pd
-import datetime
 from io import StringIO
+from .misc import get_current_season
 import re
 from bs4 import BeautifulSoup
 from codecs import encode, decode
@@ -33,7 +33,7 @@ def get_valid_teams(browser, season=None):
 	# Get only the team column.
 	team_df = team_df[0].iloc[:, 1]
  	# Remove NCAA tourny seeds for previous seasons.
-	team_df = team_df.str.replace(r'\d+', '', regex=True)
+	team_df = team_df.str.replace(r'\d+\**', '', regex=True)
 	team_df = team_df.str.rstrip()
 	team_df = team_df.dropna()
 	# Remove leftover team headers
@@ -62,19 +62,17 @@ def get_schedule(browser, team=None, season=None):
 	"""
 
 	url = 'https://kenpom.com/team.php'
-
-	date = datetime.date.today()
-	currentYear = date.strftime("%Y")
+	current_season = get_current_season(browser)
 
 	if season:
 		if int(season) < 2002:
 			raise ValueError(
 				'season cannot be less than 2002, as data only goes back that far.')
-		if int(season) > int(currentYear):
+		if int(season) > int(current_season):
 			raise ValueError(
 				'season cannot be greater than the current year.')
 	else:
-		season = int(currentYear)
+		season = current_season
 
 	if team==None or team not in get_valid_teams(browser, season):
 			raise ValueError(
@@ -93,14 +91,33 @@ def get_schedule(browser, team=None, season=None):
 
 	# Dataframe Tidying
 	schedule_df = schedule_df[0]
+	# Teams 2010 and earlier do not show their team rank, add column for consistency
+	if(len(schedule_df.columns) == 10):
+		schedule_df.insert(1, 'Team Rank', '')
 	schedule_df.columns = ['Date', 'Team Rank', 'Opponent Rank', 'Opponent Name', 'Result', 'Possession Number',
 					  'A', 'Location', 'Record', 'Conference', 'B']
 	schedule_df = schedule_df.drop(columns = ['A', 'B'])
 	schedule_df = schedule_df.fillna('')
-	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Team Rank']]
+
+	# Add postseason tournament info to a distinct column
+	schedule_df['Postseason'] = None
+	# Enumerate tournament names and their row indices
+	postseason_labels = schedule_df[(schedule_df['Team Rank'].str.contains('Tournament')) | (schedule_df['Team Rank'].str.contains('Postseason'))].reset_index()[['index', 'Date']].values.tolist()
+	# Tournament name preprocessing
+	postseason_labels = list(map(lambda x: [x[0], re.sub(r'(?:\sConference)?\sTournament.*?$', '', x[1])], postseason_labels))
+	# Loop tournaments in schedule and apply to associated games
+	i = 0
+	while i < len(postseason_labels):
+		if i != len(postseason_labels) - 1:
+			schedule_df.loc[postseason_labels[i][0]:postseason_labels[i+1][0]-1, 'Postseason'] = postseason_labels[i][1]
+		else:
+			schedule_df.loc[postseason_labels[i][0]:, 'Postseason'] = postseason_labels[i][1]
+		i += 1
+	# Remove table data not corresponding to a scheduled competition
+	schedule_df = schedule_df[schedule_df['Date'] != schedule_df['Result']]
 	schedule_df = schedule_df[schedule_df['Date'] != 'Date']
 
-	return schedule_df
+	return schedule_df.reset_index(drop=True)
 
 def get_scouting_report(browser, team=None, season=None, conference_only=False):
 	url = 'https://kenpom.com/team.php'

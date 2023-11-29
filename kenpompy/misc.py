@@ -3,10 +3,25 @@ This module provides functions for scraping the miscellaneous stats kenpom.com p
 usable pandas dataframes.
 """
 
-import mechanicalsoup
 import pandas as pd
-from bs4 import BeautifulSoup
 from io import StringIO
+import re
+
+def get_current_season(browser):
+	"""
+	Scrapes the KenPom homepage to get the latest season year that has data published
+
+	Args:
+		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+            by the `login` function.
+
+	Returns:
+		current_season (int): Number corresponding to the last season year that has data published
+	"""
+	browser.open('https://kenpom.com/index.php')
+	page_title = browser.page.select_one('#content-header h2').text
+	YEAR_PATTERN = r'^(\d{4})'
+	return int(re.match(YEAR_PATTERN, page_title).group(0))
 
 def get_pomeroy_ratings(browser, season=None):
     """

@@ -15,16 +15,16 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 
 def setup(app):
-    app.add_stylesheet('my_theme.css')
+    app.add_css_file('my_theme.css')
 
 # -- Project information -----------------------------------------------------
 
 project = "kenpompy"
-copyright = "2019, Jared Andrews"
+copyright = "2023, Jared Andrews"
 author = "Jared Andrews"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+release = "0.3.5"
 
 
 # -- General configuration ---------------------------------------------------

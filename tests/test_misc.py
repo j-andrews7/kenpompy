@@ -1,12 +1,22 @@
 import pytest
 import kenpompy.misc as kpmisc
-from kenpompy.FanMatch import FanMatch
-import pandas as pd
+
+def test_get_current_season(browser):
+	current_season = kpmisc.get_current_season(browser)
+
+	# Test that the current season is indeed published on the homepage
+	assert browser.request(url='https://kenpom.com/?y=' + str(current_season), method='GET', allow_redirects=False).status_code == 200
+
+	# Test that there are isn't a season beyond the "current" one (that it is indeed the latest)
+	assert browser.request(url='https://kenpom.com/?y=' + str(current_season + 1), method='GET', allow_redirects=False).status_code == 302
 
 def test_get_pomeroy_ratings(browser):
     expected = ['1', 'Virginia', 'ACC', '35-3', '+34.22', '123.4', '2', '89.2', '5', '59.4', '353', '+.050', '62', '+11.18', '22', '109.2', '34', '98.1', '14', '-3.24', '255', '1']
     df = kpmisc.get_pomeroy_ratings(browser, season=2019)
     assert df.iloc[0].to_list() == expected
+
+    expected = ['253', 'Cal St. Northridge', 'BW', '13-21', '-7.74', '104.8', '170', '112.5', '318', '70.9', '43', '-.018', '232', '-4.63', '263', '101.7', '282', '106.3', '225', '-4.09', '279', '']
+    assert df.loc[252].to_list() == expected
 
     # Also test proper handling of team names with special characters like ' and &
     expected = ['31', "Saint Mary's", 'WCC', '22-12', '+17.31', '114.7', '23', '97.4', '55', '62.7', '348', '-.045', '285', '+3.66', '82', '106.6', '76', '103.0', '100', '-0.90', '183', '11']
