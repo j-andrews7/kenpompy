@@ -15,7 +15,7 @@ def get_valid_teams(browser, season=None):
 	Scrapes the teams (https://kenpom.com) into a list.
 
 	Args:
-		browser (mechanicalsoul StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (mechanicalsoup.StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 
@@ -47,7 +47,7 @@ def get_schedule(browser, team=None, season=None):
 	Scrapes a team's schedule from (https://kenpom.com/team.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoul StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (mechanicalsoup.StatefulBrowser): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		team: Used to determine which team to scrape for schedule.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
@@ -120,6 +120,23 @@ def get_schedule(browser, team=None, season=None):
 	return schedule_df.reset_index(drop=True)
 
 def get_scouting_report(browser, team=None, season=None, conference_only=False):
+	"""
+    Retrieves and parses team scouting report data from (https://kenpom.com/team.php) into a dictionary.
+
+    Args:
+    	browser (mechanicalsoup.StatefulBrowser): The mechanize browser object for web scraping.
+    	team (str): team: Used to determine which team to scrape for schedule.
+    	season (int, optional): Used to define different seasons. 2002 is the earliest available season.
+    	conference_only (bool, optional): When True, only conference-related stats are retrieved; otherwise, all stats are fetched.
+
+    Returns:
+    	dict: A dictionary containing various team statistics.
+
+    Raises:
+    	ValueError if the provided season is earlier than 2002 or greater than the current year
+		ValueError if the team name is invalid or not found in the specified year
+	"""
+
 	url = 'https://kenpom.com/team.php'
 
 	current_season = get_current_season(browser)
