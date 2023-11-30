@@ -19,7 +19,7 @@ def get_current_season(browser: mechanicalsoup.StatefulBrowser):
 	Returns:
 		current_season (int): Number corresponding to the last season year that has data published
 	"""
-	response = browser.open('https://kenpom.com/index.php')
+	browser.open('https://kenpom.com/index.php')
 	page_title = browser.page.select_one('#content-header h2').text
 	YEAR_PATTERN = r'^(\d{4})'
 	return int(re.match(YEAR_PATTERN, page_title).group(0))
