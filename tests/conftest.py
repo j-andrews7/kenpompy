@@ -1,6 +1,8 @@
 import os
 import pytest
 from kenpompy.utils import login
+import time
+from random import randint
 
 @pytest.fixture(scope="session")
 def browser():
@@ -10,3 +12,8 @@ def browser():
 		pytest.exit(e)
 
 	return browser
+
+@pytest.fixture(autouse=True)
+def brakes():
+    yield
+    time.sleep(randint(2, 10))
