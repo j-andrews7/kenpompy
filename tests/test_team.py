@@ -74,3 +74,28 @@ def test_get_schedule(browser):
 	# Make sure that the valid team check is triggered
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, season = '2013', team="LMU")
+
+def test_get_scouting_report(browser):
+	data = kpteam.get_scouting_report(browser, 'Purdue', season=2023)
+	assert data['OE'] == 117.7
+	assert data['APLD'] == 18.1
+	# Not including SoS and Personnel (88 with)
+	assert len(data) == 70
+
+	data = kpteam.get_scouting_report(browser, 'Purdue', season=2023, conference_only=True)
+	assert data['OE'] == 111.3
+	assert data['APLD'] == 18.3
+	# Not including SoS and Personnel (88 with)
+	assert len(data) == 70
+
+	data = kpteam.get_scouting_report(browser, 'Kansas', season=2009)
+	assert data['OE'] == 114.5
+	assert data['APLD'] == ''
+	# Not including SoS and Personnel (88 with)
+	assert len(data) == 70
+
+	data = kpteam.get_scouting_report(browser, 'Kansas', season=2009, conference_only=True)
+	assert data['OE'] == 109.5
+	assert data['APLD'] == ''
+	# Not including SoS and Personnel (88 with)
+	assert len(data) == 70
