@@ -20,9 +20,6 @@ def get_current_season(browser: mechanicalsoup.StatefulBrowser):
 		current_season (int): Number corresponding to the last season year that has data published
 	"""
 	response = browser.open('https://kenpom.com/index.php')
-	if response.status_code != 200:
-		page_source = browser.page
-		raise ValueError(f'Invalid status code ({response.status_code}) returned when trying to get the current season.')
 	page_title = browser.page.select_one('#content-header h2').text
 	YEAR_PATTERN = r'^(\d{4})'
 	return int(re.match(YEAR_PATTERN, page_title).group(0))
