@@ -155,7 +155,6 @@ def get_teamstats(browser, defense=False, season=None):
 
 	# Dataframe tidying.
 	ts_df = ts_df[0]
-	print(ts_df.columns)
 	ts_df = ts_df.iloc[:, 0:20]
 	ts_df.columns = ['Team', 'Conference', '3P%', '3P%.Rank', '2P%', '2P%.Rank', 'FT%', 'FT%.Rank',
 					 'Blk%', 'Blk%.Rank', 'Stl%', 'Stl%.Rank', 'NST%', 'NST%.Rank', 'A%', 'A%.Rank', '3PA%', '3PA%.Rank',
