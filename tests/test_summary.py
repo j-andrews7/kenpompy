@@ -38,7 +38,7 @@ def test_get_teamstats(browser):
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
 
 	expected = ['Louisville', 'ACC', '32.0', '53', '46.0', '25', '69.5', '107', '7.9', '234', '6.3', '340', '9.8', 
-				'153', '47.9', '70', '37.2', '129']
+				'153', '47.9', '70', '37.2', '129', '94.4', '24']
 
 	df = kpsum.get_teamstats(browser, season = '2019', defense = True)
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
