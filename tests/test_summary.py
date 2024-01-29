@@ -32,7 +32,7 @@ def test_get_fourfactors(browser):
 
 def test_get_teamstats(browser):
 	expected = ['Louisville', 'ACC', '34.2', '177', '50.6', '161', '77.7', '8', '10.6', '272', '8.3', '101', '9.2', 
-				'128', '53.6', '122', '43.7', '56']
+				'128', '53.6', '122', '43.7', '56', '113.7', '28']
 
 	df = kpsum.get_teamstats(browser, season = '2019')
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
