@@ -44,14 +44,14 @@ def get_valid_teams(browser: CloudScraper, season: Optional[str]=None):
 
 	return team_list
 
-def get_schedule(browser: CloudScraper, team: str, season: Optional[str]=None):
+def get_schedule(browser: CloudScraper, team: Optional[str]=None, season: Optional[str]=None):
 	"""
 	Scrapes a team's schedule from (https://kenpom.com/team.php) into a dataframe.
 
 	Args:
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
-		team (str): Used to determine which team to scrape for schedule.
+		team (str, optional): Used to determine which team to scrape for schedule.
 		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
 
 	Returns:
