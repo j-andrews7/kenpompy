@@ -4,6 +4,10 @@ This module contains the FanMatch class for scraping the FanMatch pages into mor
 
 import pandas as pd
 from io import StringIO
+from cloudscraper import CloudScraper
+from bs4 import BeautifulSoup
+from typing import Optional
+from .utils import get_html
 
 class FanMatch:
     """Object to hold FanMatch page scraping results.
@@ -11,7 +15,7 @@ class FanMatch:
     This class scrapes the kenpom FanMatch page when a new instance is created. 
 
     Args:
-        browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+        browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
         date (str): Date to scrape, in format "YYYY-MM-DD", such as "2020-01-29".
 
@@ -31,7 +35,7 @@ class FanMatch:
         fm_df (pandas dataframe): Pandas dataframe containing parsed FanMatch table.
     """
 
-    def __init__(self, browser, date = None):
+    def __init__(self, browser: CloudScraper, date: Optional[str]=None):
         self.url = 'https://kenpom.com/fanmatch.php'
         self.date = date
         self.lines_o_night = None
@@ -48,8 +52,7 @@ class FanMatch:
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
 
-        browser.open(self.url)
-        fm = browser.get_current_page()
+        fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
         table = fm.find_all("table")[0]
         fm_df = pd.read_html(StringIO(str(table)))
         fm_df = fm_df[0]

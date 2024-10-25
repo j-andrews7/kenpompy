@@ -6,30 +6,34 @@ usable pandas dataframes.
 import pandas as pd
 from io import StringIO
 import re
-import mechanicalsoup
+from cloudscraper import CloudScraper
+from bs4 import BeautifulSoup
+from typing import Optional
+from .utils import get_html
 
-def get_current_season(browser: mechanicalsoup.StatefulBrowser):
+def get_current_season(browser: CloudScraper):
 	"""
 	Scrapes the KenPom homepage to get the latest season year that has data published
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
 
 	Returns:
 		current_season (int): Number corresponding to the last season year that has data published
 	"""
-	browser.open('https://kenpom.com/index.php')
-	page_title = browser.page.select_one('#content-header h2').text
+	url = 'https://kenpom.com/index.php'
+	content = BeautifulSoup(get_html(browser, url), "html.parser")
+	page_title = content.select_one('#content-header h2').text
 	YEAR_PATTERN = r'^(\d{4})'
 	return int(re.match(YEAR_PATTERN, page_title).group(0))
 
-def get_pomeroy_ratings(browser, season=None):
+def get_pomeroy_ratings(browser: CloudScraper, season: Optional[str]=None):
     """
     Scrapes the Pomeroy College Basketball Ratings table (https://kenpom.com/index.php) into a dataframe.
 
     Args:
-        browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+        browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
         season (str, optional): Used to define different seasons. 2002 is the earliest available season.
             Most recent season is the default.
@@ -42,8 +46,7 @@ def get_pomeroy_ratings(browser, season=None):
     if season and int(season) < 2002:
         raise ValueError("season cannot be less than 2002")
     url += '?y={}'.format(season)
-    browser.open(url)
-    page = browser.get_current_page()
+    page = BeautifulSoup(get_html(browser, url), "html.parser")
     table = page.find_all('table')[0]
     ratings_df = pd.read_html(StringIO(str(table)))
     # Dataframe tidying.
@@ -66,12 +69,12 @@ def get_pomeroy_ratings(browser, season=None):
     return ratings_df
 
 
-def get_trends(browser):
+def get_trends(browser: CloudScraper):
 	"""
 	Scrapes the statistical trends table (https://kenpom.com/trends.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 
 	Returns:
@@ -80,8 +83,7 @@ def get_trends(browser):
 
 	url = 'https://kenpom.com/trends.php'
 
-	browser.open(url)
-	trends = browser.get_current_page()
+	trends = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = trends.find_all('table')[0]
 	trends_df = pd.read_html(StringIO(str(table)))
 
@@ -92,12 +94,12 @@ def get_trends(browser):
 	return trends_df
 
 
-def get_refs(browser, season=None):
+def get_refs(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the officials rankings table (https://kenpom.com/officials.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2016 is the earliest available season.
 			Most recent season is the default.
@@ -117,8 +119,7 @@ def get_refs(browser, season=None):
 				'season cannot be less than 2016, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
-	browser.open(url)
-	refs = browser.get_current_page()
+	refs = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = refs.find_all('table')[0]
 	refs_df = pd.read_html(StringIO(str(table)))
 
@@ -131,14 +132,13 @@ def get_refs(browser, season=None):
 	return refs_df
 
 
-def get_hca(browser):
+def get_hca(browser: CloudScraper):
 	"""
 	Scrapes the home court advantage table (https://kenpom.com/hca.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
 
 	Returns:
 		hca_df (pandas dataframe): Pandas dataframe containing the home court advantage table from kenpom.com.
@@ -146,8 +146,7 @@ def get_hca(browser):
 
 	url = 'https://kenpom.com/hca.php'
 
-	browser.open(url)
-	hca = browser.get_current_page()
+	hca = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = hca.find_all('table')[0]
 	hca_df = pd.read_html(StringIO(str(table)))
 
@@ -160,12 +159,12 @@ def get_hca(browser):
 	return hca_df
 
 
-def get_arenas(browser, season=None):
+def get_arenas(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the arenas table (https://kenpom.com/arenas.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
 			Most recent season is the default.
@@ -185,8 +184,7 @@ def get_arenas(browser, season=None):
 				'season cannot be less than 2010, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
-	browser.open(url)
-	arenas = browser.get_current_page()
+	arenas = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = arenas.find_all('table')[0]
 	arenas_df = pd.read_html(StringIO(str(table)))
 
@@ -201,12 +199,12 @@ def get_arenas(browser, season=None):
 	return arenas_df
 
 
-def get_gameattribs(browser, season=None, metric='Excitement'):
+def get_gameattribs(browser: CloudScraper, season: Optional[str]=None, metric: str='Excitement'):
 	"""
 	Scrapes the Game Attributes tables (https://kenpom.com/game_attrs.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2010 is the earliest available season.
 			Most recent season is the default.
@@ -247,8 +245,7 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 			)
 		url = url + '&y=' + str(season)
 
-	browser.open(url)
-	playerstats = browser.get_current_page()
+	playerstats = BeautifulSoup(get_html(browser, url), "html.parser")
 
 	table = playerstats.find_all('table')[0]
 	ga_df = pd.read_html(StringIO(str(table)))
@@ -263,12 +260,12 @@ def get_gameattribs(browser, season=None, metric='Excitement'):
 	return ga_df
 
 
-def get_program_ratings(browser):
+def get_program_ratings(browser: CloudScraper):
 	"""
 	Scrapes the program ratings table (https://kenpom.com/programs.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 
 	Returns:
@@ -277,8 +274,7 @@ def get_program_ratings(browser):
 
 	url = 'https://kenpom.com/programs.php'
 
-	browser.open(url)
-	programs = browser.get_current_page()
+	programs = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = programs.find_all('table')[0]
 	programs_df = pd.read_html(StringIO(str(table)))
 	programs_df = programs_df[0]
