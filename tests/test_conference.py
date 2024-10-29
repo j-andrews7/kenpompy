@@ -67,8 +67,8 @@ def test_get_standings(browser):
 	
 	confs_2021 = kpconf.get_standings(browser, 'B10', season = '2021')
 	assert confs_2021.iloc[0, :]['Team'] == expectedTeam1
-	assert confs_2021.iloc[0, :]['AdjO'] == expectedTeam1AdjO
-	assert confs_2021.iloc[0, :]['AdjO.Rank'] == expectedTeam1AdjORank
+	assert confs_2021.iloc[0, :]['ORtg'] == expectedTeam1AdjO
+	assert confs_2021.iloc[0, :]['ORtg.Rank'] == expectedTeam1AdjORank
 
 	expectedTeam1 = 'Wisconsin'
 	expectedTeam1AdjO = 114.4
@@ -76,8 +76,8 @@ def test_get_standings(browser):
 
 	confs_2003 = kpconf.get_standings(browser, 'B10', season = '2003')
 	assert confs_2003.iloc[0, :]['Team'] == expectedTeam1
-	assert confs_2003.iloc[0, :]['AdjO'] == expectedTeam1AdjO
-	assert confs_2003.iloc[0, :]['AdjO.Rank'] == expectedTeam1AdjORank
+	assert confs_2003.iloc[0, :]['ORtg'] == expectedTeam1AdjO
+	assert confs_2003.iloc[0, :]['ORtg.Rank'] == expectedTeam1AdjORank
 
 
 def test_get_offense(browser):

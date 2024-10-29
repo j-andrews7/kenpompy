@@ -2,11 +2,10 @@
 The utils module provides utility functions, such as logging in.
 """
 
-import mechanicalsoup
-from requests import Session
-from ._DESAdapter import DESAdapter, environment_requires_DES_adapter
+import cloudscraper
+from cloudscraper import CloudScraper
 
-def login(email, password):
+def login(email: str, password: str):
 	"""
 	Logs in to kenpom.com using user credentials.
 
@@ -18,33 +17,44 @@ def login(email, password):
 		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com.
 	"""
 
-	# Fix for Cloudflare SSL profiling (https://github.com/j-andrews7/kenpompy/issues/33) provided by Nick Ostendorf (@nickostendorf)
-	session = Session()
-	if environment_requires_DES_adapter():
-		session.mount('https://kenpom.com/', DESAdapter())
+	browser = cloudscraper.create_scraper()
+	browser.get('https://kenpom.com/index.php')
 
-	browser = mechanicalsoup.StatefulBrowser(session)
-	browser.set_user_agent('Mozilla/5.0')
-	browser.open('https://kenpom.com/index.php')
-
-	if 'Cloudflare' in browser.page.title.string:
-		raise Exception(
-			'Opening kenpom.com failed - request was intercepted by Cloudflare protection')
+	form_data = {
+		'email': email,
+		'password': password,
+		'submit': 'Login!',
+	}
 
 	# Response page actually throws an error but further navigation works and will show you as logged in.
-	browser.get_current_page()
-	browser.select_form('form[action="handlers/login_handler.php"]')
-	browser['email'] = email
-	browser['password'] = password
+	browser.post(
+		'https://kenpom.com/handlers/login_handler.php',
+		data=form_data, 
+		allow_redirects=True
+	)
 
-	response = browser.submit_selected()
-
-	if response.status_code != 200 or 'PHPSESSID=' not in response.headers['set-cookie']:
-		raise Exception(
-			'Logging in to kenpom.com failed - check that the site is available and your credentials are correct.')
-	
-	if 'subscription expired' in str(browser.get('https://kenpom.com/index.php').content):
-		raise Exception(
-			'Logging in to kenpom.com failed - account subscription is expired')
+	home_page = browser.get('https://kenpom.com/')
+	if 'Logout' not in home_page.text:
+		raise Exception('Logging in failed - check your credentials')
 
 	return browser
+
+def get_html(browser: CloudScraper, url: str):
+	"""
+	Performs a get request on the specified url.
+
+	Args:
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
+            by the `login` function.
+		url (str): The url to perform the get request on.
+	
+	Returns:
+		html (Bytes | Any): The return content.
+	
+	Raises:
+		Exception if get request gets a non-200 response code.
+	"""	
+	response = browser.get(url)
+	if response.status_code != 200:
+		raise Exception(f'Failed to retrieve {url} (status code: {response.status_code})')
+	return response.content
