@@ -4,6 +4,7 @@ This module contains the FanMatch class for scraping the FanMatch pages into mor
 
 import pandas as pd
 from io import StringIO
+import re
 from cloudscraper import CloudScraper
 from bs4 import BeautifulSoup
 from typing import Optional
@@ -32,7 +33,7 @@ class FanMatch:
         record_favs (str): Record of favorites for the day.
         expected_record_favs (str): Expected record of favorites for the day.
         exact_mov (str): Number of games where margin of victory was accurately predicted out of total played.
-        fm_df (pandas dataframe): Pandas dataframe containing parsed FanMatch table.
+        fm_df (pandas dataframe or None): Pandas dataframe containing parsed FanMatch table. If there are no games that day, fm_df will be None.
     """
 
     def __init__(self, browser: CloudScraper, date: Optional[str]=None):
@@ -48,11 +49,22 @@ class FanMatch:
         self.record_favs = None
         self.expected_record_favs = None
         self.exact_mov = None
+        self.fm_df = None
         
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
 
         fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
+        if "Sorry, no games today. :(" in fm.text:
+            return
+        time_header = fm.find('th', string=re.compile(r"Time \(ET\)"))
+        if time_header and time_header.find("a"):
+            href = time_header.find("a")["href"]
+            date_match = re.search(r'd=(\d{4}-\d{2}-\d{2})', href)
+            if date_match:
+                found_date = date_match.group(1)
+                if found_date != date:
+                    return
         table = fm.find_all("table")[0]
         fm_df = pd.read_html(StringIO(str(table)))
         fm_df = fm_df[0]
