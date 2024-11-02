@@ -1,1 +1,4 @@
 sphinx-rtd-theme
+pandas
+bs4
+cloudscraper
