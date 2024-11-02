@@ -35,16 +35,16 @@ def get_pomeroy_ratings(browser: CloudScraper, season: Optional[str]=None):
     Args:
         browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
-        season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+        season (str, optional): Used to define different seasons. 1999 is the earliest available season.
             Most recent season is the default.
     Returns:
         refs_df (pandas dataframe): Pandas dataframe containing the Pomeroy College Basketball Ratings table from kenpom.com.
     Raises:
-        ValueError: If `season` is less than 2002.
+        ValueError: If `season` is less than 1999.
     """
     url = 'https://kenpom.com/index.php'
-    if season and int(season) < 2002:
-        raise ValueError("season cannot be less than 2002")
+    if season and int(season) < 1999:
+        raise ValueError("season cannot be less than 1999")
     url += '?y={}'.format(season)
     page = BeautifulSoup(get_html(browser, url), "html.parser")
     table = page.find_all('table')[0]

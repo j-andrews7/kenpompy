@@ -18,22 +18,22 @@ def get_efficiency(browser: CloudScraper, season: Optional[str]=None):
 	Args:
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season but 
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season but 
 			possession length data wasn't available until 2010. Most recent season is the default.
 
 	Returns:
 		eff_df (pandas dataframe): Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.
 
 	Raises:
-		ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/summary.php'
 
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
 	eff = BeautifulSoup(get_html(browser, url), "html.parser")
@@ -75,22 +75,22 @@ def get_fourfactors(browser: CloudScraper, season: Optional[str]=None):
 	Args:
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 			Most recent season is the default.
 
 	Returns:
 		ff_df (pandas dataframe): Pandas dataframe containing the summary Four Factors table from kenpom.com.
 
 	Raises:
-		ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/stats.php'
 
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
 	ff = BeautifulSoup(get_html(browser, url), "html.parser")
@@ -124,14 +124,14 @@ def get_teamstats(browser: CloudScraper, defense: Optional[bool]=False, season: 
 			by the `login` function.
 		defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by 
 			default.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 			Most recent season is the default.
 
 	Returns:
 			ts_df (pandas dataframe): Pandas dataframe containing the Miscellaneous Team Stats table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2002.
+			ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/teamstats.php'
@@ -139,9 +139,9 @@ def get_teamstats(browser: CloudScraper, defense: Optional[bool]=False, season: 
 
 	# Create URL.
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 		if defense:
 			url = url + '&od=d'
@@ -178,23 +178,23 @@ def get_pointdist(browser: CloudScraper, season: Optional[str]=None):
 	Args:
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 			Most recent season is the default.
 
 	Returns:
 		dist_df (pandas dataframe): Pandas dataframe containing the Team Points Distribution table from kenpom.com.
 
 	Raises:
-		ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/pointdist.php'
 
 	# Create URL.
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
 	dist = BeautifulSoup(get_html(browser, url), "html.parser")
