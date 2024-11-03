@@ -17,7 +17,7 @@ def get_valid_conferences(browser: CloudScraper, season: Optional[str]=None):
 	Args:
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 
 	Returns:
 		conference_list (list): List containing all valid conferences for the given season on kenpom.com.
@@ -45,7 +45,7 @@ def get_aggregate_stats(browser: CloudScraper, conf: Optional[str]=None, season:
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		conf (str: optional): conference abbreviation (ie B10, P12). If None, it will grab the table from https://kenpom.com/confstats.php instead of https://kenpom.com/conf.php
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 
 	Returns:
 		conference_df (dataframe): Dataframe containing aggregate stats of the conference for the given season on kenpom.com.
@@ -91,7 +91,7 @@ def get_standings(browser: CloudScraper, conf: str, season: Optional[str]=None):
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		conf (str): conference abbreviation (ie B10, P12)
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 
 	Returns:
 		conference_df (dataframe): Dataframe containing standing stats of the conference for the given season on kenpom.com.
@@ -122,7 +122,7 @@ def get_offense(browser: CloudScraper, conf: str, season: Optional[str]=None):
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		conf (str): conference abbreviation (ie B10, P12)
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 
 	Returns:
 		conference_df (dataframe): Dataframe containing offensive stats of the conference for the given season on kenpom.com.
@@ -150,7 +150,7 @@ def get_defense(browser: CloudScraper, conf: str, season: Optional[str]=None):
 		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function
 		conf (str): conference abbreviation (ie B10, P12)
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 
 	Returns:
 		conference_df (dataframe): Dataframe containing defensive stats of the conference for the given season on kenpom.com.

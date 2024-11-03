@@ -49,7 +49,7 @@ def test_get_schedule(browser):
 	nextYear = str(int(currentYear)+1)
 
 	with pytest.raises(ValueError):
-		kpteam.get_schedule(browser, team="Iowa", season = '2001')
+		kpteam.get_schedule(browser, team="Iowa", season = '1998')
 
 	with pytest.raises(ValueError):
 		kpteam.get_schedule(browser, team="Kansas", season = nextYear)
