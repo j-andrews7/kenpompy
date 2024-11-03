@@ -55,7 +55,7 @@ class FanMatch:
             self.url = self.url + "?d=" + self.date
 
         fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
-        if "Sorry, no games today. :(" in fm.text:
+        if "Sorry, no games today." in fm.text:
             return
         time_header = fm.find('th', string=re.compile(r"Time \(ET\)"))
         if time_header and time_header.find("a"):
