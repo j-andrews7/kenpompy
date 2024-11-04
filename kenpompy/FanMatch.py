@@ -5,6 +5,7 @@ This module contains the FanMatch class for scraping the FanMatch pages into mor
 import pandas as pd
 from io import StringIO
 import re
+from datetime import datetime
 from cloudscraper import CloudScraper
 from bs4 import BeautifulSoup
 from typing import Optional
@@ -57,13 +58,15 @@ class FanMatch:
         fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
         if "Sorry, no games today." in fm.text:
             return
-        time_header = fm.find('th', string=re.compile(r"Time \(ET\)"))
-        if time_header and time_header.find("a"):
-            href = time_header.find("a")["href"]
-            date_match = re.search(r'd=(\d{4}-\d{2}-\d{2})', href)
+        if date is not None:
+            date_text = fm.find("div", class_="lh12").get_text()
+            date_match = re.search(r"for \w+, (\w+ \d{1,2}[a-z]{2})", date_text)
             if date_match:
-                found_date = date_match.group(1)
-                if found_date != date:
+                extracted_date_str = re.sub(r"(st|nd|rd|th)", "", date_match.group(1))
+                extracted_date = datetime.strptime(extracted_date_str, "%B %d")
+                extracted_mmdd = extracted_date.strftime("%m-%d")
+                user_mmdd = datetime.strptime(date, "%Y-%m-%d").strftime("%m-%d")
+                if extracted_mmdd != user_mmdd:
                     return
         table = fm.find_all("table")[0]
         fm_df = pd.read_html(StringIO(str(table)))
