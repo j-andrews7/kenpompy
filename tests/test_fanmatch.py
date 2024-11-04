@@ -17,6 +17,7 @@ def test_fanmatch(browser):
 				"Marquette",
 				"73-72",
 				"51%",
+                "nan",
 				"1",
 				"Xavier",
 				"2OT",
