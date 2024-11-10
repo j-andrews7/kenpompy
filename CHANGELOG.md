@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.4.0
+
+**Release date: 11/09/2024**
+
+* Unit tests and warning fixes for scouting report by @WakeUpWaffles in https://github.com/j-andrews7/kenpompy/pull/76
+* Strip asterisks from team name in get_valid_teams for 2020 season (fixes #81) by @esqew in https://github.com/j-andrews7/kenpompy/pull/82
+* Add postseason indicator for team schedule (closes #80) by @esqew in https://github.com/j-andrews7/kenpompy/pull/83
+* Remove dead imports (fixes #60) by @esqew in https://github.com/j-andrews7/kenpompy/pull/84
+* Add pause time between test cases by @esqew in https://github.com/j-andrews7/kenpompy/pull/86
+* Add support for scraping dynamic Scouting Report in team.py by @esqew in https://github.com/j-andrews7/kenpompy/pull/71
+* Remove unused variable in misc.py by @esqew in https://github.com/j-andrews7/kenpompy/pull/88
+* add NST% columns by @nickostendorf in https://github.com/j-andrews7/kenpompy/pull/89
+* Refactor for new cloudflare requirements by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/95
+* Handle dates with no games in fanmatch data by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/96
+* Update docs  by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/97
+* Adds `lxml` and fix for new no games fanmatch message by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/99
+* Update for predicted possessions and new date matching  by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/101
+* V0.4.0 release by @j-andrews7 in https://github.com/j-andrews7/kenpompy/pull/98
+* Fix ReadTheDocs documentation build (again) due to missing dependencies.
+
 ## v0.3.5
 
 **Release date: 11/22/2023**
