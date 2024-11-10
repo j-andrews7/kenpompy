@@ -17,7 +17,6 @@
 * Update docs  by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/97
 * Adds `lxml` and fix for new no games fanmatch message by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/99
 * Update for predicted possessions and new date matching  by @seankim658 in https://github.com/j-andrews7/kenpompy/pull/101
-* V0.4.0 release by @j-andrews7 in https://github.com/j-andrews7/kenpompy/pull/98
 * Fix ReadTheDocs documentation build (again) due to missing dependencies.
 
 ## v0.3.5
