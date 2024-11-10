@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kenpompy",
-    version="0.3.5",
+    version="0.4.0",
     author="Jared Andrews",
     author_email="jared.andrews07@gmail.com",
     description="A python package for scraping kenpom.com NCAA basketball data.",
@@ -22,6 +22,6 @@ setuptools.setup(
         "Intended Audience :: Science/Research",
         "Intended Audience :: Developers"
     ],
-    install_requires = ["mechanicalsoup", "pandas", "bs4"],
+    install_requires = ["mechanicalsoup", "pandas", "bs4", "cloudscraper"],
     python_requires='>=3.8',
 )
