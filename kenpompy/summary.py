@@ -6,34 +6,37 @@ usable pandas dataframes.
 import pandas as pd
 import re
 from io import StringIO
+from cloudscraper import CloudScraper
+from bs4 import BeautifulSoup
+from typing import Optional
+from .utils import get_html
 
-def get_efficiency(browser, season=None):
+def get_efficiency(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the Efficiency stats table (https://kenpom.com/summary.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season but 
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season but 
 			possession length data wasn't available until 2010. Most recent season is the default.
 
 	Returns:
 		eff_df (pandas dataframe): Pandas dataframe containing the summary efficiency/tempo table from kenpom.com.
 
 	Raises:
-		ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/summary.php'
 
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
-	browser.open(url)
-	eff = browser.get_current_page()
+	eff = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = eff.find_all('table')[0]
 	eff_df = pd.read_html(StringIO(str(table)))
 
@@ -65,33 +68,32 @@ def get_efficiency(browser, season=None):
 	return eff_df
 
 
-def get_fourfactors(browser, season=None):
+def get_fourfactors(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the Four Factors table (https://kenpom.com/stats.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 			Most recent season is the default.
 
 	Returns:
 		ff_df (pandas dataframe): Pandas dataframe containing the summary Four Factors table from kenpom.com.
 
 	Raises:
-		ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/stats.php'
 
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
-	browser.open(url)
-	ff = browser.get_current_page()
+	ff = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = ff.find_all('table')[0]
 	ff_df = pd.read_html(StringIO(str(table)))
 
@@ -113,23 +115,23 @@ def get_fourfactors(browser, season=None):
 	return ff_df
 
 
-def get_teamstats(browser, defense=False, season=None):
+def get_teamstats(browser: CloudScraper, defense: Optional[bool]=False, season: Optional[str]=None):
 	"""
 	Scrapes the Miscellaneous Team Stats table (https://kenpom.com/teamstats.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		defense (bool, optional): Used to flag whether the defensive teamstats table is wanted or not. False by 
 			default.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 			Most recent season is the default.
 
 	Returns:
 			ts_df (pandas dataframe): Pandas dataframe containing the Miscellaneous Team Stats table from kenpom.com.
 
 	Raises:
-			ValueError: If `season` is less than 2002.
+			ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/teamstats.php'
@@ -137,9 +139,9 @@ def get_teamstats(browser, defense=False, season=None):
 
 	# Create URL.
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 		if defense:
 			url = url + '&od=d'
@@ -148,8 +150,7 @@ def get_teamstats(browser, defense=False, season=None):
 		url = url + '?od=d'
 		last_cols = ['AdjDE', 'AdjDE.Rank']
 
-	browser.open(url)
-	ts = browser.get_current_page()
+	ts = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = ts.find_all('table')[0]
 	ts_df = pd.read_html(StringIO(str(table)))
 
@@ -170,34 +171,33 @@ def get_teamstats(browser, defense=False, season=None):
 	return ts_df
 
 
-def get_pointdist(browser, season=None):
+def get_pointdist(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the Team Points Distribution table (https://kenpom.com/pointdist.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
-		season (str, optional): Used to define different seasons. 2002 is the earliest available season.
+		season (str, optional): Used to define different seasons. 1999 is the earliest available season.
 			Most recent season is the default.
 
 	Returns:
 		dist_df (pandas dataframe): Pandas dataframe containing the Team Points Distribution table from kenpom.com.
 
 	Raises:
-		ValueError: If `season` is less than 2002.
+		ValueError: If `season` is less than 1999.
 	"""
 
 	url = 'https://kenpom.com/pointdist.php'
 
 	# Create URL.
 	if season:
-		if int(season) < 2002:
+		if int(season) < 1999:
 			raise ValueError(
-				'season cannot be less than 2002, as data only goes back that far.')
+				'season cannot be less than 1999, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
-	browser.open(url)
-	dist = browser.get_current_page()
+	dist = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = dist.find_all('table')[0]
 	dist_df = pd.read_html(StringIO(str(table)))
 
@@ -217,12 +217,12 @@ def get_pointdist(browser, season=None):
 	return dist_df
 
 
-def get_height(browser, season=None):
+def get_height(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the Height/Experience table (https://kenpom.com/height.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2007 is the earliest available season but 
 			continuity data wasn't available until 2008. Most recent season is the default.
@@ -242,8 +242,7 @@ def get_height(browser, season=None):
 				'Season cannot be less than 2007, as data only goes back that far.')
 		url = url + '?y=' + str(season)
 
-	browser.open(url)
-	height = browser.get_current_page()
+	height = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = height.find_all('table')[0]
 	h_df = pd.read_html(StringIO(str(table)))
 
@@ -274,12 +273,12 @@ def get_height(browser, season=None):
 	return h_df
 
 
-def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=False):
+def get_playerstats(browser: CloudScraper, season: Optional[str]=None, metric: str='EFG', conf: Optional[str]=None, conf_only: bool=False):
 	"""
 	Scrapes the Player Leaders tables (https://kenpom.com/playerstats.php) into a dataframe.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2004 is the earliest available season. 
 			Most recent season is the default.
@@ -338,8 +337,7 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 	if conf:
 		url = url + '&f=' + conf
 
-	browser.open(url)
-	playerstats = browser.get_current_page()
+	playerstats = BeautifulSoup(get_html(browser, url), "html.parser")
 	if metric == 'ORTG':
 		ps_dfs = []
 		tables = playerstats.find_all('table')
@@ -380,12 +378,12 @@ def get_playerstats(browser, season=None, metric='EFG', conf=None, conf_only=Fal
 	return ps_df
 
 
-def get_kpoy(browser, season=None):
+def get_kpoy(browser: CloudScraper, season: Optional[str]=None):
 	"""
 	Scrapes the kenpom Player of the Year tables (https://kenpom.com/kpoy.php) into dataframes.
 
 	Args:
-		browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
 			by the `login` function.
 		season (str, optional): Used to define different seasons. 2011 is the earliest available season.
 			Most recent season is the default.
@@ -410,8 +408,7 @@ def get_kpoy(browser, season=None):
 	else:
 		season = 2013
 
-	browser.open(url)
-	kpoy = browser.get_current_page()
+	kpoy = BeautifulSoup(get_html(browser, url), "html.parser")
 	table = kpoy.find_all('table')[0]
 	df = pd.read_html(StringIO(str(table)))
 

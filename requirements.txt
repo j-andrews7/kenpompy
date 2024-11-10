@@ -1,4 +1,5 @@
-mechanicalsoup
 pandas
 bs4
 sphinx>2.2.0
+cloudscraper
+lxml

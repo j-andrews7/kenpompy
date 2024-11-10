@@ -4,6 +4,12 @@ This module contains the FanMatch class for scraping the FanMatch pages into mor
 
 import pandas as pd
 from io import StringIO
+import re
+from datetime import datetime
+from cloudscraper import CloudScraper
+from bs4 import BeautifulSoup
+from typing import Optional
+from .utils import get_html
 
 class FanMatch:
     """Object to hold FanMatch page scraping results.
@@ -11,7 +17,7 @@ class FanMatch:
     This class scrapes the kenpom FanMatch page when a new instance is created. 
 
     Args:
-        browser (mechanicalsoup StatefulBrowser): Authenticated browser with full access to kenpom.com generated
+        browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
         date (str): Date to scrape, in format "YYYY-MM-DD", such as "2020-01-29".
 
@@ -28,10 +34,10 @@ class FanMatch:
         record_favs (str): Record of favorites for the day.
         expected_record_favs (str): Expected record of favorites for the day.
         exact_mov (str): Number of games where margin of victory was accurately predicted out of total played.
-        fm_df (pandas dataframe): Pandas dataframe containing parsed FanMatch table.
+        fm_df (pandas dataframe or None): Pandas dataframe containing parsed FanMatch table. If there are no games that day, fm_df will be None.
     """
 
-    def __init__(self, browser, date = None):
+    def __init__(self, browser: CloudScraper, date: Optional[str]=None):
         self.url = 'https://kenpom.com/fanmatch.php'
         self.date = date
         self.lines_o_night = None
@@ -44,12 +50,24 @@ class FanMatch:
         self.record_favs = None
         self.expected_record_favs = None
         self.exact_mov = None
+        self.fm_df = None
         
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
 
-        browser.open(self.url)
-        fm = browser.get_current_page()
+        fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
+        if "Sorry, no games today." in fm.text:
+            return
+        if date is not None:
+            date_text = fm.find("div", class_="lh12").get_text()
+            date_match = re.search(r"for \w+, (\w+ \d{1,2}[a-z]{2})", date_text)
+            if date_match:
+                extracted_date_str = re.sub(r"(st|nd|rd|th)", "", date_match.group(1))
+                extracted_date = datetime.strptime(extracted_date_str, "%B %d")
+                extracted_mmdd = extracted_date.strftime("%m-%d")
+                user_mmdd = datetime.strptime(date, "%Y-%m-%d").strftime("%m-%d")
+                if extracted_mmdd != user_mmdd:
+                    return
         table = fm.find_all("table")[0]
         fm_df = pd.read_html(StringIO(str(table)))
         fm_df = fm_df[0]
@@ -112,13 +130,11 @@ class FanMatch:
         pos = fm_df.Game.str.split(r" \[").str[1]
         fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(r" \[").str[0], pos.astype("str")
         fm_df.Possessions = fm_df.Possessions.str.rstrip(r"\] ")
-        predict_info = fm_df.Prediction.str.split()
-        pred_winner = fm_df.Prediction.astype("str").str.split().str[0:-2].tolist()
-        pred_winner = [" ".join(i) if not any(pd.isnull(i)) else float("nan") for i in pred_winner]
-        fm_df["PredictedWinner"] = pred_winner
-        fm_df["PredictedScore"] = fm_df.Prediction.str.split().str[-2]
-        fm_df["WinProbability"] = fm_df.Prediction.str.split().str[-1]
-        fm_df.WinProbability = fm_df.WinProbability.str.strip("()")
+        fm_df["PredictedWinner"] = fm_df["Prediction"].str.extract(r"^(.+?) \d+-\d+")[0]
+        fm_df["PredictedScore"] = fm_df["Prediction"].str.extract(r" (\d+-\d+)")[0]
+        fm_df["WinProbability"] = fm_df["Prediction"].str.extract(r"\((\d+%)\)")[0]
+        fm_df["PredictedPossessions"] = fm_df["Prediction"].str.extract(r"\[(\d+)\]")[0].astype(float)
+        fm_df["Possessions"] = fm_df["Possessions"].where(fm_df["Possessions"] != "", fm_df["PredictedPossessions"])
 
         fm_df["PredictedMOV"] = [(int(x[0]) - int(x[1])) if len(x) > 1 else float("nan") for x 
                                  in fm_df.PredictedScore.astype("str").str.split("-")]
@@ -128,11 +144,12 @@ class FanMatch:
         # Parse predicted loser.
         teams = fm_df.Game.str.split(", ").tolist()
         teams_np = fm_df.Game.str.split(" at ").tolist()
+        pred_winner = fm_df["PredictedWinner"].tolist()
         
         i = 0
         pred_loser = []
-        for x in teams:
-            if not len(x) == 2:
+        for i, x in enumerate(teams):
+            if len(x) != 2:
                 x = teams_np[i]
                 
                 # Account for neutral games.

@@ -17,6 +17,7 @@ def test_fanmatch(browser):
 				"Marquette",
 				"73-72",
 				"51%",
+                "nan",
 				"1",
 				"Xavier",
 				"2OT",
@@ -55,3 +56,13 @@ def test_fanmatch(browser):
 	fm = FanMatch(browser, date)
 	assert fm.fm_df.Tournament.loc[0] == "NCAA"
 	assert "NCAA" not in fm.fm_df.Game.loc[0]
+
+    # Test for a day with no game that is in season
+	date = "2020-12-24"
+	fm = FanMatch(browser, date)
+	assert fm.fm_df is None
+
+    # Test for a day with no games that is during the offseason
+	date = "2024-10-30"
+	fm = FanMatch(browser, date)
+	assert fm.fm_df is None
