@@ -5,13 +5,16 @@ pandas dataframes
 
 import pandas as pd
 from io import StringIO
+
+from setuptools.config.pyprojecttoml import validate
+
 from .misc import get_current_season
 import re
 from cloudscraper import CloudScraper
 from bs4 import BeautifulSoup
 from codecs import encode, decode
 from typing import Optional
-from .utils import get_html
+from .utils import get_html, validate_season
 
 def get_valid_teams(browser: CloudScraper, season: Optional[str]=None):
 	"""
@@ -181,10 +184,14 @@ def get_scouting_report(browser: CloudScraper, team: str, season: Optional[int]=
 	return stats_df
 
 def get_player_stats(browser: CloudScraper, team: str, season: Optional[int]=None, conference_only: bool=False):
-
 	url = 'https://kenpom.com/team.php'
 
-	validate_arguments(browser, team, season)
+	current_season = get_current_season(browser)
+	season = validate_season(browser, current_season, season)
+
+	if team == None or team not in get_valid_teams(browser, season):
+		raise ValueError(
+			'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
 
 	# Sanitize team name
 	team = team.replace(" ", "+")
@@ -205,25 +212,44 @@ def get_player_stats(browser: CloudScraper, team: str, season: Optional[int]=Non
 		"Limited roles (12-16% of possessions used)",
 		"Nearly invisible (<12% of possessions used)",
 		"Benchwarmers (played in fewer than 10% of team's minutes)"
-
 	]
+
 	player_df = player_df[~player_df["Name"].isin(player_categories)]
+	player_df["Name"] = player_df["Name"].apply(clean_player_name)
 	return player_df
 
-def validate_arguments(browser: CloudScraper, team: str, season: Optional[int]=None):
-	current_season = get_current_season(browser)
 
-	if season:
-		if int(season) < 1999:
-			raise ValueError(
-				'season cannot be less than 1999, as data only goes back that far.')
-		if int(season) > current_season:
-			raise ValueError(
-				'season cannot be greater than the current year.')
-	else:
-		season = int(current_season)
+def clean_player_name(name):
+	# Remove "National Rank" from player name
+	name = re.sub(r'\s*National Rank$', '', name)
+
+	# Remove integer rank from player name
+	name = re.sub(r'\s*\d+\s*$', '', name)
+
+	return name.strip()
+
+def get_depth_chart(browser: CloudScraper, team: str, season: Optional[int]=None, conference_only: bool=False):
+	url = 'https://kenpom.com/team.php'
+
+	current_season = get_current_season(browser)
+	season = validate_season(browser, current_season, season)
 
 	if team == None or team not in get_valid_teams(browser, season):
 		raise ValueError(
 			'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
+
+	# Sanitize team name
+	team = team.replace(" ", "+")
+	team = team.replace("&", "%26")
+	url = url + "?team=" + str(team)
+	url = url + "&y=" + str(season)
+
+	teams_page = BeautifulSoup(get_html(browser, url), "html.parser")
+	depth_chart = teams_page.find("table", id="dc-table")
+	depth_chart_df = pd.read_html(StringIO(str(depth_chart)))[0]
+
+	breakpoint = "hey"
+
+
+
 

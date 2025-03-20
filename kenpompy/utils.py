@@ -4,6 +4,7 @@ The utils module provides utility functions, such as logging in.
 
 import cloudscraper
 from cloudscraper import CloudScraper
+from typing import Optional
 
 def login(email: str, password: str):
 	"""
@@ -58,3 +59,16 @@ def get_html(browser: CloudScraper, url: str):
 	if response.status_code != 200:
 		raise Exception(f'Failed to retrieve {url} (status code: {response.status_code})')
 	return response.content
+
+def validate_season(browser: CloudScraper, current_season, season: Optional[int]=None):
+
+	if season:
+		if int(season) < 1999:
+			raise ValueError(
+				'season cannot be less than 1999, as data only goes back that far.')
+		if int(season) > current_season:
+			raise ValueError(
+				'season cannot be greater than the current year.')
+	else:
+		season = int(current_season)
+	return season
