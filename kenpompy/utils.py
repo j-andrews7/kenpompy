@@ -34,7 +34,7 @@ def login(email: str, password: str):
 	)
 
 	home_page = browser.get('https://kenpom.com/')
-	if 'Logout' not in home_page.text:
+	if 'Logged in as' not in home_page.text:
 		raise Exception('Logging in failed - check your credentials')
 
 	return browser
