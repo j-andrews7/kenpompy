@@ -163,7 +163,13 @@ def get_scouting_report(browser: CloudScraper, team: str, season: Optional[int]=
 	url = url + "&y=" + str(season)
 
 	report = BeautifulSoup(get_html(browser, url), "html.parser")
-	scouting_report_scripts = report.find("script", { "type": "text/javascript", "src": ""} )
+	# Find all script tags and filter for ones without src attribute (inline scripts)
+	all_scripts = report.find_all("script", { "type": "text/javascript"})
+	scouting_report_scripts = None
+	for script in all_scripts:
+		if not script.get('src'):  # Find script tag without src attribute
+			scouting_report_scripts = script
+			break
 
 	extraction_pattern = re.compile(r"\$\(\"td#(?P<token>[A-Za-z0-9]+)\"\)\.html\(\"(.+)\"\);")
 	if conference_only:

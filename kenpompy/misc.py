@@ -279,9 +279,9 @@ def get_program_ratings(browser: CloudScraper):
 	programs_df = pd.read_html(StringIO(str(table)))
 	programs_df = programs_df[0]
 
-	programs_df.columns = ['Rank', 'Team', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
+	programs_df.columns = ['Rank', 'Team', 'Conference', 'Rating', 'kenpom.Best.Rank', 'kenpom.Best.Season', 'kenpom.Worst.Rank',
 							'kenpom.Worst.Season', 'kenpom.Median.Rank', 'kenpom.Top10.Finishes',
-							'kenpom.Top25.Finishes', 'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4', 'NCAA.E8',
+							'kenpom.Top25.Finishes', 'kenpom.Top50.Finishes', 'NCAA.Champs', 'NCAA.F4',
 							'NCAA.S16', 'NCAA.R1', 'Change']
 
 	programs_df = programs_df[programs_df.Team != 'Team']

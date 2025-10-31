@@ -129,7 +129,7 @@ class FanMatch:
 
         pos = fm_df.Game.str.split(r" \[").str[1]
         fm_df["Game"], fm_df["Possessions"] = fm_df.Game.str.split(r" \[").str[0], pos.astype("str")
-        fm_df.Possessions = fm_df.Possessions.str.rstrip(r"\] ")
+        fm_df.Possessions = fm_df.Possessions.str.split("]").str[0]
         fm_df["PredictedWinner"] = fm_df["Prediction"].str.extract(r"^(.+?) \d+-\d+")[0]
         fm_df["PredictedScore"] = fm_df["Prediction"].str.extract(r" (\d+-\d+)")[0]
         fm_df["WinProbability"] = fm_df["Prediction"].str.extract(r"\((\d+%)\)")[0]
