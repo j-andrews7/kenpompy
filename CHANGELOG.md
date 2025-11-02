@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0
+
+**Release date: 11/01/2025**
+
+* Updates for new seasons, including new teams, login fix (closes #111), various updates reflecting minor site changes by @WakeUpWaffles in https://github.com/j-andrews7/kenpompy/pull/112.
+
 ## v0.4.0
 
 **Release date: 11/09/2024**
