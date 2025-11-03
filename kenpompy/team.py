@@ -5,13 +5,16 @@ pandas dataframes
 
 import pandas as pd
 from io import StringIO
+
+from setuptools.config.pyprojecttoml import validate
+
 from .misc import get_current_season
 import re
 from cloudscraper import CloudScraper
 from bs4 import BeautifulSoup
 from codecs import encode, decode
 from typing import Optional
-from .utils import get_html
+from .utils import get_html, validate_season
 
 def get_valid_teams(browser: CloudScraper, season: Optional[str]=None):
 	"""
@@ -185,3 +188,74 @@ def get_scouting_report(browser: CloudScraper, team: str, season: Optional[int]=
 		stats_df[stat[0]] = stat[1]
 		stats_df[stat[0]+'.Rank'] = stat[2]
 	return stats_df
+
+def get_player_stats(browser: CloudScraper, team: str, season: Optional[int]=None, conference_only: bool=False):
+	url = 'https://kenpom.com/team.php'
+
+	current_season = get_current_season(browser)
+	season = validate_season(browser, current_season, season)
+
+	if team == None or team not in get_valid_teams(browser, season):
+		raise ValueError(
+			'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
+
+	# Sanitize team name
+	team = team.replace(" ", "+")
+	team = team.replace("&", "%26")
+	url = url + "?team=" + str(team)
+	url = url + "&y=" + str(season)
+
+	players = BeautifulSoup(get_html(browser, url), "html.parser")
+	table = players.find("table", id="player-table")
+	player_df = pd.read_html(StringIO(str(table)))[0]
+	player_df = player_df.rename(columns={'Unnamed: 0': 'Number', 'Unnamed: 1': 'Name'})
+
+	player_categories = [
+		"Go-to guys (>28% of possessions used)",
+		"Major Contributors (24-28% of possessions used)",
+		"Significant Contributors (20-24% of possessions used)",
+		"Role Players (16-20% of possessions used)",
+		"Limited roles (12-16% of possessions used)",
+		"Nearly invisible (<12% of possessions used)",
+		"Benchwarmers (played in fewer than 10% of team's minutes)"
+	]
+
+	player_df = player_df[~player_df["Name"].isin(player_categories)]
+	player_df["Name"] = player_df["Name"].apply(clean_player_name)
+	return player_df
+
+
+def clean_player_name(name):
+	# Remove "National Rank" from player name
+	name = re.sub(r'\s*National Rank$', '', name)
+
+	# Remove integer rank from player name
+	name = re.sub(r'\s*\d+\s*$', '', name)
+
+	return name.strip()
+
+def get_depth_chart(browser: CloudScraper, team: str, season: Optional[int]=None, conference_only: bool=False):
+	url = 'https://kenpom.com/team.php'
+
+	current_season = get_current_season(browser)
+	season = validate_season(browser, current_season, season)
+
+	if team == None or team not in get_valid_teams(browser, season):
+		raise ValueError(
+			'the team does not exist in kenpom in the given year.  Check that the spelling matches (https://kenpom.com) exactly.')
+
+	# Sanitize team name
+	team = team.replace(" ", "+")
+	team = team.replace("&", "%26")
+	url = url + "?team=" + str(team)
+	url = url + "&y=" + str(season)
+
+	teams_page = BeautifulSoup(get_html(browser, url), "html.parser")
+	depth_chart = teams_page.find("table", id="dc-table")
+	depth_chart_df = pd.read_html(StringIO(str(depth_chart)))[0]
+
+	breakpoint = "hey"
+
+
+
+

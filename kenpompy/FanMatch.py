@@ -139,7 +139,7 @@ class FanMatch:
         fm_df["PredictedMOV"] = [(int(x[0]) - int(x[1])) if len(x) > 1 else float("nan") for x 
                                  in fm_df.PredictedScore.astype("str").str.split("-")]
 
-        fm_df.drop(["Prediction", "Time (ET)"], axis = 1, inplace = True)
+        fm_df.drop(["Prediction"], axis = 1, inplace = True)
         
         # Parse predicted loser.
         teams = fm_df.Game.str.split(", ").tolist()

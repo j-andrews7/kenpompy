@@ -11,3 +11,6 @@
 /.ipynb_checkpoints/
 __pycache__/
 /.sos/
+
+# PyCharm
+.idea/
