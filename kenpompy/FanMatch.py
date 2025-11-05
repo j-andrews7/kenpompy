@@ -487,10 +487,11 @@ class FanMatch:
 
             value = cell.find(string=True, recursive=False)
             if value:
-                result["value"] = value.strip()
+                stripped_value = value.strip()
+                result["value"] = stripped_value if stripped_value else None
             return result
 
-        # Fall back
+        # Fall back TODO : this could be handled better
         rank_span = cell.find("span", class_="seed-gray-block")
         if rank_span:
             rank_text = rank_span.get_text(strip=True)
@@ -498,7 +499,8 @@ class FanMatch:
 
             value = cell.find(string=True, recursive=False)
             if value:
-                result["value"] = value.strip()
+                stripped_value = value.strip()
+                result["value"] = stripped_value if stripped_value else None
         else:
             text = cell.get_text(strip=True)
             result["value"] = text if text else None
