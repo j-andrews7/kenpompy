@@ -4,7 +4,7 @@ from datetime import datetime
 from cloudscraper import CloudScraper
 from bs4 import BeautifulSoup, Tag
 from bs4.element import NavigableString
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, Optional, List, Union
 from .utils import get_html
 
 
@@ -17,7 +17,7 @@ class FanMatch:
         browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
         date (str or None): Date to scrape, in format "YYYY-MM-DD", such as "2020-01-29".
-        html_str (str or None): Optionally pass in html to use instead of fetching.
+        html_content (str, bytes or None): Optionally pass in html to use instead of fetching.
 
     Attributes:
         url (str): Full url for the page to be scraped.
@@ -40,7 +40,7 @@ class FanMatch:
         self,
         browser: CloudScraper,
         date: Optional[str] = None,
-        html_str: Optional[str] = None,
+        html_content: Optional[Union[bytes, str]] = None,
     ):
         self.url = "https://kenpom.com/fanmatch.php"
         self.date = date
@@ -118,15 +118,15 @@ class FanMatch:
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
 
-        if html_str is None:
+        if html_content is None:
             fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
         else:
-            fm = BeautifulSoup(html_str, "html.parser")
+            fm = BeautifulSoup(html_content, "html.parser")
+
+        self.fm_date = self._extract_fm_date(fm)
 
         if "Sorry, no games today." in fm.text:
             return
-
-        self.fm_date = self._extract_fm_date(fm)
 
         if date is not None:
             if not self._validate_date(date, self.fm_date):
@@ -723,3 +723,22 @@ class FanMatch:
         )
         if exact_mov_match:
             self.exact_mov = f"{exact_mov_match.group(1)}/{exact_mov_match.group(2)}"
+
+    def __repr__(self) -> str:
+        lines = [
+            f"FanMatch(url='{self.url}')",
+            f"  date: {self.date}",
+            f"  fm_date: {self.fm_date}",
+            f"  lines_of_night: {self.lines_of_night}",
+            f"  ppg: {self.ppg}",
+            f"  avg_eff: {self.avg_eff}",
+            f"  pos_40: {self.pos_40}",
+            f"  mean_abs_err_pred_total_score: {self.mean_abs_err_pred_total_score}",
+            f"  bias_pred_total_score: {self.bias_pred_total_score}",
+            f"  mean_abs_err_pred_mov: {self.mean_abs_err_pred_mov}",
+            f"  record_favs: {self.record_favs}",
+            f"  expected_record_favs: {self.expected_record_favs}",
+            f"  exact_mov: {self.exact_mov}",
+            f"  fm_df: {'<DataFrame with ' + str(len(self.fm_df)) + ' rows>' if self.fm_df is not None else None}",
+        ]
+        return "\n".join(lines)
