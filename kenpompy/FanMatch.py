@@ -1,12 +1,9 @@
-"""
-This module contains the FanMatch class for scraping the FanMatch pages into more usable objects.
-"""
-
 import pandas as pd
 import re
 from datetime import datetime
 from cloudscraper import CloudScraper
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
+from bs4.element import NavigableString
 from typing import Any, Dict, Optional, List
 from .utils import get_html
 
@@ -60,6 +57,64 @@ class FanMatch:
         self.exact_mov: Optional[str] = None
         self.fm_df = None
 
+        self._patterns = {
+            "date": r"for \w+, (\w+ \d{1,2}[a-z]{2})",
+            "ordinal": r"(st|nd|rd|th)",
+            "possessions": r"\[(\d+)\]",
+            "score": r"^(.+?)\s+(\d+-\d+)",
+            "win_probability": r"\((\d+(?:\.\d+)?%)\)",
+            "score_number": r"\s*(\d{2,3})",
+            "time": r"(\d+:\d+\s*[ap]m)",
+            "city_state": r"^([^,]+),\s*([A-Z]{2})",
+            "rank_marker": r"·(\d+)·",
+            "mvp": r"MVP:\s*(.+?)(?:\s+[A-Z]{2,}-T|\s+NCAA|$)",
+            "tournament": r"([A-Z]{2,}-T|NCAA)$",
+            "non_ranked": r"NR\s+([A-Za-z\s&\'.]+?)\s+(?:vs\.|at)",
+            "ppg": r"Points per game:\s*(\d+\.?\d*)",
+            "avg_eff": r"Average efficiency:\s*(\d+\.?\d*)",
+            "pos_40": r"Possessions per 40 minutes:\s*(\d+\.?\d*)",
+            "mae_total_score": r"Mean absolute error.*?predicted total score.*?:\s*(\d+\.?\d*)",
+            "pred_score_bias": r"Bias.*?:\s*([-]?\d+\.?\d*)",
+            "mae_mov": r"Mean absolute error.*?predicted.*?margin.*?:\s*(\d+\.?\d*)",
+            "fav_records": r"Record of favorites today:\s*(\d+-\d+)",
+            "exp_record": r"\(expected:\s*(\d+\.?\d*-\d+\.?\d*)\)",
+            "exact_mov": r"Exact.*?(\d+)\s+of\s+(\d+)",
+        }
+        self._output_cols = [
+            "Game",
+            "Team1",
+            "Team2",
+            "Team1Rank",
+            "Team2Rank",
+            "Conference",
+            "PredictedWinner",
+            "PredictedLoser",
+            "PredictedScore",
+            "WinProbability",
+            "PredictedPossessions",
+            "PredictedMOV",
+            "ThrillScore",
+            "ThrillScoreRank",
+            "Tournament",
+            "City",
+            "State",
+            "Arena",
+            "Time",
+            "Network",
+            "OT",
+            "Winner",
+            "WinnerScore",
+            "Loser",
+            "LoserScore",
+            "ActualMOV",
+            "Comeback",
+            "ComebackRank",
+            "Excitement",
+            "ExcitementRank",
+            "MVP",
+            "Possessions",
+        ]
+
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
 
@@ -109,12 +164,14 @@ class FanMatch:
             return None
 
         date_text = date_div.get_text()
-        date_match = re.search(r"for \w+, (\w+ \d{1,2}[a-z]{2})", date_text)
+        date_match = re.search(self._patterns["date"], date_text)
         if date_match is None:
             return None
 
         try:
-            extracted_date_str = re.sub(r"(st|nd|rd|th)", "", date_match.group(1))
+            extracted_date_str = re.sub(
+                self._patterns["ordinal"], "", date_match.group(1)
+            )
             extracted_date = datetime.strptime(extracted_date_str, "%B %d")
             extracted_mmdd = extracted_date.strftime("%m-%d")
             return extracted_mmdd
@@ -132,7 +189,7 @@ class FanMatch:
         except (ValueError, AttributeError):
             return False
 
-    def _parse_game_row(self, row) -> Optional[Dict]:
+    def _parse_game_row(self, row: Tag) -> Optional[Dict]:
         """Parse a single game row from the FanMatch table."""
         cells = row.find_all("td")
         if len(cells) < 5:
@@ -196,17 +253,17 @@ class FanMatch:
             game_data["ExcitementRank"] = None
 
         # Extract MVP if present
-        mvp_match = re.search(r"MVP:\s*(.+?)(?:\s+[A-Z]{2,}-T|\s+NCAA|$)", game_text)
+        mvp_match = re.search(self._patterns["mvp"], game_text)
         game_data["MVP"] = mvp_match.group(1).strip() if mvp_match else None
 
         # Extract Tournament info
-        tournament_match = re.search(r"([A-Z]{2,}-T|NCAA)$", game_text)
+        tournament_match = re.search(self._patterns["tournament"], game_text)
         game_data["Tournament"] = (
             tournament_match.group(1) if tournament_match else None
         )
 
         conference_span = game_cell.find(
-            "span", style=lambda value: value and "color:#f768a1" in value
+            "span", style=lambda value: bool(value and "color:#f768a1" in value)
         )
         game_data["Conference"] = (
             conference_span.get_text(strip=True) if conference_span else None
@@ -214,45 +271,33 @@ class FanMatch:
 
         return game_data
 
-    def _parse_game_teams(self, game_cell, team_links: List, game_text: str) -> Dict:
+    def _parse_game_teams(
+        self, game_cell: Tag, team_links: List[Tag], game_text: str
+    ) -> Dict[str, Any]:
         """Parse team information from the game cell."""
-        result = {}
+        result: Dict[str, Any] = {}
 
-        # Get all span elements with seed-gray class for rankings
         rank_spans = game_cell.find_all("span", class_="seed-gray")
 
-        # Extract team names and rankings
-        teams = []
-        ranks = []
-
+        teams: List[str] = []
         for link in team_links:
             teams.append(link.get_text(strip=True))
 
-        # If we have fewer teams from links, extract from text
         if len(teams) < 2:
-            non_d1_match = re.search(
-                r"NR\s+([A-Za-z\s&\'.]+?)\s+(?:vs\.|at)", game_text
-            )
-            if non_d1_match:
-                teams.insert(0, non_d1_match.group(1).strip())
+            non_ranked_match = re.search(self._patterns["non_ranked"], game_text)
+            if non_ranked_match:
+                teams.insert(0, non_ranked_match.group(1).strip())
 
-        # Extract rankings
+        ranks: List[Optional[str]] = []
         for span in rank_spans:
             rank_text = span.get_text(strip=True)
             ranks.append(rank_text if rank_text != "NR" else None)
 
-        while len(teams) < 2:
-            teams.append(None)
-        while len(ranks) < 2:
-            ranks.append(None)
+        result["team1"] = teams[0] if len(teams) > 0 else None
+        result["team1_rank"] = ranks[0] if len(ranks) > 0 else None
+        result["team2"] = teams[1] if len(teams) > 1 else None
+        result["team2_rank"] = ranks[1] if len(ranks) > 1 else None
 
-        # Store parsed data (keeping original team order)
-        result["team1"] = teams[0]
-        result["team1_rank"] = ranks[0]
-        result["team2"] = teams[1]
-        result["team2_rank"] = ranks[1]
-
-        # Determine game location type
         if " vs. " in game_text or " vs." in game_text:
             result["game_type"] = "neutral"
         elif " at " in game_text:
@@ -260,8 +305,8 @@ class FanMatch:
         else:
             result["game_type"] = None
 
-        # Extract possessions from brackets in game text
-        poss_match = re.search(r"\[(\d+)\]", game_text)
+        # Extract possessions
+        poss_match = re.search(self._patterns["possessions"], game_text)
         result["actual_possessions"] = (
             float(poss_match.group(1)) if poss_match else None
         )
@@ -270,25 +315,19 @@ class FanMatch:
 
     def _construct_game_string(self, team_info: Dict) -> str:
         """Construct the Game string."""
-        team1_rank = team_info.get("team1_rank", "NR")
+        rank1 = team_info.get("team1_rank") or "NR"
+        rank2 = team_info.get("team2_rank") or "NR"
         team1 = team_info.get("team1", "")
-        team2_rank = team_info.get("team2_rank", "NR")
         team2 = team_info.get("team2", "")
         game_type = team_info.get("game_type", "")
 
-        # Format ranks
-        rank1_str = str(team1_rank) if team1_rank else "NR"
-        rank2_str = str(team2_rank) if team2_rank else "NR"
+        separators = {
+            "neutral": " vs. ",
+            "away": " at ",
+        }
+        separator = separators.get(game_type, " ")
 
-        # Determine separator
-        if game_type == "neutral":
-            separator = " vs. "
-        elif game_type == "away":
-            separator = " at "
-        else:
-            separator = " "
-
-        return f"{rank1_str} {team1}{separator}{rank2_str} {team2}"
+        return f"{rank1} {team1}{separator}{rank2} {team2}"
 
     def _parse_prediction(self, prediction_text: str, team_info: Dict) -> Dict:
         """Parse prediction information."""
@@ -305,7 +344,7 @@ class FanMatch:
             return result
 
         # Extract predicted winner (team name before the score)
-        winner_match = re.search(r"^(.+?)\s+(\d+-\d+)", prediction_text)
+        winner_match = re.search(self._patterns["score"], prediction_text)
         if winner_match:
             result["PredictedWinner"] = winner_match.group(1).strip()
             result["PredictedScore"] = winner_match.group(2)
@@ -315,12 +354,12 @@ class FanMatch:
                 result["PredictedMOV"] = float(int(scores[0]) - int(scores[1]))
 
         # Extract win probability
-        prob_match = re.search(r"\((\d+(?:\.\d+)?%)\)", prediction_text)
+        prob_match = re.search(self._patterns["win_probability"], prediction_text)
         if prob_match:
             result["WinProbability"] = prob_match.group(1)
 
         # Extract predicted possessions
-        poss_match = re.search(r"\[(\d+)\]", prediction_text)
+        poss_match = re.search(self._patterns["possessions"], prediction_text)
         if poss_match:
             result["PredictedPossessions"] = float(poss_match.group(1))
 
@@ -335,7 +374,7 @@ class FanMatch:
 
         return result
 
-    def _parse_actual_scores(self, game_cell, game_text: str) -> Dict:
+    def _parse_actual_scores(self, game_cell: Tag, game_text: str) -> Dict[str, Any]:
         """Parse actual game scores from completed games."""
         result: Dict[str, Any] = {
             "OT": None,
@@ -383,7 +422,7 @@ class FanMatch:
 
         return result
 
-    def _parse_time(self, time_cell) -> Dict:
+    def _parse_time(self, time_cell: Tag) -> Dict[str, Any]:
         """Parse time and network information.
 
         Note: Some of the rows in the HTML are missing closing `</td>`
@@ -415,20 +454,20 @@ class FanMatch:
 
         return result
 
-    def _parse_location(self, location_cell) -> Dict:
+    def _parse_location(self, location_cell: Tag) -> Dict[str, Any]:
         """Parse location information."""
         result: Dict[str, Any] = {"City": None, "State": None, "Arena": None}
 
-        location_parts = []
+        location_parts: List[str] = []
         for content in location_cell.children:
-            if content.name != "a":
-                text = content.string if hasattr(content, "string") else str(content)
-                if text and text.strip():
-                    location_parts.append(text.strip())
+            if isinstance(content, NavigableString):
+                text = str(content).strip()
+                if text:
+                    location_parts.append(text)
 
         location_text = " ".join(location_parts)
 
-        city_state_match = re.match(r"^([^,]+),\s*([A-Z]{2})", location_text)
+        city_state_match = re.match(self._patterns["city_state"], location_text)
         if city_state_match:
             result["City"] = city_state_match.group(1).strip()
             result["State"] = city_state_match.group(2).strip()
@@ -441,9 +480,9 @@ class FanMatch:
 
         return result
 
-    def _parse_thrill_score(self, thrill_cell) -> Dict:
+    def _parse_thrill_score(self, thrill_cell: Tag) -> Dict[str, Any]:
         """Parse thrill score and rank."""
-        result = {"ThrillScore": None, "ThrillScoreRank": None}
+        result: Dict[str, Any] = {"ThrillScore": None, "ThrillScoreRank": None}
 
         rank_span = thrill_cell.find("span", class_="seed-gray-block")
 
@@ -461,7 +500,7 @@ class FanMatch:
 
         return result
 
-    def _parse_metric_with_rank(self, cell) -> Dict:
+    def _parse_metric_with_rank(self, cell: Optional[Tag]) -> Dict[str, Optional[str]]:
         """Parser for comeback and excitement metrics."""
         result: Dict[str, Any] = {"value": None, "rank": None}
 
@@ -469,29 +508,22 @@ class FanMatch:
             return result
 
         rank_span = cell.find("span", class_="win-prob-link")
+        if not rank_span:
+            # Fallback
+            rank_span = cell.find("span", class_="seed-gray-block")
+
         if rank_span:
             rank_text = rank_span.get_text(strip=True)
-            rank_match = re.search(r"·(\d+)·", rank_text)
-            if rank_match:
-                result["rank"] = rank_match.group(1)
 
-            value = cell.find(string=True, recursive=False)
-            if value:
-                stripped_value = value.strip()
-                result["value"] = stripped_value if stripped_value else None
-            return result
-
-        # Fall back TODO : this could be handled better
-        rank_span = cell.find("span", class_="seed-gray-block")
-        if rank_span:
-            rank_text = rank_span.get_text(strip=True)
-            result["rank"] = rank_text
+            rank_match = re.search(self._patterns["rank_marker"], rank_text)
+            result["rank"] = rank_match.group(1) if rank_match else rank_text
 
             value = cell.find(string=True, recursive=False)
             if value:
                 stripped_value = value.strip()
                 result["value"] = stripped_value if stripped_value else None
         else:
+            # Fallback
             text = cell.get_text(strip=True)
             result["value"] = text if text else None
 
@@ -537,42 +569,7 @@ class FanMatch:
             columns=[col for col in columns_to_drop if col in self.fm_df.columns]
         )
 
-        self.fm_df = self.fm_df.reindex(
-            columns=[
-                "Game",
-                "Team1",
-                "Team2",
-                "Team1Rank",
-                "Team2Rank",
-                "Conference",
-                "PredictedWinner",
-                "PredictedLoser",
-                "PredictedScore",
-                "WinProbability",
-                "PredictedPossessions",
-                "PredictedMOV",
-                "ThrillScore",
-                "ThrillScoreRank",
-                "Tournament",
-                "City",
-                "State",
-                "Arena",
-                "Time",
-                "Network",
-                "OT",
-                "Winner",
-                "WinnerScore",
-                "Loser",
-                "LoserScore",
-                "ActualMOV",
-                "Comeback",
-                "ComebackRank",
-                "Excitement",
-                "ExcitementRank",
-                "MVP",
-                "Possessions",
-            ]
-        )
+        self.fm_df = self.fm_df.reindex(columns=self._output_cols)
 
     def _parse_game_results(self) -> None:
         """Parse actual game results for completed games."""
@@ -592,19 +589,21 @@ class FanMatch:
             if col not in self.fm_df.columns:
                 self.fm_df[col] = None
 
-        for idx in self.fm_df.index:
-            team1 = self.fm_df.loc[idx, "Team1"]
-            team1_score = self.fm_df.loc[idx, "Team1Score"]
-            team2 = self.fm_df.loc[idx, "Team2"]
-            team2_score = self.fm_df.loc[idx, "Team2Score"]
+        completed_games = (
+            self.fm_df["Team1Score"].notna() & self.fm_df["Team2Score"].notna()
+        )
 
-            if pd.notna(team1_score) and pd.notna(team2_score):
-                if pd.to_numeric(team1_score) > pd.to_numeric(team2_score):
-                    self.fm_df.loc[idx, "Winner"] = team1
-                    self.fm_df.loc[idx, "Loser"] = team2
-                else:
-                    self.fm_df.loc[idx, "Winner"] = team2
-                    self.fm_df.loc[idx, "Loser"] = team1
+        team1_wins = completed_games & (
+            pd.to_numeric(self.fm_df["Team1Score"], errors="coerce")
+            > pd.to_numeric(self.fm_df["Team2Score"], errors="coerce")
+        )
+
+        self.fm_df.loc[team1_wins, "Winner"] = self.fm_df.loc[team1_wins, "Team1"]
+        self.fm_df.loc[team1_wins, "Loser"] = self.fm_df.loc[team1_wins, "Team2"]
+
+        team2_wins = completed_games & ~team1_wins
+        self.fm_df.loc[team2_wins, "Winner"] = self.fm_df.loc[team2_wins, "Team2"]
+        self.fm_df.loc[team2_wins, "Loser"] = self.fm_df.loc[team2_wins, "Team1"]
 
     def _parse_summary_stats(self, soup: BeautifulSoup) -> None:
         """Parse summary statistics from the bottom of the page."""
@@ -619,8 +618,6 @@ class FanMatch:
 
         rows = tbody.find_all("tr")
 
-        # Summary stats are usually in rows that don't follow the standard game format
-        # They have specific text patterns like "Lines of the night", "Points per game", etc.
         for row in rows:
             cells = row.find_all("td")
             if not cells:
@@ -673,23 +670,23 @@ class FanMatch:
         page_text = soup.get_text()
 
         # Parse points per game stats
-        ppg_match = re.search(r"Points per game:\s*(\d+\.?\d*)", page_text)
+        ppg_match = re.search(self._patterns["ppg"], page_text)
         if ppg_match:
             self.ppg = float(ppg_match.group(1))
 
         # Parse average efficiency
-        eff_match = re.search(r"Average efficiency:\s*(\d+\.?\d*)", page_text)
+        eff_match = re.search(self._patterns["avg_eff"], page_text)
         if eff_match:
             self.avg_eff = float(eff_match.group(1))
 
         # Parse possessions per 40
-        pos_match = re.search(r"Possessions per 40 minutes:\s*(\d+\.?\d*)", page_text)
+        pos_match = re.search(self._patterns["pos_40"], page_text)
         if pos_match:
             self.pos_40 = float(pos_match.group(1))
 
         # Parse mean absolute error for predicted total score
         mae_score_match = re.search(
-            r"Mean absolute error.*?predicted total score.*?:\s*(\d+\.?\d*)",
+            self._patterns["mae_total_score"],
             page_text,
             re.IGNORECASE,
         )
@@ -697,13 +694,13 @@ class FanMatch:
             self.mean_abs_err_pred_total_score = float(mae_score_match.group(1))
 
         # Parse bias for predicted total score
-        bias_match = re.search(r"Bias.*?:\s*([-]?\d+\.?\d*)", page_text)
+        bias_match = re.search(self._patterns["pred_score_bias"], page_text)
         if bias_match:
             self.bias_pred_total_score = float(bias_match.group(1))
 
         # Parse mean absolute error for predicted MOV
         mae_mov_match = re.search(
-            r"Mean absolute error.*?predicted.*?margin.*?:\s*(\d+\.?\d*)",
+            self._patterns["mae_mov"],
             page_text,
             re.IGNORECASE,
         )
@@ -711,18 +708,18 @@ class FanMatch:
             self.mean_abs_err_pred_mov = float(mae_mov_match.group(1))
 
         # Parse record of favorites
-        record_match = re.search(r"Record of favorites today:\s*(\d+-\d+)", page_text)
+        record_match = re.search(self._patterns["fav_records"], page_text)
         if record_match:
             self.record_favs = record_match.group(1)
 
         # Parse expected record
-        exp_record_match = re.search(
-            r"\(expected:\s*(\d+\.?\d*-\d+\.?\d*)\)", page_text
-        )
+        exp_record_match = re.search(self._patterns["exp_record"], page_text)
         if exp_record_match:
             self.expected_record_favs = exp_record_match.group(1)
 
         # Parse exact MOV
-        exact_mov_match = re.search(r"Exact.*?(\d+)\s+of\s+(\d+)", page_text, re.IGNORECASE)
+        exact_mov_match = re.search(
+            self._patterns["exact_mov"], page_text, re.IGNORECASE
+        )
         if exact_mov_match:
             self.exact_mov = f"{exact_mov_match.group(1)}/{exact_mov_match.group(2)}"
