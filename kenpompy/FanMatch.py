@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from typing import Any, Dict, Optional, List
 from .utils import get_html
 
+
 class FanMatch:
     """Object to hold FanMatch page scraping results.
 
@@ -38,11 +39,16 @@ class FanMatch:
         fm_df (pandas dataframe or None): Pandas dataframe containing parsed FanMatch table. If there are no games that day, fm_df will be None.
     """
 
-    def __init__(self, browser: CloudScraper, date: Optional[str] = None, html_str: Optional[str] = None):
+    def __init__(
+        self,
+        browser: CloudScraper,
+        date: Optional[str] = None,
+        html_str: Optional[str] = None,
+    ):
         self.url = "https://kenpom.com/fanmatch.php"
         self.date = date
         self.fm_date = None
-        self.lines_of_night = None
+        self.lines_of_night: Optional[List] = None
         self.ppg: Optional[float] = None
         self.avg_eff: Optional[float] = None
         self.pos_40: Optional[float] = None
@@ -61,7 +67,6 @@ class FanMatch:
             fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
         else:
             fm = BeautifulSoup(html_str, "html.parser")
-
 
         if "Sorry, no games today." in fm.text:
             return
@@ -638,12 +643,18 @@ class FanMatch:
             if not cells:
                 break
 
-            cell_text = cells[0].get_text(strip=True)
+            cell_text = (
+                str(cells[0].get_text(strip=True))
+                .replace("•", "")
+                .replace("  ", " ")
+                .replace('"', "")
+            )
 
             # Stop when we hit summary statistics
             if any(
                 keyword in cell_text.lower()
                 for keyword in [
+                    "note:",
                     "points per game",
                     "predicted total score",
                     "predicted margin",
@@ -655,7 +666,7 @@ class FanMatch:
                 lines.append(cell_text)
 
         if lines:
-            self.lines_o_night = lines
+            self.lines_of_night = lines
 
     def _extract_summary_statistics(self, soup: BeautifulSoup) -> None:
         """Extract summary statistics."""
@@ -672,7 +683,7 @@ class FanMatch:
             self.avg_eff = float(eff_match.group(1))
 
         # Parse possessions per 40
-        pos_match = re.search(r"Possessions per 40:\s*(\d+\.?\d*)", page_text)
+        pos_match = re.search(r"Possessions per 40 minutes:\s*(\d+\.?\d*)", page_text)
         if pos_match:
             self.pos_40 = float(pos_match.group(1))
 
@@ -700,18 +711,18 @@ class FanMatch:
             self.mean_abs_err_pred_mov = float(mae_mov_match.group(1))
 
         # Parse record of favorites
-        record_match = re.search(r"Record of favorites:\s*(\d+-\d+)", page_text)
+        record_match = re.search(r"Record of favorites today:\s*(\d+-\d+)", page_text)
         if record_match:
             self.record_favs = record_match.group(1)
 
         # Parse expected record
         exp_record_match = re.search(
-            r"Expected record:\s*(\d+\.?\d*-\d+\.?\d*)", page_text
+            r"\(expected:\s*(\d+\.?\d*-\d+\.?\d*)\)", page_text
         )
         if exp_record_match:
             self.expected_record_favs = exp_record_match.group(1)
 
         # Parse exact MOV
-        exact_mov_match = re.search(r"Exact.*?(\d+)/(\d+)", page_text)
+        exact_mov_match = re.search(r"Exact.*?(\d+)\s+of\s+(\d+)", page_text, re.IGNORECASE)
         if exact_mov_match:
             self.exact_mov = f"{exact_mov_match.group(1)}/{exact_mov_match.group(2)}"
