@@ -10,10 +10,6 @@ from bs4 import BeautifulSoup
 from typing import Any, Dict, Optional, List
 from .utils import get_html
 
-# TODO : testing
-import os
-
-
 class FanMatch:
     """Object to hold FanMatch page scraping results.
 
@@ -23,6 +19,7 @@ class FanMatch:
         browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
             by the `login` function.
         date (str or None): Date to scrape, in format "YYYY-MM-DD", such as "2020-01-29".
+        html_str (str or None): Optionally pass in html to use instead of fetching.
 
     Attributes:
         url (str): Full url for the page to be scraped.
@@ -41,7 +38,7 @@ class FanMatch:
         fm_df (pandas dataframe or None): Pandas dataframe containing parsed FanMatch table. If there are no games that day, fm_df will be None.
     """
 
-    def __init__(self, browser: CloudScraper, date: Optional[str] = None):
+    def __init__(self, browser: CloudScraper, date: Optional[str] = None, html_str: Optional[str] = None):
         self.url = "https://kenpom.com/fanmatch.php"
         self.date = date
         self.fm_date = None
@@ -60,23 +57,11 @@ class FanMatch:
         if self.date is not None:
             self.url = self.url + "?d=" + self.date
 
-        # TODO : testing
-        local_file_name = (
-            f"{date.replace('-', '')}.html" if date is not None else "output.html"
-        )
-        html_content: str
-        if os.path.exists(local_file_name):
-            with open(local_file_name, "r") as f:
-                html_content = f.read()
-            fm = BeautifulSoup(html_content, "html.parser")
-            print("READ FROM LOCAL\n\n")
-        else:
+        if html_str is None:
             fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
-            with open(local_file_name, "w") as f:
-                f.write(str(fm))
-            print("FETCHED\n\n")
+        else:
+            fm = BeautifulSoup(html_str, "html.parser")
 
-        # fm = BeautifulSoup(get_html(browser, self.url), "html.parser")
 
         if "Sorry, no games today." in fm.text:
             return
