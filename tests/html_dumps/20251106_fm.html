@@ -1,0 +1,638 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><LINK REL=stylesheet TYPE="text/css" HREF="css/rate2.css?1725252033">
+<LINK REL=stylesheet TYPE="text/css" HREF="css/fanmatch.css?1729131698">
+<TITLE>FanMatch</TITLE>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6DKK0E2CDM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6DKK0E2CDM');
+</script>
+
+<!-- try to use css link for google fonts -->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600,400&text=1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:%c3%97%C3%A9%c2%b7%C2%A9%20%26%2B%2D%2C%2E%25%27%28%29%2a%7C%95%3F" />
+
+<link rel="Shortcut Icon" type="image/ico" href="assets/favicon.ico?1662440188" />
+
+<LINK REL=stylesheet TYPE='text/css' HREF='css/master2.css?1734893002'><style type="text/css">
+  #ratings-table tr.fav td {
+    background-color:#CC1122;
+    color:#FFFFFF;
+  }
+  #ratings-table tr.fav a {
+    background-color:#CC1122;
+    color:#FFFFFF;
+  }
+</style>
+<script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
+<script src='menu.js?1662440188'></script>
+
+</head>
+
+<body>
+<div id="wrapper">
+<div id="container">
+<!-- <div id='login-container'> -->
+<div id="logged-in">
+<span class="mobileHide"> Logged in as: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4333312c27213a30282a2e2e263103242e222a2f6d202c2e">[email&#160;protected]</a> (<a href="team.php?team=Wisconsin">Wisconsin</a> <i>next: Fri vs. <a href="team.php?team=Northern+Illinois">Northern Illinois</a></i>)</span> <span class="mobileHide">|</span> <a href="account.php">Manage Account</a> (<span style="background-color:yellow"><span style=color:red>expires 11/21/25 <a href="register-kenpom.php">Renew here!</a></span>)
+    <!-- new navigation bar -->
+    <div id="logo-header">
+        <div id="tagline-container">
+            <div class="icon">
+                <a href="https://doubletakeout.com"><img src="https://kenpom.com/assets/dt_logo.svg" width="30"></a>
+                <a href="https://bballanalytics.com"><img src="https://kenpom.com/assets/bbanalytics.png" width="17"></a>
+            </div>
+            <div id="tagline"><h3>ADVANCED ANALYSIS OF COLLEGE BASKETBALL</h3></div>
+            <div class="icon">
+                <a href="https://kenpom.substack.com"><img src="https://kenpom.com/assets/substack.svg" height="16"></a>
+                <a href="https://dunksandthrees.com"><img src="https://kenpom.com/assets/dunksandthrees.svg" height="16"></a>
+            </div>
+        </div>
+        <hr><hr>
+    </div> <!-- end logo-header div -->
+    <div id="nav2">
+        <nav>
+            <h1 class="logo"><a href="/"><img src="assets/kenpom_new.png" /></a></h1>
+            <a class="burger-nav"><span class="burger-span">&#8801;</span></a>
+            <ul id="main-menu">
+                <li id="stats-menu" class="stats"><a href="#">Stats</a>
+                    <ul>
+                        <li><a href="summary.php">Efficiency</a></li>
+                        <li><a href="stats.php">Four Factors</a></li>
+                        <li><a href="playerstats.php">Player Stats</a></li>
+                        <li><a href="pointdist.php">Point Distribution</a></li>
+                        <li><a href="height.php">Height/Experience</a></li>
+                        <li><a href="teamstats.php">Misc. Team Stats</a></li>
+                    </ul>
+                </li>
+                <li class="fanmatch"><a href="fanmatch.php" title="FanMatch">FanMatch</a></li>
+                <li class="universe"><a href="universe.php" title="D-I Universe">D-I Universe</a></li>
+                <li id="misc-menu" class="misc"><a href="#">Miscellany</a>
+                    <ul>
+                        <li><a href="blog">Blog</a></li>
+                        <li><a href="game_attrs.php">Game Rankings</a></li>
+                        <li><a href="trends.php">D-I Stats Trends</a></li>
+                        <li><a href="officials.php">Ref Ratings</a></li>
+                        <li><a href="hca.php">Home Court Ratings</a></li>
+                        <li><a href="arenas.php">Arena Capacity</a></li>
+                    </ul>
+                </li>
+                <li class="search">
+                    <form action="team.php">
+                        <input id="teams" name="team" placeholder="Search teams"/>
+                    </form>
+                    <form action="history.php">
+                        <input id="coaches" name="c" placeholder="Search coaches"/>
+                    </form>
+                </li>
+                <li class="contact"><a href="contact.php" title="Contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <hr>
+    <hr>
+</div>
+
+<!-- The content header -->
+<div id="content-header">
+<style type="text/css">
+#fanmatch-table tr.fav td {
+background-color:#CC1122;
+color:#FFFFFF;
+}
+#fanmatch-table tr.fav a {
+background-color:#CC1122;
+color:#FFFFFF;
+}
+</style>
+<h2 class='lh075'>FanMatch<sup>TM</sup> <a href="blog/introducing-fanmatch/"><img src="assets/help.gif"></a></h2>
+<div class='lh12'>for Thursday, November 6th (<a href='archive.php?d=2025-11-06'>Ratings archive</a>)<br />
+try <a href='fanmatchg.php'>Visual FanMatch</a><br/><a href="/fanmatch.php?d=2025-11-05">11/05</a> <a href="/fanmatch.php?d=2025-11-07">11/07</a>
+</div></div> <!-- end content-header div -->
+<div id="data-area">
+<table id="fanmatch-table">
+<thead>
+<tr>
+<th style="text-align:left">Game</th>
+<th style="text-align:left"><a href="fanmatch.php?s=Predictions">Prediction</a></th>
+<th><a href="fanmatch.php?s=Time">Time (ET)</a></th>
+<th style="text-align:left"><a href="fanmatch.php?s=Location">Location</a></th>
+<th><a href="/fanmatch.php">Thrill<br />Score</a></th>
+<th><a href="fanmatch.php?s=Comeback">Come<br/>back</a></th>
+<th><a href="/fanmatch.php?s=Excitement">Excite<br/>ment</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">122</span> <a href="team.php?team=Illinois+St.">Illinois St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">164</span> <a href="team.php?team=Ohio">Ohio</a>
+</td>
+<td style="text-align:left;">Illinois St. 80-79 (50%) <span class='small'>[72]</span>
+<td><a href="gameprep.php?g=265">7:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Athens, OH
+<a href="http://maps.google.com?q=Convocation+Center,+Athens%2C+OH&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Convocation Center</span></a></td>
+<td class="stats" style="background-color:#bbfbc3">43.0<span class='seed-gray-block'>1</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">198</span> <a href="team.php?team=Nebraska+Omaha">Nebraska Omaha</a> at<span class="desktopHide"><br></span> <span class="seed-gray">180</span> <a href="team.php?team=Abilene+Christian">Abilene Christian</a>
+</td>
+<td style="text-align:left;">Abilene Christian 78-75 (63%) <span class='small'>[75]</span></td>
+<td><a href="gameprep.php?g=249">8:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Abilene, TX
+<a href="http://maps.google.com?q=Moody+Coliseum,+Abilene%2C+TX&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Moody Coliseum</span></a></td>
+<td class="stats" style="background-color:#c4efd5">34.2<span class='seed-gray-block'>2</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">160</span> <a href="team.php?team=CSUN">CSUN</a> at<span class="desktopHide"><br></span> <span class="seed-gray">116</span> <a href="team.php?team=Northern+Iowa">Northern Iowa</a>
+</td>
+<td style="text-align:left;">Northern Iowa 80-73 (74%) <span class='small'>[74]</span></td>
+<td><a href="gameprep.php?g=252">8:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Cedar Falls, IA
+<a href="http://maps.google.com?q=McLeod+Center,+Cedar+Falls%2C+IA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>McLeod Center</span></a></td>
+<td class="stats" style="background-color:#d0fbda">33.6<span class='seed-gray-block'>3</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">275</span> <a href="team.php?team=UC+Riverside">UC Riverside</a> at<span class="desktopHide"><br></span> <span class="seed-gray">313</span> <a href="team.php?team=North+Dakota">North Dakota</a>
+</td>
+<td style="text-align:left;">North Dakota 77-76 (51%) <span class='small'>[72]</span></td>
+<td><a href="gameprep.php?g=251">8:00 pm</a><td style="text-align:left;">Grand Forks, ND
+<a href="http://maps.google.com?q=Betty+Engelstad+Sioux+Center,+Grand+Forks%2C+ND&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Betty Engelstad Sioux Center</span></a></td>
+<td class="stats" style="background-color:#c9eeda">31.5<span class='seed-gray-block'>4</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">290</span> <a href="team.php?team=LIU">LIU</a> 94, <span class="desktopHide"><br></span><span class="seed-gray">345</span> <a href="team.php?team=IU+Indy">IU Indy</a> 90 <span style="font-size:10px;">[87]</span>
+<span class="seed-gray-block">MVP: <a href="player.php?p=55193">Greg Gordon</a> (29p/7r/4a/2b/1s)</span></td>
+<td class="correct">LIU 78-77 (55%) <span class='small'>[73]</span></td>
+<td><a href="box.php?g=238">box</a>
+<span class='win-prob-link'><a href="winprob.php?g=238">win prob</a></span></td>
+<td style="text-align:left;">Indianapolis, IN
+<a href="http://maps.google.com?q=The+Jungle,+Indianapolis%2C+IN&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>The Jungle</span></a></td>
+<td class="stats" style="background-color:#d6fbe0">30.5<span class='seed-gray-block'>5</span></td>
+<td class="stats" style="background-color:#ecfaf7">8<span class='win-prob-link'>&middot;20&middot;</span></td>
+<td class="stats" style="background-color:#08ff08">3.44<span class='win-prob-link'>&middot;2&middot;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">312</span> <a href="team.php?team=Central+Connecticut">Central Connecticut</a> at<span class="desktopHide"><br></span> <span class="seed-gray">235</span> <a href="team.php?team=Quinnipiac">Quinnipiac</a>
+</td>
+<td style="text-align:left;">Quinnipiac 78-72 (73%) <span class='small'>[74]</span></td>
+<td><a href="gameprep.php?g=246">7:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Hamden, CT
+<a href="http://maps.google.com?q=M%26T+Bank+Arena,+Hamden%2C+CT&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>M&T Bank Arena</span></a></td>
+<td class="stats" style="background-color:#d3ede6">25.0<span class='seed-gray-block'>6</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">242</span> <a href="team.php?team=Robert+Morris">Robert Morris</a> at<span class="desktopHide"><br></span> <span class="seed-gray">124</span> <a href="team.php?team=Drake">Drake</a>
+</td>
+<td style="text-align:left;">Drake 81-71 (82%) <span class='small'>[72]</span></td>
+<td><a href="gameprep.php?g=269">7:30 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Des Moines, IA
+<a href="http://maps.google.com?q=Knapp+Center,+Des+Moines%2C+IA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Knapp Center</span></a></td>
+<td class="stats" style="background-color:#e2faec">23.3<span class='seed-gray-block'>7</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">192</span> <a href="team.php?team=Bethune+Cookman">Bethune Cookman</a> at<span class="desktopHide"><br></span> <span class="seed-gray">74</span> <a href="team.php?team=Miami+FL">Miami FL</a>
+</td>
+<td style="text-align:left;">Miami FL 83-70 (89%) <span class='small'>[73]</span></td>
+<td><a href="gameprep.php?g=263">7:00 pm</a><span class='seed-gray-block'>&nbsp;ACC Network Extra&nbsp;</span></td>
+<td style="text-align:left;">Coral Gables, FL
+<a href="http://maps.google.com?q=Watsco+Center,+Coral+Gables%2C+FL&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Watsco Center</span></a></td>
+<td class="stats" style="background-color:#d6ede9">22.6<span class='seed-gray-block'>8</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">194</span> <a href="team.php?team=Wright+St.">Wright St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">83</span> <a href="team.php?team=California">California</a>
+</td>
+<td style="text-align:left;">California 83-70 (88%) <span class='small'>[73]</span></td>
+<td><a href="gameprep.php?g=277">10:00 pm</a><span class='seed-gray-block'>&nbsp;ACC Network Extra&nbsp;</span></td>
+<td style="text-align:left;">Berkeley, CA
+<a href="http://maps.google.com?q=Haas+Pavilion,+Berkeley%2C+CA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Haas Pavilion</span></a></td>
+<td class="stats" style="background-color:#e3faed">22.5<span class='seed-gray-block'>9</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr class="bold-bottom">
+<td class="bold-bottom-left"><span class="seed-gray">336</span> <a href="team.php?team=Alcorn+St.">Alcorn St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">169</span> <a href="team.php?team=South+Alabama">South Alabama</a>
+</td>
+<td class="bold-bottom-left">South Alabama 78-67 (84%) <span class='small'>[69]</span></td>
+<td class="bold-bottom"><a href="gameprep.php?g=274">8:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td class="bold-bottom-left">Mobile, AL
+<a href="http://maps.google.com?q=Mitchell+Center,+Mobile%2C+AL&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Mitchell Center</span></a></td>
+<td class="stats" style="background-color:#dcedef">18.0<span class='seed-gray-block'>10</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">211</span> <a href="team.php?team=Campbell">Campbell</a> at<span class="desktopHide"><br></span> <span class="seed-gray">69</span> <a href="team.php?team=West+Virginia">West Virginia</a>
+</td>
+<td style="text-align:left;">West Virginia 79-63 (93%) <span class='small'>[68]</span></td>
+<td><a href="gameprep.php?g=266">7:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Morgantown, WV
+<a href="http://maps.google.com?q=Hope+Coliseum,+Morgantown%2C+WV&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Hope Coliseum</span></a></td>
+<td class="stats" style="background-color:#eafaf5">16.1<span class='seed-gray-block'>11</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">277</span> <a href="team.php?team=Northwestern+St.">Northwestern St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">91</span> <a href="team.php?team=North+Texas">North Texas</a>
+</td>
+<td style="text-align:left;">North Texas 78-63 (91%) <span class='small'>[69]</span></td>
+<td><a href="gameprep.php?g=271">8:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Denton, TX
+<a href="http://maps.google.com?q=The+Super+Pit,+Denton%2C+TX&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>The Super Pit</span></a></td>
+<td class="stats" style="background-color:#deedf1">15.8<span class='seed-gray-block'>12</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">364</span> <a href="team.php?team=Arkansas+Pine+Bluff">Arkansas Pine Bluff</a> at<span class="desktopHide"><br></span> <span class="seed-gray">263</span> <a href="team.php?team=Portland">Portland</a>
+</td>
+<td style="text-align:left;">Portland 86-73 (88%) <span class='small'>[75]</span></td>
+<td><a href="gameprep.php?g=256">10:30 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Portland, OR
+<a href="http://maps.google.com?q=Chiles+Center,+Portland%2C+OR&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Chiles Center</span></a></td>
+<td class="stats" style="background-color:#ecfaf6">14.7<span class='seed-gray-block'>13</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">262</span> <a href="team.php?team=Texas+A%26M+Corpus+Chris">Texas A&M Corpus Chris</a> at<span class="desktopHide"><br></span> <span class="seed-gray">43</span> <a href="team.php?team=SMU">SMU</a>
+</td>
+<td style="text-align:left;">SMU 89-67 (97%) <span class='small'>[73]</span></td>
+<td><a href="gameprep.php?g=272">8:00 pm</a><span class='seed-gray-block'>&nbsp;ACC Network Extra&nbsp;</span></td>
+<td style="text-align:left;">Dallas, TX
+<a href="http://maps.google.com?q=Moody+Coliseum,+Dallas%2C+TX&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Moody Coliseum</span></a></td>
+<td class="stats" style="background-color:#e0ecf4">13.1<span class='seed-gray-block'>14</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">266</span> <a href="team.php?team=Jackson+St.">Jackson St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">11</span> <a href="team.php?team=Louisville">Louisville</a>
+</td>
+<td style="text-align:left;">Louisville 95-67 (99%) <span class='small'>[75]</span></td>
+<td><a href="gameprep.php?g=262">7:00 pm</a><span class='seed-gray-block'>&nbsp;ACC Network Extra&nbsp;</span></td>
+<td style="text-align:left;">Louisville, KY
+<a href="http://maps.google.com?q=KFC+Yum%21+Center,+Louisville%2C+KY&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>KFC Yum! Center</span></a></td>
+<td class="stats" style="background-color:#eefaf8">12.1<span class='seed-gray-block'>15</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">331</span> <a href="team.php?team=The+Citadel">The Citadel</a> at<span class="desktopHide"><br></span> <span class="seed-gray">99</span> <a href="team.php?team=Boston+College">Boston College</a>
+</td>
+<td style="text-align:left;">Boston College 82-64 (95%) <span class='small'>[70]</span></td>
+<td><a href="gameprep.php?g=257">7:00 pm</a><span class='seed-gray-block'>&nbsp;ACC Network Extra&nbsp;</span></td>
+<td style="text-align:left;">Chestnut Hill, MA
+<a href="http://maps.google.com?q=Conte+Forum,+Chestnut+Hill%2C+MA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Conte Forum</span></a></td>
+<td class="stats" style="background-color:#e1ecf5">11.5<span class='seed-gray-block'>16</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">278</span> <a href="team.php?team=Merrimack">Merrimack</a> at<span class="desktopHide"><br></span> <span class="seed-gray">41</span> <a href="team.php?team=Auburn">Auburn</a>
+</td>
+<td style="text-align:left;">Auburn 83-61 (98%) <span class='small'>[70]</span></td>
+<td><a href="gameprep.php?g=268">8:00 pm</a><span class='seed-gray-block'>&nbsp;SEC Network Plus&nbsp;</span></td>
+<td style="text-align:left;">Auburn, AL
+<a href="http://maps.google.com?q=Neville+Arena,+Auburn%2C+AL&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Neville Arena</span></a></td>
+<td class="stats" style="background-color:#eefaf9">11.4<span class='seed-gray-block'>17</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">309</span> <a href="team.php?team=Texas+Southern">Texas Southern</a> at<span class="desktopHide"><br></span> <span class="seed-gray">34</span> <a href="team.php?team=Texas+A%26M">Texas A&M</a>
+</td>
+<td style="text-align:left;">Texas A&M 91-64 (99%) <span class='small'>[75]</span></td>
+<td><a href="gameprep.php?g=276">8:00 pm</a><span class='seed-gray-block'>&nbsp;SEC Network Plus&nbsp;</span></td>
+<td style="text-align:left;">College Station, TX
+<a href="http://maps.google.com?q=Reed+Arena,+College+Station%2C+TX&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Reed Arena</span></a></td>
+<td class="stats" style="background-color:#e2ecf6">10.5<span class='seed-gray-block'>18</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">342</span> <a href="team.php?team=Le+Moyne">Le Moyne</a> at<span class="desktopHide"><br></span> <span class="seed-gray">71</span> <a href="team.php?team=Xavier">Xavier</a>
+</td>
+<td style="text-align:left;">Xavier 90-66 (98%) <span class='small'>[74]</span></td>
+<td><a href="gameprep.php?g=247">7:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Cincinnati, OH
+<a href="http://maps.google.com?q=Cintas+Center,+Cincinnati%2C+OH&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Cintas Center</span></a></td>
+<td class="stats" style="background-color:#effafa">9.5<span class='seed-gray-block'>19</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr class="bold-bottom">
+<td class="bold-bottom-left"><span class="seed-gray">343</span> <a href="team.php?team=North+Florida">North Florida</a> at<span class="desktopHide"><br></span> <span class="seed-gray">4</span> <a href="team.php?team=Florida">Florida</a>
+</td>
+<td class="bold-bottom-left">Florida 101-66 (99.9%) <span class='small'>[76]</span></td>
+<td class="bold-bottom"><a href="gameprep.php?g=259">8:00 pm</a><span class='seed-gray-block'>&nbsp;SEC Network Plus&nbsp;</span></td>
+<td class="bold-bottom-left">Gainesville, FL
+<a href="http://maps.google.com?q=O%27Connell+Center,+Gainesville%2C+FL&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>O'Connell Center</span></a></td>
+<td class="stats" style="background-color:#e3ecf6">9.4<span class='seed-gray-block'>20</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">337</span> <a href="team.php?team=Denver">Denver</a> at<span class="desktopHide"><br></span> <span class="seed-gray">42</span> <a href="team.php?team=Washington">Washington</a>
+</td>
+<td style="text-align:left;">Washington 91-65 (99%) <span class='small'>[73]</span></td>
+<td><a href="gameprep.php?g=278">10:00 pm</a><span class='seed-gray-block'>&nbsp;<a target="blank" href="http://www.bigtenplus.com">Big Ten Network</a>&nbsp;</span></td>
+<td style="text-align:left;">Seattle, WA
+<a href="http://maps.google.com?q=Alaska+Airlines+Arena,+Seattle%2C+WA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Alaska Airlines Arena</span></a></td>
+<td class="stats" style="background-color:#effafa">9.4<span class='seed-gray-block'>21</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">304</span> <a href="team.php?team=Grambling+St.">Grambling St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">12</span> <a href="team.php?team=Iowa+St.">Iowa St.</a>
+</td>
+<td style="text-align:left;">Iowa St. 85-56 (99.6%) <span class='small'>[72]</span></td>
+<td><a href="gameprep.php?g=270">8:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Ames, IA
+<a href="http://maps.google.com?q=Hilton+Coliseum,+Ames%2C+IA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Hilton Coliseum</span></a></td>
+<td class="stats" style="background-color:#e3ecf6">9.3<span class='seed-gray-block'>22</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">360</span> <a href="team.php?team=Mercyhurst">Mercyhurst</a> at<span class="desktopHide"><br></span> <span class="seed-gray">110</span> <a href="team.php?team=Loyola+Chicago">Loyola Chicago</a>
+</td>
+<td style="text-align:left;">Loyola Chicago 83-63 (97%) <span class='small'>[70]</span></td>
+<td><a href="gameprep.php?g=255">9:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Chicago, IL
+<a href="http://maps.google.com?q=Gentile+Arena,+Chicago%2C+IL&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Gentile Arena</span></a></td>
+<td class="stats" style="background-color:#f0fafb">8.9<span class='seed-gray-block'>23</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">348</span> <a href="team.php?team=Saint+Francis">Saint Francis</a> at<span class="desktopHide"><br></span> <span class="seed-gray">92</span> <a href="team.php?team=TCU">TCU</a>
+</td>
+<td style="text-align:left;">TCU 85-63 (98%) <span class='small'>[72]</span></td>
+<td><a href="gameprep.php?g=275">8:00 pm</a><span class='seed-gray-block'>&nbsp;<a target="blank" href="http://tntdrama.com/watchtnt">TNT</a>&nbsp;</span></td>
+<td style="text-align:left;">Fort Worth, TX
+<a href="http://maps.google.com?q=Schollmaier+Arena,+Fort+Worth%2C+TX&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Schollmaier Arena</span></a></td>
+<td class="stats" style="background-color:#e3ecf7">8.6<span class='seed-gray-block'>24</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">362</span> <a href="team.php?team=Chicago+St.">Chicago St.</a> at<span class="desktopHide"><br></span> <span class="seed-gray">64</span> <a href="team.php?team=Saint+Louis">Saint Louis</a>
+</td>
+<td style="text-align:left;">Saint Louis 91-62 (99.5%) <span class='small'>[73]</span></td>
+<td><a href="gameprep.php?g=273">8:00 pm</a><span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">St. Louis, MO
+<a href="http://maps.google.com?q=Chaifetz+Arena,+St.+Louis%2C+MO&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Chaifetz Arena</span></a></td>
+<td class="stats" style="background-color:#f0fafb">7.3<span class='seed-gray-block'>25</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Illinois Tech at<span class="desktopHide"><br></span> <span class="seed-gray">215</span> <a href="team.php?team=Indiana+St.">Indiana St.</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Terre Haute, IN
+<a href="http://maps.google.com?q=Hulman+Center,+Terre+Haute%2C+IN&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Hulman Center</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Valley Forge at<span class="desktopHide"><br></span> <span class="seed-gray">292</span> <a href="team.php?team=Lehigh">Lehigh</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Lehigh, PA
+<a href="http://maps.google.com?q=Leeman-Turner+Arena,+Lehigh%2C+PA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Leeman-Turner Arena</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Randolph at<span class="desktopHide"><br></span> <span class="seed-gray">200</span> <a href="team.php?team=Old+Dominion">Old Dominion</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Norfolk, VA
+<a href="http://maps.google.com?q=Chartway+Arena,+Norfolk%2C+VA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Chartway Arena</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">260</span> <a href="team.php?team=Cal+St.+Bakersfield">Cal St. Bakersfield</a> 83, <span class="desktopHide"><br></span><span class="seed-gray">NR</span> Whittier 61 <span style="font-size:10px;">[82]</span>
+<span class="seed-gray-block">MVP: <a href="player.php?p=56228">CJ Hardy</a> (17p/3r)</span></td>
+<td>
+<td><a href="box.php?g=236">box</a>
+<span class='win-prob-link'>&nbsp;</span></td>
+<td style="text-align:left;">Bakersfield, CA
+<a href="http://maps.google.com?q=Icardo+Center,+Bakersfield%2C+CA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Icardo Center</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr class="bold-bottom">
+<td class="bold-bottom-left"><span class="seed-gray">355</span> <a href="team.php?team=Morgan+St.">Morgan St.</a> 101, <span class="desktopHide"><br></span><span class="seed-gray">NR</span> Central Pennsylvania 77 <span style="font-size:10px;">[81]</span>
+<span class="seed-gray-block">MVP: <a href="player.php?p=55589">Elijah Davis</a> (14p/7r/7a/3s)</span></td>
+<td class="bold-bottom">
+<td class="bold-bottom"><a href="box.php?g=264">box</a>
+<span class='win-prob-link'>&nbsp;</span></td>
+<td class="bold-bottom-left">Baltimore, MD
+<a href="http://maps.google.com?q=Hill+Field+House,+Baltimore%2C+MD&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Hill Field House</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">358</span> <a href="team.php?team=New+Hampshire">New Hampshire</a> 113, <span class="desktopHide"><br></span><span class="seed-gray">NR</span> Curry 31 <span style="font-size:10px;">[81]</span>
+<span class="seed-gray-block">MVP: <a href="player.php?p=54419">KiJan Robinson</a> (20p/1r/5a/2s)</span></td>
+<td>
+<td><a href="box.php?g=237">box</a>
+<span class='win-prob-link'>&nbsp;</span></td>
+<td style="text-align:left;">Durham, NH
+<a href="http://maps.google.com?q=Lundholm+Gym,+Durham%2C+NH&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Lundholm Gym</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Trinity FL at<span class="desktopHide"><br></span> <span class="seed-gray">244</span> <a href="team.php?team=Jacksonville">Jacksonville</a>
+</td>
+<td>
+<td>8:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Jacksonville, FL
+<a href="http://maps.google.com?q=Swisher+Gym,+Jacksonville%2C+FL&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Swisher Gym</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Northwood MI at<span class="desktopHide"><br></span> <span class="seed-gray">287</span> <a href="team.php?team=Western+Michigan">Western Michigan</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Kalamazoo, MI
+<a href="http://maps.google.com?q=University+Arena,+Kalamazoo%2C+MI&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>University Arena</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">302</span> <a href="team.php?team=Loyola+MD">Loyola MD</a> 96, <span class="desktopHide"><br></span><span class="seed-gray">NR</span> Penn St. Abington 60 <span style="font-size:10px;">[72]</span>
+<span class="seed-gray-block">MVP: <a href="player.php?p=57709">Sam Springer</a> (16p/5r)</span></td>
+<td>
+<td><a href="box.php?g=235">box</a>
+<span class='win-prob-link'>&nbsp;</span></td>
+<td style="text-align:left;">Baltimore, MD
+<a href="http://maps.google.com?q=Reitz+Arena,+Baltimore%2C+MD&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Reitz Arena</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Midway at<span class="desktopHide"><br></span> <span class="seed-gray">191</span> <a href="team.php?team=Eastern+Kentucky">Eastern Kentucky</a>
+</td>
+<td>
+<td>8:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Berea, KY
+<a href="http://maps.google.com?q=Seabury+Center,+Berea%2C+KY&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Seabury Center</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Allegheny at<span class="desktopHide"><br></span> <span class="seed-gray">351</span> <a href="team.php?team=Canisius">Canisius</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Buffalo, NY
+<a href="http://maps.google.com?q=Koessler+Athletic+Center,+Buffalo%2C+NY&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Koessler Athletic Center</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Toccoa Falls at<span class="desktopHide"><br></span> <span class="seed-gray">326</span> <a href="team.php?team=Charleston+Southern">Charleston Southern</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Charleston, SC
+<a href="http://maps.google.com?q=Buccaneer+Fieldhouse,+Charleston%2C+SC&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Buccaneer Fieldhouse</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Dakota St. at<span class="desktopHide"><br></span> <span class="seed-gray">165</span> <a href="team.php?team=South+Dakota+St.">South Dakota St.</a>
+</td>
+<td>
+<td>8:00 pm<td style="text-align:left;">Brookings, SD
+<a href="http://maps.google.com?q=First+Bank+%26+Trust+Arena,+Brookings%2C+SD&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>First Bank & Trust Arena</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Tougaloo at<span class="desktopHide"><br></span> <span class="seed-gray">284</span> <a href="team.php?team=Southern+Miss">Southern Miss</a>
+</td>
+<td>
+<td>8:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Hattiesburg, MS
+<a href="http://maps.google.com?q=Reed+Green+Coliseum,+Hattiesburg%2C+MS&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Reed Green Coliseum</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr class="bold-bottom">
+<td class="bold-bottom-left"><span class="seed-gray">NR</span> Capital at<span class="desktopHide"><br></span> <span class="seed-gray">219</span> <a href="team.php?team=Cleveland+St.">Cleveland St.</a>
+</td>
+<td class="bold-bottom">
+<td class="bold-bottom">7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td class="bold-bottom-left">Cleveland, OH
+<a href="http://maps.google.com?q=Wolstein+Center,+Cleveland%2C+OH&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Wolstein Center</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Mid Atlantic Christian at<span class="desktopHide"><br></span> <span class="seed-gray">218</span> <a href="team.php?team=Hampton">Hampton</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;<a target="blank" href="http://flosports.tv">FloSports</a>&nbsp;</span></td>
+<td style="text-align:left;">Hampton, VA
+<a href="http://maps.google.com?q=Hampton+Convocation+Center,+Hampton%2C+VA&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Hampton Convocation Center</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> UDC at<span class="desktopHide"><br></span> <span class="seed-gray">311</span> <a href="team.php?team=Howard">Howard</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Washington, DC
+<a href="http://maps.google.com?q=Burr+Arena,+Washington%2C+DC&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Burr Arena</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">NR</span> Bethany WV at<span class="desktopHide"><br></span> <span class="seed-gray">140</span> <a href="team.php?team=Bowling+Green">Bowling Green</a>
+</td>
+<td>
+<td>7:00 pm<span class='seed-gray-block'>&nbsp;ESPN+&nbsp;</span></td>
+<td style="text-align:left;">Bowling Green, OH
+<a href="http://maps.google.com?q=Stroh+Center,+Bowling+Green%2C+OH&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Stroh Center</span></a></td>
+<td class="stats" style="background-color:#f2fafd">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#f2fafd">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff93a123fffffffffffff8ec">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr>
+<td style="text-align:left;"><span class="seed-gray">328</span> <a href="team.php?team=Lindenwood">Lindenwood</a> 116, <span class="desktopHide"><br></span><span class="seed-gray">NR</span> St. Louis Pharmacy 51 <span style="font-size:10px;">[80]</span>
+<span class="seed-gray-block">MVP: <a href="player.php?p=56733">Jadis Jones</a> (16p/3r/2a/2s)</span></td>
+<td>
+<td><a href="box.php?g=244">box</a>
+<span class='win-prob-link'>&nbsp;</span></td>
+<td style="text-align:left;">Saint Charles, MO
+<a href="http://maps.google.com?q=Robert+F.+Hyland+Arena,+Saint+Charles%2C+MO&zoom=9&num=1&t=m" target="_blank"><span class='win-prob-link'>Robert F. Hyland Arena</span></a></td>
+<td class="stats" style="background-color:#e5ecf9">0.0<span class='seed-gray-block'>26</span></td>
+<td class="stats" style="background-color:#e5ecf9">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+<td class="stats" style="background-color:#fffffffffffff998187fffffffffffff908">&nbsp;<span class='win-prob-link'>&nbsp;</span></td>
+</tr>
+<tr><td style='text-align:left; border-top:2px solid #000;' colspan="7"><b><span style="color:#D00">Lines o' the night:</td></tr><tr><td style='text-align:left' colspan="7"><b><span style="color:#D00">1.</span> <a href="player.php?p=55193">Greg Gordon</a>, <a href="team.php?team=LIU">LIU</a> &bull; 29 pts </b>(12-18 2's, 5-9 FT's)<b> &bull; 7 Rebs </b>(4 Off)<b> &bull; 4 Assists &bull; 2 Blks &bull; 1 Stl</b></td></tr>
+<tr><td style='text-align:left; border-bottom:2px solid #000;' colspan="7"><b><span style="color:#D00">2.</span> <a href="player.php?p=58581">Maguire Mitchell</a>, <a href="team.php?team=IU+Indy">IU Indy</a> &bull; 22 pts </b>(1-1 2's, 6-12 3's, 2-2 FT's)<b> &bull; 2 Blks &bull; 2 Stls &bull; 1 Reb</b></td></tr>
+<tr><td style='text-align:left' colspan="7"><b>Note:</b> Rankings shown for each team are for the date the game was played</td></tr>
+<tr><td style='text-align:left; border-top:2px solid #000' colspan="7">Mean absolute error of predicted margin of victory today: 3.0
+ &bull; Record of favorites today: 1-0 (expected: 1-0) &bull; Exact MOV was predicted in 0 of 1 games</td></tr><tr><td style='text-align:left' colspan="7">Mean absolute error of predicted total score today: 29.0
+ &bull; Bias of predicted total score: -29.0 &bull; <a href='diagnostics.php'>Model Diagnostics</a></tr>
+<tr><td style='text-align:left; border-top:2px solid #000' colspan="7"><b>Today's stats (D-I vs D-I only):</b> Points per game: 92.0 &bull; Average efficiency: 106.4 &bull; Possessions per 40 minutes: 86.5</td></tr>
+</tbody>
+</table>
+</div></div></div><footer>
+&copy; 1999-2025 The Forecast Factory LLC. All rights reserved.
+<span class="mobileHide">| <a href="terms.php">Terms of Use</a> | <a href="privacy.php">Privacy Policy</a> | Stats provided by <a href="https://stats.com">STATS Perform</a><br /></span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
+<script type="text/javascript" src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+<script type='text/javascript' src='coach_box.js?1761597857'></script>
+</html>
