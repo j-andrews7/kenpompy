@@ -126,6 +126,25 @@ def get_refs(browser: CloudScraper, season: Optional[str]=None):
 	# Dataframe tidying.
 	refs_df = refs_df[0]
 	refs_df.columns = ['Rank', 'Name', 'Rating', 'Games', 'Last Game', 'Game Score', 'Box']
+
+	ref_ids = []
+	for row in table.find_all('tr'):
+		cells = row.find_all('td')
+		if not cells:
+			continue
+		name_link = cells[1].find('a', href=True) if len(cells) > 1 else None
+		href = name_link['href'] if name_link else ''
+		# The ID is found in the href as a query parameter like '?r=12345'.
+		match = re.search(r'(?:\?|&)r=(\d+)(?:&|$)', href)
+		ref_ids.append(int(match.group(1)) if match else pd.NA)
+		
+	# We aren't expected to hit these two conditions below but handle them just in case.
+	if len(ref_ids) < len(refs_df):
+		ref_ids.extend([pd.NA] * (len(refs_df) - len(ref_ids)))
+	elif len(ref_ids) > len(refs_df):
+		ref_ids = ref_ids[:len(refs_df)]
+	refs_df['ID'] = pd.array(ref_ids, dtype='Int64')
+	
 	refs_df = refs_df[refs_df.Rating != 'Rating']
 	refs_df = refs_df.drop(['Box'], axis=1)
 
