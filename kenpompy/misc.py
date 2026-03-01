@@ -151,6 +151,31 @@ def get_refs(browser: CloudScraper, season: Optional[str]=None):
 	return refs_df
 
 
+def get_ref(browser: CloudScraper, ref_id: str, season: Optional[str]=None):
+	"""
+	Scrapes an individual referee page table (https://kenpom.com/referee.php) into a dataframe.
+
+	Args:
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		ref_id (str): Referee ID from the `r` query parameter in the referee page URL.
+		season (str, optional): Used to define different seasons. Most recent season is the default.
+
+	Returns:
+		ref_df (pandas dataframe): Pandas dataframe containing all rows in the referee table.
+	"""
+
+	url = 'https://kenpom.com/referee.php?r=' + str(ref_id)
+	if season:
+		url = url + '&y=' + str(season)
+
+	ref = BeautifulSoup(get_html(browser, url), "html.parser")
+	table = ref.find_all('table')[0]
+	ref_df = pd.read_html(StringIO(str(table)))
+
+	return ref_df[0]
+
+
 def get_hca(browser: CloudScraper):
 	"""
 	Scrapes the home court advantage table (https://kenpom.com/hca.php) into a dataframe.

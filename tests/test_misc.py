@@ -51,6 +51,19 @@ def test_get_refs(browser):
 		kpmisc.get_refs(browser, season = "2014")
 
 
+def test_get_ref(browser):
+	expected = ["107",
+				"Sat Apr 6",
+				"6:09 PM",
+				"1 Virginia 63, 11 Auburn 62",
+				"Minneapolis, MN",
+				"U.S. Bank Stadium",
+				"NCAA",
+				"76.8"]
+	df = kpmisc.get_ref(browser, ref_id="714363", season="2019")
+	assert [str(i) for i in df.iloc[0].to_list()] == expected
+
+
 def test_get_hca(browser):
 	expected = len(['Louisville', 'ACC', '3.4', '119', '-4.1','44', '4.5', '269',
 		'-2.1', '14', '1.1', '228', '400', '185'])
