@@ -126,10 +126,54 @@ def get_refs(browser: CloudScraper, season: Optional[str]=None):
 	# Dataframe tidying.
 	refs_df = refs_df[0]
 	refs_df.columns = ['Rank', 'Name', 'Rating', 'Games', 'Last Game', 'Game Score', 'Box']
+
+	ref_ids = []
+	for row in table.find_all('tr'):
+		cells = row.find_all('td')
+		if not cells:
+			continue
+		name_link = cells[1].find('a', href=True) if len(cells) > 1 else None
+		href = name_link['href'] if name_link else ''
+		# The ID is found in the href as a query parameter like '?r=12345'.
+		match = re.search(r'(?:\?|&)r=(\d+)(?:&|$)', href)
+		ref_ids.append(int(match.group(1)) if match else pd.NA)
+		
+	# We aren't expected to hit these two conditions below but handle them just in case.
+	if len(ref_ids) < len(refs_df):
+		ref_ids.extend([pd.NA] * (len(refs_df) - len(ref_ids)))
+	elif len(ref_ids) > len(refs_df):
+		ref_ids = ref_ids[:len(refs_df)]
+	refs_df['ID'] = pd.array(ref_ids, dtype='Int64')
+	
 	refs_df = refs_df[refs_df.Rating != 'Rating']
 	refs_df = refs_df.drop(['Box'], axis=1)
 
 	return refs_df
+
+
+def get_ref(browser: CloudScraper, ref_id: str, season: Optional[str]=None):
+	"""
+	Scrapes an individual referee page table (https://kenpom.com/referee.php) into a dataframe.
+
+	Args:
+		browser (CloudScraper): Authenticated browser with full access to kenpom.com generated
+			by the `login` function.
+		ref_id (str): Referee ID from the `r` query parameter in the referee page URL.
+		season (str, optional): Used to define different seasons. Most recent season is the default.
+
+	Returns:
+		ref_df (pandas dataframe): Pandas dataframe containing all rows in the referee table.
+	"""
+
+	url = 'https://kenpom.com/referee.php?r=' + str(ref_id)
+	if season:
+		url = url + '&y=' + str(season)
+
+	ref = BeautifulSoup(get_html(browser, url), "html.parser")
+	table = ref.find_all('table')[0]
+	ref_df = pd.read_html(StringIO(str(table)))
+
+	return ref_df[0]
 
 
 def get_hca(browser: CloudScraper):

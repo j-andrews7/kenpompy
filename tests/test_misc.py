@@ -42,10 +42,26 @@ def test_get_refs(browser):
 				"Sat 4/6",
 				"1 Virginia 63, 11 Auburn 62 (Minneapolis, MN)"]
 	df = kpmisc.get_refs(browser, season = "2019")
-	assert [str(i) for i in df[df.Name == "Keith Kimble"].iloc[0].to_list()] == expected
+	keith_row = df[df.Name == "Keith Kimble"].iloc[0]
+	assert [str(i) for i in keith_row[['Rank', 'Name', 'Rating', 'Games', 'Last Game', 'Game Score']].to_list()] == expected
+	assert 'ID' in df.columns
+	assert keith_row['ID'] == 714363
 
 	with pytest.raises(ValueError):
 		kpmisc.get_refs(browser, season = "2014")
+
+
+def test_get_ref(browser):
+	expected = ["107",
+				"Sat Apr 6",
+				"6:09 PM",
+				"1 Virginia 63, 11 Auburn 62",
+				"Minneapolis, MN",
+				"U.S. Bank Stadium",
+				"NCAA",
+				"76.8"]
+	df = kpmisc.get_ref(browser, ref_id="714363", season="2019")
+	assert [str(i) for i in df.iloc[0].to_list()] == expected
 
 
 def test_get_hca(browser):
