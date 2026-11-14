@@ -7,9 +7,9 @@ import pandas as pd
 from io import StringIO
 from .misc import get_current_season
 import re
+import json
 from cloudscraper import CloudScraper
 from bs4 import BeautifulSoup
-from codecs import encode, decode
 from typing import Optional
 from .utils import get_html
 
@@ -162,26 +162,48 @@ def get_scouting_report(browser: CloudScraper, team: str, season: Optional[int]=
 	url = url + "?team=" + str(team)
 	url = url + "&y=" + str(season)
 
-	report = BeautifulSoup(get_html(browser, url), "html.parser")
-	# Find all script tags and filter for ones without src attribute (inline scripts)
-	all_scripts = report.find_all("script", { "type": "text/javascript"})
-	scouting_report_scripts = None
-	for script in all_scripts:
-		if not script.get('src'):  # Find script tag without src attribute
-			scouting_report_scripts = script
-			break
+	html = get_html(browser, url).decode('utf-8', errors='replace')
 
-	extraction_pattern = re.compile(r"\$\(\"td#(?P<token>[A-Za-z0-9]+)\"\)\.html\(\"(.+)\"\);")
-	if conference_only:
-		pattern = re.compile(r"\$\(':checkbox'\).click\(function\(\) \{([^\}]+)}")
-	else:
-		pattern = re.compile(r"function tableStart\(\) \{([^\}]+)}")
+	# The page embeds the stats as JSON in `allData` (all games) and `confData` (conference games).
+	data_name = 'confData' if conference_only else 'allData'
+	match = re.search(r'const\s+' + data_name + r'\s*=\s*', html)
+	if match is None:
+		raise ValueError(f'Could not find {data_name} on the scouting report page.')
+	data, _ = json.JSONDecoder().raw_decode(html, match.end())
 
-	stats = extraction_pattern.findall(decode(encode(pattern.search(str(scouting_report_scripts.contents[0])).groups()[0], 'latin-1', 'backslashreplace'), 'unicode-escape'))
-	stats = list(map(lambda x: (x[0], float(BeautifulSoup(x[1], "lxml").find('a').contents[0]), int(str(BeautifulSoup(x[1], "lxml").find('span', { "class": "seed" }).contents[0]))), stats[2:]))
-	# Defaulting each stat to '' for earlier years which might not have all the stats
-	stats_df = {'OE': '', 'OE.Rank': '', 'DE': '', 'DE.Rank': '', 'Tempo': '', 'Tempo.Rank': '', 'APLO': '', 'APLO.Rank': '', 'APLD': '', 'APLD.Rank': '', 'eFG': '', 'eFG.Rank': '', 'DeFG': '', 'DeFG.Rank': '', 'TOPct': '', 'TOPct.Rank': '', 'DTOPct': '', 'DTOPct.Rank': '', 'ORPct': '', 'ORPct.Rank': '', 'DORPct': '', 'DORPct.Rank': '', 'FTR': '', 'FTR.Rank': '', 'DFTR': '', 'DFTR.Rank': '', '3Pct': '', '3Pct.Rank': '', 'D3Pct': '', 'D3Pct.Rank': '', '2Pct': '', '2Pct.Rank': '', 'D2Pct': '', 'D2Pct.Rank': '', 'FTPct': '', 'FTPct.Rank': '', 'DFTPct': '', 'DFTPct.Rank': '', 'BlockPct': '', 'BlockPct.Rank': '', 'DBlockPct': '', 'DBlockPct.Rank': '', 'StlRate': '', 'StlRate.Rank': '', 'DStlRate': '', 'DStlRate.Rank': '', 'NSTRate': '', 'NSTRate.Rank': '', 'DNSTRate': '', 'DNSTRate.Rank': '', '3PARate': '', '3PARate.Rank': '', 'D3PARate': '', 'D3PARate.Rank': '', 'ARate': '', 'ARate.Rank': '', 'DARate': '', 'DARate.Rank': '', 'PD3': '', 'PD3.Rank': '', 'DPD3': '', 'DPD3.Rank': '', 'PD2': '', 'PD2.Rank': '', 'DPD2': '', 'DPD2.Rank': '', 'PD1': '', 'PD1.Rank': '', 'DPD1': '', 'DPD1.Rank': ''}	
-	for stat in stats:
-		stats_df[stat[0]] = stat[1]
-		stats_df[stat[0]+'.Rank'] = stat[2]
+	# Maps the returned stat names to the keys used in the embedded data.
+	stat_keys = {
+		'OE': 'AdjOE', 'DE': 'AdjDE', 'Tempo': 'AdjTempo',
+		'APLO': 'APL_Off', 'APLD': 'APL_Def',
+		'eFG': 'eFG_Pct', 'DeFG': 'OppeFG_Pct',
+		'TOPct': 'TO_Pct', 'DTOPct': 'OppTO_Pct',
+		'ORPct': 'OR_Pct', 'DORPct': 'OppOR_Pct',
+		'FTR': 'FT_Rate', 'DFTR': 'OppFT_Rate',
+		'3Pct': 'FG3Pct', 'D3Pct': 'OppFG3Pct',
+		'2Pct': 'FG2Pct', 'D2Pct': 'OppFG2Pct',
+		'FTPct': 'FTPct', 'DFTPct': 'OppFTPct',
+		'BlockPct': 'BlockPct', 'DBlockPct': 'OppBlockPct',
+		'StlRate': 'StlRate', 'DStlRate': 'OppStlRate',
+		'NSTRate': 'NSTRate', 'DNSTRate': 'OppNSTRate',
+		'3PARate': 'F3GRate', 'D3PARate': 'OppF3GRate',
+		'ARate': 'ARate', 'DARate': 'OppARate',
+		'PD3': 'Off_3', 'DPD3': 'Def_3',
+		'PD2': 'Off_2', 'DPD2': 'Def_2',
+		'PD1': 'Off_1', 'DPD1': 'Def_1',
+	}
+
+	# Stats missing for earlier years default to '' (as before).
+	stats_df = {}
+	for name, key in stat_keys.items():
+		value = data.get(key)
+		rank = data.get('Rank' + key)
+		if value is None:
+			stats_df[name] = ''
+		else:
+			# Steal rates are stored as fractions but displayed as percentages.
+			if key in ('StlRate', 'OppStlRate'):
+				value = value * 100
+			# Round to match the one-decimal values shown on the page.
+			stats_df[name] = round(float(value), 1)
+		stats_df[name + '.Rank'] = '' if rank is None else int(rank)
 	return stats_df

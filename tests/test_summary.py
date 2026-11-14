@@ -2,15 +2,27 @@ import pytest
 import kenpompy.summary as kpsum
 
 def test_get_efficiency(browser):
-	expected = ['Louisville', 'ACC', '67.2', '199', '68.3', '217', '17.6', '183', '17.5', '175', '113.7', '28', '107.6',
-				'75', '94.4', '24', '98.8', '62']
+	expected = ['Louisville', 'ACC', 
+	            '113.7', '+9.4', '28', 
+				'107.6', '75', 
+				'94.4', '-9.9', '24', 
+				'98.8', '62', 
+				'67.2', '-0.6', '199', 
+				'68.3', '217', 
+				'17.6', '183', 
+				'17.5', '175']
 
 	df = kpsum.get_efficiency(browser, season = '2019')
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected
 	assert df.loc[44]['Team'] == 'Cal St. Northridge'
 
-	expected = ['Louisville', 'BE', '65.3', '160', '67.1', '169', '113.1', '40', '107.3', '67', '87.7', '4', '91.2', 
-				'7']
+	expected = ['Louisville', 'BE', 
+	            '113.1', '+9.7', '40', 
+				'107.3', '67', 
+				'87.7', '-15.7', '4', 
+				'91.2', '7', 
+				'65.3', '-0.0', '160', 
+				'67.1', '169']
 
 	df = kpsum.get_efficiency(browser, season = '2008')
 	assert [str(i) for i in df[df.Team == 'Louisville'].iloc[0].to_list()] == expected

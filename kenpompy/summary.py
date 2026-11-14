@@ -44,19 +44,26 @@ def get_efficiency(browser: CloudScraper, season: Optional[str]=None):
 	eff_df = eff_df[0]
 
 	# Handle seasons prior to 2010 having fewer columns.
-	if len(eff_df.columns) == 18:
-		eff_df = eff_df.iloc[:, 0:18]
-		eff_df.columns = ['Team', 'Conference', 'Tempo-Adj', 'Tempo-Adj.Rank', 'Tempo-Raw', 'Tempo-Raw.Rank',
-						  'Avg. Poss Length-Offense', 'Avg. Poss Length-Offense.Rank', 'Avg. Poss Length-Defense',
-						  'Avg. Poss Length-Defense.Rank', 'Off. Efficiency-Adj', 'Off. Efficiency-Adj.Rank',
-						  'Off. Efficiency-Raw', 'Off. Efficiency-Raw.Rank', 'Def. Efficiency-Adj',
-						  'Def. Efficiency-Adj.Rank', 'Def. Efficiency-Raw', 'Def. Efficiency-Raw.Rank']
+	if len(eff_df.columns) == 21:
+		eff_df = eff_df.iloc[:, 0:21]
+		eff_df.columns = ['Team', 'Conference', 
+		                  'Off. Efficiency-Adj', 'Off. Efficiency-AllTime', 'Off. Efficiency-Adj.Rank',
+						  'Off. Efficiency-Raw', 'Off. Efficiency-Raw.Rank', 
+						  'Def. Efficiency-Adj', 'Def. Efficiency-AllTime', 'Def. Efficiency-Adj.Rank', 
+						  'Def. Efficiency-Raw', 'Def. Efficiency-Raw.Rank',
+						  'Tempo-Adj', 'Tempo-AllTime', 'Tempo-Adj.Rank', 
+						  'Tempo-Raw', 'Tempo-Raw.Rank',
+						  'Avg. Poss Length-Offense', 'Avg. Poss Length-Offense.Rank', 
+						  'Avg. Poss Length-Defense', 'Avg. Poss Length-Defense.Rank']
 	else:
-		eff_df = eff_df.iloc[:, 0:14]
-		eff_df.columns = ['Team', 'Conference', 'Tempo-Adj', 'Tempo-Adj.Rank', 'Tempo-Raw', 'Tempo-Raw.Rank',
-						  'Off. Efficiency-Adj', 'Off. Efficiency-Adj.Rank', 'Off. Efficiency-Raw',
-						  'Off. Efficiency-Raw.Rank', 'Def. Efficiency-Adj', 'Def. Efficiency-Adj.Rank',
-						  'Def. Efficiency-Raw', 'Def. Efficiency-Raw.Rank']
+		eff_df = eff_df.iloc[:, 0:17]
+		eff_df.columns = ['Team', 'Conference', 
+						  'Off. Efficiency-Adj', 'Off. Efficiency-AllTime', 'Off. Efficiency-Adj.Rank',
+						  'Off. Efficiency-Raw', 'Off. Efficiency-Raw.Rank', 
+						  'Def. Efficiency-Adj', 'Def. Efficiency-AllTime', 'Def. Efficiency-Adj.Rank',
+						  'Def. Efficiency-Raw', 'Def. Efficiency-Raw.Rank',
+		                  'Tempo-Adj', 'Tempo-AllTime', 'Tempo-Adj.Rank', 
+						  'Tempo-Raw', 'Tempo-Raw.Rank']
 
 	# Remove the header rows that are interjected for readability.
 	eff_df = eff_df[eff_df.Team != 'Team']
